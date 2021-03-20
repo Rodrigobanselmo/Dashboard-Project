@@ -1,7 +1,8 @@
 import styled, {css, keyframes} from 'styled-components/macro';
 import { Link } from 'react-router-dom';
-import { BsCheckCircle,BsExclamationTriangle,BsXOctagon } from 'react-icons/bs';
-
+import BsXOctagon from '@material-ui/icons/ErrorOutlineRounded';
+import BsExclamationTriangle from '@material-ui/icons/WarningRounded';
+import BsCheckCircle from '@material-ui/icons/CheckCircleOutline';
 
 export const HeroBg = styled.div`
   position: absolute;
@@ -142,10 +143,10 @@ export const Form = styled.div`
   max-width: 480px;
   padding: 30px 68px 30px;
   align-self:center;
-  -webkit-box-shadow: 0px 0px 16px 6px rgba(51,51,51,0.81); 
+  -webkit-box-shadow: 0px 0px 16px 6px rgba(51,51,51,0.81);
   box-shadow: 0px 0px 16px 6px rgba(51,51,51,0.81);
   animation: ${slideIn} 1.2s ease-in;
-  
+
 /*   ${props => props.animation && css`
   `} */
 
@@ -206,7 +207,7 @@ export const TextSmall = styled.p`
   text-align: justify;
   line-height: normal;
   color: #8c8c8c;
-  
+
 `;
 
 export const LinkButton = styled(Link)`
