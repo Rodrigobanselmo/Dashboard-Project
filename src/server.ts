@@ -1,11 +1,12 @@
 import express from 'express';
-import routes from './routes';
-
+import dotenv from 'dotenv';
+// const apiRoute = require("./routes/api.js")
 const app = express();
 
-app.use(express.json());
-app.use(routes);
+dotenv.config();
 
-app.listen(3001, () => {
-  console.log(`Example app listening at ${3001}`);
+// app.use('/api', apiRoute)
+
+app.listen(process.env.PORT, () => {
+  console.log(`Example app listening at ${process.env.PORT}`);
 });
