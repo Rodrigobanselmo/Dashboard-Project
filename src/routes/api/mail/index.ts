@@ -23,15 +23,15 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
 router.post('/invite-members', (req, res) => {
-  const data = req.body;
+  const { to, subject, html } = req.body;
 
   transport
     .sendMail({
       from: `SimpleSST ${process.env.EMAIL_USER}`,
-      to: data.to,
+      to,
       replyTo: process.env.EMAIL_USER,
-      subject: data.subject,
-      html: data.html,
+      subject,
+      html,
     })
     .then(() => {
       console.log('enviada');
