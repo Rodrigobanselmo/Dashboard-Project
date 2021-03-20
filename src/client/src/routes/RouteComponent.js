@@ -1,12 +1,14 @@
 import React from "react"
 import { Route, Redirect } from "react-router-dom"
-import { useAuth } from "../context/AuthContext"
-import {useNotification} from "../context/NotificationContext"
+//import { useAuth } from "../context/AuthContext"
+//import {useNotification} from "../context/NotificationContext"
 
 export default function RouteComponent({ component: Component,privateRoute, ...rest }) {
 
-  const { currentUser } = useAuth()
-  const notification = useNotification()
+  //const { currentUser } = useAuth()
+  //const notification = useNotification()
+  currentUser=null
+
 
   function onValidate() {
     if (rest?.infoUser && rest.infoUser) {
