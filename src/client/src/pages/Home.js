@@ -12,7 +12,7 @@ import Sidebar from '../components/Initial/Sidebar';
 //import Services from '../components/Initial/Services';
 
 function Home() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggle = () => {
     setIsOpen(!isOpen);

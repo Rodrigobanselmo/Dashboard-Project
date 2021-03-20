@@ -24,9 +24,13 @@ import Error from '@material-ui/icons/Error';
 import RestorePage from '@material-ui/icons/RestorePage';
 import Storage from '@material-ui/icons/StorageTwoTone';
 import Business from '@material-ui/icons/BusinessTwoTone';
+import InfoOutlined from '@material-ui/icons/InfoOutlined';
+import ErrorOutlineRoundedIcon from '@material-ui/icons/ErrorOutlineRounded';
+import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import Apps from '@material-ui/icons/Apps';
-import { AiOutlineClose } from 'react-icons/ai';
-import { BsCheckCircle,BsExclamationTriangle,BsXOctagon,BsInfoCircle } from 'react-icons/bs';
+//import { AiOutlineClose } from 'react-icons/ai';
+//import { BsCheckCircle,BsExclamationTriangle,BsXOctagon,BsInfoCircle } from 'react-icons/bs';
 import LottieAnimation from '../../lib/lottie'
 
 export function Icons({type,...props}) {
@@ -34,13 +38,13 @@ export function Icons({type,...props}) {
 
 
         case 'Check':
-            return <BsCheckCircle {...props} />
+            return <CheckCircleOutlineIcon {...props} />
         case 'Warn':
-            return <BsExclamationTriangle {...props} />
+            return <WarningRoundedIcon {...props} />
         case 'Error':
-            return <BsXOctagon {...props} />
+            return <ErrorOutlineRoundedIcon {...props} />
         case 'Info':
-            return <BsInfoCircle {...props} />
+            return <InfoOutlined {...props} />
 
         case 'Administrative':
             return <FileCopyIcon {...props} />
@@ -52,7 +56,7 @@ export function Icons({type,...props}) {
             return <SettingsIcon {...props} />
         case 'Admin':
             return <SupervisorAccountIcon {...props} />
-            
+
         case 'Storage':
             return <Storage {...props} />
         case 'Business':
