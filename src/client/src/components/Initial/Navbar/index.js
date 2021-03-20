@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FaBars } from 'react-icons/fa';
-import { IconContext } from 'react-icons/lib';
 import { animateScroll as scroll } from 'react-scroll';
 import {
   MobileIcon,
@@ -14,6 +12,7 @@ import {
 } from './NavbarElements';
 import {SIGN,APP_HOME,ABOUT_HOME,SERVICES_HOME,FAQ_HOME} from '../../../routes/routesNames'
 import {NavLogo} from '../../Main/NavLogo'
+import {Icons} from '../../Icons/iconsDashboard.tsx'
 
 const Navbar = ({ toggle }) => {
   const [scrollNav, setScrollNav] = useState(false);
@@ -41,12 +40,11 @@ const Navbar = ({ toggle }) => {
 
   return (
     <>
-      <IconContext.Provider value={{ color: '#fff' }}>
         <Nav scrollNav={scrollNav}>
           <NavbarContainer>
             <NavLogo onClick={toggleHome} to='/' home={'true'} />
             <MobileIcon onClick={toggle}>
-              <FaBars />
+              <Icons type='Menu' style={{color:'#fff'}} />
             </MobileIcon>
             <NavMenu>
               <NavItem>
@@ -103,7 +101,6 @@ const Navbar = ({ toggle }) => {
             </NavBtn>
           </NavbarContainer>
         </Nav>
-      </IconContext.Provider>
     </>
   );
 };

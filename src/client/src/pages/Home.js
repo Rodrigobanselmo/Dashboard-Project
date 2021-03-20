@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import Navbar from '../components/Initial/Navbar';
+import Navbar from '../components/Initial/Navbar';
 import Sidebar from '../components/Initial/Sidebar';
 //import Footer from '../components/Initial/Footer';
 //import HeroSection from '../components/Initial/HeroSection';
@@ -21,6 +21,7 @@ function Home() {
   return (
     <>
       <Sidebar isOpen={isOpen} toggle={toggle} />
+      <Navbar toggle={toggle} />
     </>
   );
 }

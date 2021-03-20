@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Link as LinkS } from 'react-scroll';
 import { Link as LinkR } from 'react-router-dom';
-import moduleName from '../';
 import Close from '@material-ui/icons/Close';
 
 export const SidebarContainer = styled.aside`
@@ -19,6 +18,8 @@ export const SidebarContainer = styled.aside`
   top: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
   z-index: 999;
 `;
+
+
 
 export const CloseIcon = styled(Close)`
   color: #fff;
