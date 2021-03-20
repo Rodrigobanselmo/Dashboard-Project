@@ -7,11 +7,11 @@ const router = express.Router();
 router.use(cors());
 router.use(express.json());
 
-router.get('/:cnpj', (req, res) => {
+router.get('/:caepi', (req, res) => {
   axios
-    .get(`http://consultaca.com/15151`)
+    .get(`http://consultaca.com/${req.params.caepi}`)
     .then(response => {
-      console.log(response.data);
+      res.send(response.data);
     })
     .catch(error => res.send(error));
 });
