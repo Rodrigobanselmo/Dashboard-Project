@@ -73,7 +73,7 @@ export const NavMenu = styled.ul`
   align-items: center;
   list-style: none;
   text-align: center;
-  margin-right: 60px;
+  margin-right: 39px;
 
   @media screen and (max-width: 768px) {
     display: none;
@@ -113,7 +113,7 @@ export const NavLinks = styled(LinkS)`
     text-decoration: none;
   }
 
-  
+
 `;
 
 //  logo1: '#F27329',

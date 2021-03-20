@@ -5,7 +5,9 @@ import ExitToApp from '@material-ui/icons/ExitToApp';
 import Person from '@material-ui/icons/Person';
 import Group from '@material-ui/icons/Group';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import KeyboardArrowLeftOutlinedIcon from '@material-ui/icons/KeyboardArrowLeftOutlined';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Search from '@material-ui/icons/Search';
 import Add from '@material-ui/icons/Add';
@@ -33,6 +35,12 @@ import Apps from '@material-ui/icons/Apps';
 import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined';
 import MenuOpenOutlinedIcon from '@material-ui/icons/MenuOpenOutlined';
 
+import Facebook from '@material-ui/icons/Facebook';
+import YouTube from '@material-ui/icons/YouTube';
+import LinkedIn from '@material-ui/icons/LinkedIn';
+import Twitter from '@material-ui/icons/Twitter';
+import Instagram from '@material-ui/icons/Instagram';
+
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 // import LottieAnimation from '../../lib/lottie'
@@ -46,6 +54,17 @@ interface SvgIcons extends SvgIconProps {
 // eslint-disable-next-line react/prop-types
 export const Icons: React.FC<SvgIcons> = ({ type, ...props }) => {
   switch (type) {
+    case 'Twitter':
+      return <Twitter {...props} />;
+    case 'Instagram':
+      return <Instagram {...props} />;
+    case 'LinkedIn':
+      return <LinkedIn {...props} />;
+    case 'YouTube':
+      return <YouTube {...props} />;
+    case 'Facebook':
+      return <Facebook {...props} />;
+
     case 'Menu':
       return <MenuOutlinedIcon {...props} />;
     case 'MenuOpen':
@@ -90,6 +109,10 @@ export const Icons: React.FC<SvgIcons> = ({ type, ...props }) => {
       return <Person {...props} />;
     case 'KeyboardArrowRightIcon':
       return <KeyboardArrowRightIcon {...props} />;
+    case 'KeyboardArrowLeft':
+      return <KeyboardArrowLeftOutlinedIcon {...props} />;
+    case 'ArrowForward':
+      return <ArrowForwardOutlinedIcon {...props} />;
     case 'KeyboardArrowDownIcon':
       return <KeyboardArrowDownIcon {...props} />;
     case 'Add':

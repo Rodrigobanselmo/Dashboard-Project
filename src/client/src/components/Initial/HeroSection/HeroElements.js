@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { MdKeyboardArrowRight, MdArrowForward } from 'react-icons/md';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 
 export const HeroContainer = styled.div`
   background: #0c0c0c;
@@ -101,14 +102,19 @@ export const HeroBtnWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
-export const ArrowForward = styled(MdArrowForward)`
+export const ArrowForward = styled(ArrowForwardOutlinedIcon)`
   margin-left: 8px;
   font-size: 20px;
+  position: absolute;
+  top:10px;
 `;
 
-export const ArrowRight = styled(MdKeyboardArrowRight)`
+export const ArrowRight = styled(KeyboardArrowRightIcon)`
   margin-left: 8px;
   font-size: 20px;
+  position: absolute;
+  top:10px;
 `;

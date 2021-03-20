@@ -16,6 +16,7 @@ function HeroSection() {
   const [hover, setHover] = useState(false);
 
   const onHover = () => {
+    console.log('object');
     setHover(!hover);
   };
   return (
@@ -40,10 +41,14 @@ function HeroSection() {
             offset={-80}
             primary='true'
             dark='true'
-            onMouseEnter={onHover}
+            onMouseEnter={()=>onHover()}
             onMouseLeave={onHover}
           >
-            É Simple {hover ? <ArrowForward /> : <ArrowRight />}
+            <div style={{padding:'0px 15px',marginLeft:-15}}>
+
+            É Simple
+            {!hover ? <ArrowForward /> : <ArrowRight />}
+            </div>
           </Button>
         </HeroBtnWrapper>
       </HeroContent>

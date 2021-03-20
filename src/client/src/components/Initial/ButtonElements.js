@@ -1,14 +1,15 @@
 import styled from 'styled-components';
 import { Link } from 'react-scroll';
-import { MdKeyboardArrowRight, MdArrowForward } from 'react-icons/md';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowRight';
 
-export const ArrowForward = styled(MdArrowForward)`
+export const ArrowForward = styled(KeyboardArrowLeftIcon)`
   margin-left: 8px;
   color:'#fff';
   font-size: 20px;
 `;
 
-export const ArrowRight = styled(MdKeyboardArrowRight)`
+export const ArrowRight = styled(KeyboardArrowRightIcon)`
   margin-left: 8px;
   color:'#fff';
   font-size: 20px;
@@ -52,7 +53,7 @@ export const ButtonDisable = styled.button`
   transition: all 0.5s ease-in-out;
   border:none;
   margin-top:20px;
-  
+
   &:disabled {
     transition: all 0.5s ease-in-out;
     background: #444;

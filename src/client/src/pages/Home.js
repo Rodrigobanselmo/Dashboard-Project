@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Initial/Navbar';
 import Sidebar from '../components/Initial/Sidebar';
-//import Footer from '../components/Initial/Footer';
-//import HeroSection from '../components/Initial/HeroSection';
-//import InfoSection from '../components/Initial/InfoSection';
-/* import {
+import Footer from '../components/Initial/Footer';
+import HeroSection from '../components/Initial/HeroSection';
+import InfoSection from '../components/Initial/InfoSection';
+import {
   homeObjOne,
   homeObjTwo,
   homeObjThree
-} from '../components/Initial/InfoSection/Data'; */
+} from '../components/Initial/InfoSection/Data';
 //import Services from '../components/Initial/Services';
 
 function Home() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -22,6 +22,12 @@ function Home() {
     <>
       <Sidebar isOpen={isOpen} toggle={toggle} />
       <Navbar toggle={toggle} />
+      <HeroSection />
+      <InfoSection {...homeObjOne} />
+      <InfoSection {...homeObjTwo} />
+{/*       <Services />
+      <InfoSection {...homeObjThree} /> */}
+      <Footer />
     </>
   );
 }

@@ -1,11 +1,4 @@
 import React from 'react';
-import {
-  FaFacebook,
-  FaInstagram,
-  FaYoutube,
-  FaTwitter,
-  FaLinkedin
-} from 'react-icons/fa';
 import { animateScroll as scroll } from 'react-scroll';
 import {
   FooterContainer,
@@ -22,6 +15,7 @@ import {
   SocialIcons,
   SocialIconLink
 } from './FooterElements';
+import {Icons} from '../../Icons/iconsDashboard';
 
 const Footer = () => {
   const toggleHome = () => {
@@ -70,10 +64,10 @@ const Footer = () => {
             <WebsiteRights>SimpleSST © {new Date().getFullYear()}. Todos os direitos reservados.</WebsiteRights>
             <SocialIcons>
               <SocialIconLink href='/' target='_blank' aria-label='Facebook'>
-                <FaFacebook />
+                <Icons type='Facebook' />
               </SocialIconLink>
               <SocialIconLink href='/' target='_blank' aria-label='Instagram'>
-                <FaInstagram />
+                <Icons type='Instagram' />
               </SocialIconLink>
               <SocialIconLink
                 href='//www.youtube.com/'
@@ -81,10 +75,10 @@ const Footer = () => {
                 aria-label='Youtube'
                 rel='noopener noreferrer'
               >
-                <FaYoutube />
+                <Icons type='YouTube' />
               </SocialIconLink>
               <SocialIconLink href='/' target='_blank' aria-label='Linkedin'>
-                <FaLinkedin />
+                <Icons type='LinkedIn' />
               </SocialIconLink>
             </SocialIcons>
           </SocialMediaWrap>
