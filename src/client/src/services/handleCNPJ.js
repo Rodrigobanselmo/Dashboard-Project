@@ -3,8 +3,8 @@ import axios from 'axios';
 export function GetCNPJ(cnpj,checkSuccess,checkError) {
 
     cnpj = cnpj.replace(/\D/g, '');
-    
-    axios.get(`http://localhost:3000/api/cnpj/${cnpj}`)
+
+    axios.get(`http://localhost:3001/api/cnpj/${cnpj}`)
     .then(response => checkSuccess(response.data))
     .catch(error => checkError(error))
 }

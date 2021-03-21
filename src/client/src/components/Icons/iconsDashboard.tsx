@@ -29,7 +29,8 @@ import Storage from '@material-ui/icons/StorageTwoTone';
 import Business from '@material-ui/icons/BusinessTwoTone';
 import InfoOutlined from '@material-ui/icons/InfoOutlined';
 import ErrorOutlineRoundedIcon from '@material-ui/icons/ErrorOutlineRounded';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
+import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+// import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import Apps from '@material-ui/icons/Apps';
 import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined';
@@ -43,7 +44,7 @@ import Instagram from '@material-ui/icons/Instagram';
 
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
-// import LottieAnimation from '../../lib/lottie'
+import LottieAnimation from '../../lib/lottie';
 // import { AiOutlineClose } from 'react-icons/ai';
 // import { BsCheckCircle,BsExclamationTriangle,BsXOctagon,BsInfoCircle } from 'react-icons/bs';
 
@@ -52,7 +53,8 @@ interface SvgIcons extends SvgIconProps {
 }
 
 // eslint-disable-next-line react/prop-types
-export const Icons: React.FC<SvgIcons> = ({ type, ...props }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const Icons: React.FC<SvgIcons | any> = ({ type, ...props }) => {
   switch (type) {
     case 'Twitter':
       return <Twitter {...props} />;
@@ -73,7 +75,7 @@ export const Icons: React.FC<SvgIcons> = ({ type, ...props }) => {
     case 'Check':
       return <CheckCircleOutlineIcon {...props} />;
     case 'Warn':
-      return <WarningRoundedIcon {...props} />;
+      return <ReportProblemOutlinedIcon {...props} />;
     case 'Error':
       return <ErrorOutlineRoundedIcon {...props} />;
     case 'Info':
@@ -141,12 +143,17 @@ export const Icons: React.FC<SvgIcons> = ({ type, ...props }) => {
     case 'Video':
       return <VideoLibrary {...props} />;
 
-    /*         case 'Load':
-            return (
-            <div {...props}>
-                <LottieAnimation  lotti='loader' height={30} width={30} isClickToPauseDisabled={true} />
-            </div>
-            ) */
+    case 'Load':
+      return (
+        <div {...props}>
+          <LottieAnimation
+            lotti="loader"
+            height={30}
+            width={30}
+            isClickToPauseDisabled
+          />
+        </div>
+      );
     default:
       return <Close {...props} />;
   }

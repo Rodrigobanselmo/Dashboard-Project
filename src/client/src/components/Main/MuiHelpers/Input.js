@@ -16,7 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 export const Icon = styled(Icons)`
     position:absolute;
-    top:25%;
+    top:18%;
     right:17px;
     cursor:pointer;
     color: ${({theme})=> theme.palette.status.success };
@@ -91,7 +91,7 @@ export default function Input({validation=false,status,icon,width='100%',title='
                 {validation &&
                 <BootstrapTooltip placement="right" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={title} styletooltip={{transform: 'translateY(-30px)'}}>
                     <div>
-                        <Icon status={status} type={icon}/> 
+                        <Icon status={status} type={icon}/>
                     </div>
                 </BootstrapTooltip>
                 }
@@ -111,7 +111,7 @@ export function InputEnd({validation=false,option=false,marginTop=10,marginBotto
                 {validation &&
                 <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={title} styletooltip={{transform: 'translateY(0px)'}}>
                     <div>
-                        <IconEnd status={status} type={icon}/> 
+                        <IconEnd status={status} type={icon}/>
                     </div>
                 </BootstrapTooltip>
                 }
@@ -127,19 +127,19 @@ export function InputEnd({validation=false,option=false,marginTop=10,marginBotto
 export function SelectedEnd({selected,setData,sliceItems=false,label,data=[],marginTop=10,marginBottom=10,status,icon,width='100%',title='OK',...props}) {
 
     const [open, setOpen] = React.useState(false);
-  
+
     const handleChange = (event) => {
       setData(data[event.target.value - 1])
     };
-  
+
     const handleClose = () => {
       setOpen(false);
     };
-  
+
     const handleOpen = () => {
       setOpen(true);
     };
-  
+
     return (
         <FormControl variant="outlined" style={{width:width,marginTop,marginBottom}} >
             <InputLabelEnd margin={'dense'} htmlFor="outlined-age-native-simple">{label}</InputLabelEnd>
@@ -154,7 +154,7 @@ export function SelectedEnd({selected,setData,sliceItems=false,label,data=[],mar
             onChange={handleChange}
             {...props}
             >
-            {sliceItems ? 
+            {sliceItems ?
                 data.slice(1,sliceItems).map((item,index)=>
                     <MenuItem key={index} value={(index+1)}>{item}</MenuItem>
                 )

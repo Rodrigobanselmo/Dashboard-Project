@@ -1,7 +1,7 @@
 import styled, {css, keyframes} from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 import BsXOctagon from '@material-ui/icons/ErrorOutlineRounded';
-import BsExclamationTriangle from '@material-ui/icons/WarningRounded';
+import BsExclamationTriangle from '@material-ui/icons/ReportProblemOutlined';
 import BsCheckCircle from '@material-ui/icons/CheckCircleOutline';
 
 export const HeroBg = styled.div`
