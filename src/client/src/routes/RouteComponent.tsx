@@ -26,7 +26,7 @@ const RouteComponent: React.FC<PrivateRouterest> = ({
       {...props}
       render={(rest: RouteComponentProps) => {
         if (props?.isPrivate)
-          return privateRoute === '/e' ? (
+          return props.isPrivate ? (
             <Component {...rest} />
           ) : (
             <>

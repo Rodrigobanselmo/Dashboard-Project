@@ -9,7 +9,8 @@ import { Home } from './pages';
 import { RouteComponent, home, auth } from './routes';
 /* import { AuthProvider } from './context/AuthContext.js';
 import NotificationProvider from './context/NotificationContext.js';
-import LoaderProvider from './context/LoaderContext.js'; */
+ */
+import LoaderProvider from './context/LoaderContext';
 
 export const App: React.FC = () => {
   return (
@@ -21,16 +22,16 @@ export const App: React.FC = () => {
               <Home />
             </Route>
             {/*             <NotificationProvider>
-              <LoaderProvider>
                 <AuthProvider> */}
-            <Switch>
-              {auth.map((route) => (
-                <RouteComponent key={route.path} {...route} />
-              ))}
-            </Switch>
-            {/*                 </AuthProvider>
-              </LoaderProvider>
+            <LoaderProvider>
+              <Switch>
+                {auth.map((route) => (
+                  <RouteComponent key={route.path} {...route} />
+                ))}
+              </Switch>
+              {/*                 </AuthProvider>
             </NotificationProvider> */}
+            </LoaderProvider>
           </Switch>
         </Router>
         <GlobalStyle />

@@ -1,8 +1,8 @@
+/* eslint-disable import/no-anonymous-default-export */
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
-import 'firebase/auth';
 
-//import { seedDatabase } from '../seed';
+// import { seedDatabase } from '../seed';
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -11,11 +11,11 @@ const config = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 const firebase = Firebase.initializeApp(config);
 
-export const auth = firebase.auth()
+export const auth = firebase.auth();
 export const fb = Firebase;
 export const db = firebase.firestore();
 
