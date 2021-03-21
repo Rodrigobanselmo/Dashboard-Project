@@ -7,8 +7,7 @@ import { GlobalStyle } from './styles/global';
 import themeColor from './styles/themeDark';
 import { Home } from './pages';
 import { RouteComponent, home, auth } from './routes';
-/* import { AuthProvider } from './context/AuthContext.js';
- */
+import { AuthProvider } from './context/AuthContext.js';
 import NotificationProvider from './context/NotificationContext.js';
 import LoaderProvider from './context/LoaderContext';
 
@@ -22,14 +21,14 @@ export const App: React.FC = () => {
               <Home />
             </Route>
             <NotificationProvider>
-              {/* <AuthProvider> */}
               <LoaderProvider>
-                <Switch>
-                  {auth.map((route) => (
-                    <RouteComponent key={route.path} {...route} />
-                  ))}
-                </Switch>
-                {/*   </AuthProvider> */}
+                <AuthProvider>
+                  <Switch>
+                    {auth.map((route: any) => (
+                      <RouteComponent key={route.path} {...route} />
+                    ))}
+                  </Switch>
+                </AuthProvider>
               </LoaderProvider>
             </NotificationProvider>
           </Switch>

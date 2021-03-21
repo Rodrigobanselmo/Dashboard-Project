@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import firebase from 'firebase';
-import { auth } from '../lib/firebase.prod';
+import { auth } from '../lib/firebase.prod.js';
 
 const errorCatch = (error: any) => {
   let errorMessage = error;

@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
   },
   popper: {
-    zIndex: theme.xyzIndex.richTooltip,
+    zIndex: 1500,
     '&[x-placement*="bottom"] $arrow': {
       top:10,
       right: 0,
@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   arrow: {
-    zIndex: theme.xyzIndex.richTooltip,
+    zIndex: 1500,
     position: 'absolute',
     fontSize: 8,
     width: '3em',
@@ -112,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
       },
   },
 }));
-  
+
   const RichTooltip = ({open,setOpen,anchorRef,children, arrow=true,placement='bottom-end',width=250,translateY=0}) => {
     const classes = useStyles();
     const [arrowRef, setArrowRef] = React.useState(null);
@@ -160,5 +160,5 @@ const useStyles = makeStyles((theme) => ({
           </Popper>
     );
   };
-  
+
   export default RichTooltip;

@@ -4,9 +4,8 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
-import ReCAPTCHA from "react-google-recaptcha";
 import {ButtonDisable,ArrowForward,ArrowRight} from '../../Initial/ButtonElements'
-import { AiOutlineClose } from 'react-icons/ai';
+import AiOutlineClose from '@material-ui/icons/Close';
 import styled from "styled-components";
 
 const IconCloseButton = styled(AiOutlineClose)`
@@ -55,9 +54,9 @@ const useStyles = makeStyles((theme) => ({
 // '&:hover': { /* … */ }
 
 export function ModalMui({email,open,onClose,onClick}) {
-  
+
 /*   const [recaptcha, setRecaptcha] = React.useState(false) */
-  
+
   const classes = useStyles();
 
 /*   const recaptchaKey = '6Ld75T8aAAAAAFHCMlDdQldC2kLUaX-dHMnPFMWK' */
@@ -94,7 +93,7 @@ export function ModalMui({email,open,onClose,onClick}) {
             <div style={{backgroundColor:'#ddd',  borderColor:'#555',borderRadius:5, borderStyle:'solid', borderWidth:1,width:'100%',padding:'12px 20px'}}>
               <p style={{textAlign:'center',color:'#202020',fontSize:15}}>{`${(email).toLowerCase()}`}</p>
             </div>
-          
+
 {/*             <div style={{alignSelf: 'center',margin:'30px 0px',marginBottom:40}}>
               <ReCAPTCHA
                 sitekey={recaptchaKey}

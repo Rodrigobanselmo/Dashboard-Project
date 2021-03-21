@@ -1,5 +1,5 @@
 import React, {useState,useRef} from 'react';
-import {Icons} from '../../../Icons/iconsDashboard';
+import {Icons} from '../../../Icons/iconsDashboard.tsx';
 import RichTooltip from './RichTooltip'
 import styled from "styled-components";
 
@@ -55,14 +55,14 @@ const Text = styled.p`
 export default function Select({dataToSelect,selected,setSelected,width=250,textWidth=150,icon='KeyboardArrowDownIcon',children,uniq=false,attention=false}) {
     const [openType, setOpenType] = useState(false);
     const anchorRef = useRef(null);
-    
+
     function RichTooltipContent() {
-        
+
         function onSelect(type) {
-            setSelected(type) 
+            setSelected(type)
             setOpenType(false)
         }
-        
+
         return (
             <div style={{padding:'5px 0px 5px 3px',maxHeight:'240px',overflowY:'scroll'}} >
             {dataToSelect.map((type,index)=>
@@ -74,12 +74,12 @@ export default function Select({dataToSelect,selected,setSelected,width=250,text
             </div>
         )
     }
-  
+
     return (
         <>
             <Container onClick={()=>{setOpenType(openType=>!openType)}} open={openType} >
                 <Text style={{maxWidth:textWidth}} >
-                    {attention && !dataToSelect.find(i=>i===selected)  ? 
+                    {attention && !dataToSelect.find(i=>i===selected)  ?
                         <Attention>*</Attention>
                     :null}
                     {selected}

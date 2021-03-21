@@ -13,7 +13,7 @@ import {useNotification} from '../../../context/NotificationContext'
 import {DASHBOARD} from '../../../routes/routesNames'
 
 export default function SignIn({emailQuery}) {
-  
+
   const initialState = {
     emailAddress: emailQuery ? emailQuery:'rodrigobanselmo@gmail.com',
     password: 'qweqwe',
@@ -22,7 +22,7 @@ export default function SignIn({emailQuery}) {
     warnPassMessage: {body:'Campo de senha não pode ser nulo',type:'none'},
     warnConfirmMessage: {body:'Confirme sua senha para continuar',type:'none'},
   }
-  
+
   const history = useHistory()
 
   const [error, setError] = useState('');
@@ -30,21 +30,21 @@ export default function SignIn({emailQuery}) {
   const [login, setLogin] = useState(false); //tels us with state the component is // Enter-Login-Register
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(initialState);
-  
+
   const [update, setUpdate] = useState(false); // will tell us if need to check the email input
-  
+
   const inputPass = useRef(null);
   const inputConfirm = useRef(null);
-  
+
   const { currentUser } = useAuth()
   const {load,setLoad} = useLoaderScreen();
   const notification = useNotification();
-  
+
   const [fade,change,fadeInOut] = useFade('Entrar')
   const [onTimeOutReset] = useTimeOut() //to undo an error message and if i sent a new error will erase the old setTimeout to undo it
   const [onTimeOutR,onClearTimeO] = useTimeOut()  //to see if email is valid and if user stopped texting
 
-  
+
   useEffect(() => {  //redirect to app if user is logged  and if user email is coming from query it will valid it
     if (currentUser) {
       setLoad(true)
@@ -60,15 +60,15 @@ export default function SignIn({emailQuery}) {
   }, [currentUser])
 
   useEffect(() => {
-    if (error && error !== '') onTimeOutReset(()=>setError(''),4000); 
+    if (error && error !== '') onTimeOutReset(()=>setError(''),4000);
   }, [error])
 
 
-  useEffect(() => {  //when email input is lazy and email is valid will call this checkEmail func  
+  useEffect(() => {  //when email input is lazy and email is valid will call this checkEmail func
     update && onTimeOutR(onButtonSign,1500)
   }, [update])
 
-  
+
   function onChangeAuthMethod(type) { //it will change the title of the form box
     let message= 'Entrar'
     if (type === 'register') message = 'Cadastro'
@@ -93,11 +93,11 @@ export default function SignIn({emailQuery}) {
   function onSentRecoveryEmail() {
     onRecoveryEmail({data,setLoad,setError,onSuccessNotification,onErrorNotification,setRecoveryModal})
   }
-  
+
   function onSetEmailAddress(value) {
     handleEmailChange(value,data,setData,setUpdate,onClearTimeO)
   }
-  
+
   function onSetPassword(value) {
     handlePasswordChange(value,data,setData)
   }
@@ -106,7 +106,7 @@ export default function SignIn({emailQuery}) {
     confirmHandlePasswordChange(value,data,setData)
   }
 
-  
+
   function onFocusEmail(value) { //every time I focus the email will disappear the others inputs
     if (login !== false  ) {
       setData({...initialState,emailAddress:value})
@@ -131,35 +131,35 @@ export default function SignIn({emailQuery}) {
         <Collapse timeout={1000} in={error && error !== '' ? true : false}>
           <Sign.Errors error={error}/>
         </Collapse>
-        <Base 
+        <Base
           onSubmit={onButtonSign}
           method="POST"
         >
           <Sign.InputEmail
             loading={loading}
-            data={data} 
-            onSetEmailAddress={onSetEmailAddress} 
+            data={data}
+            onSetEmailAddress={onSetEmailAddress}
            /*  onBlurEmail={onBlurEmail} */
-            onFocusEmail={onFocusEmail} 
+            onFocusEmail={onFocusEmail}
             onKerPress={({key})=>key==='Enter' && onButtonSign()}
             />
-          <Sign.InputPass 
-            inputPass={inputPass} 
+          <Sign.InputPass
+            inputPass={inputPass}
             data={data}
             loading={loading}
             login={login}
-            onSetPassword={onSetPassword} 
+            onSetPassword={onSetPassword}
             onKerPress={({key})=>key==='Enter' && (login === 'register' ? inputConfirm.current.focus() : onButtonSign())}
             />
-          <Sign.InputConfirmPass 
-            inputConfirm={inputConfirm} 
-            data={data} 
-            onSetConfirmPassword={onSetConfirmPassword} 
+          <Sign.InputConfirmPass
+            inputConfirm={inputConfirm}
+            data={data}
+            onSetConfirmPassword={onSetConfirmPassword}
             login={login}
             loading={loading}
             />
-          <Sign.ContinueButton 
-            handleSignIn={onButtonSign} 
+          <Sign.ContinueButton
+            handleSignIn={onButtonSign}
             login={login}
             data={data}
           />

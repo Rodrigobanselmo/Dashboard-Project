@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { db } from '../lib/firebase.prod';
+import { db } from '../lib/firebase.prod.js';
 
 export const errorCatch = (error: any) => {
   let errorMessage = error;

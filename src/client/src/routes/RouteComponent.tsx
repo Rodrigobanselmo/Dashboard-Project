@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import {
@@ -7,7 +8,7 @@ import {
   RouteComponentProps,
 } from 'react-router-dom';
 
-interface PrivateRouterest extends RouteProps {
+interface PrivateRouteProps extends RouteProps {
   component: React.FC<RouteComponentProps>;
   privateRoute?: string;
   isPrivate?: boolean;
@@ -16,7 +17,7 @@ interface PrivateRouterest extends RouteProps {
   Equal?: boolean[];
 }
 
-const RouteComponent: React.FC<PrivateRouterest> = ({
+const RouteComponent: React.FC<PrivateRouteProps> = ({
   component: Component,
   privateRoute = '/',
   ...props
