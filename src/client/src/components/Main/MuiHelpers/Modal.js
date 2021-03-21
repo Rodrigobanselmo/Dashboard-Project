@@ -4,9 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
-import ReCAPTCHA from "react-google-recaptcha";
 import {ButtonDisable,ArrowForward,ArrowRight} from '../../Initial/ButtonElements'
-import { AiOutlineClose } from 'react-icons/ai';
 import styled from "styled-components";
 import IconButton from '@material-ui/core/IconButton';
 import {Icons} from '../../Icons/iconsDashboard'
@@ -97,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function ModalMui({children,open,onClose,title}) {
-  
+
   const classes = useStyles();
 
   function onCloseModal() {
@@ -118,7 +116,7 @@ export function ModalMui({children,open,onClose,title}) {
         <Fade in={open}>
 {/*         <Slide direction="up" in={true} mountOnEnter unmountOnExit timeout={600}> */}
           <div className={classes.paper}>
-            {title ? 
+            {title ?
             <Title>{title}</Title>
             : null}
               <IconCloseButton >
@@ -135,7 +133,7 @@ export function ModalMui({children,open,onClose,title}) {
 }
 
 export function ModalFullScreen({children,open,onClose,infoModal=false,onGoBack=false,arrow=false}) {
-  
+
     const classes = useStyles();
     const notification = useNotification();
 
@@ -152,7 +150,7 @@ export function ModalFullScreen({children,open,onClose,infoModal=false,onGoBack=
         onClose()
       }
     }
-  
+
     return (
         <Modal
           className={classes.modal}
@@ -171,7 +169,7 @@ export function ModalFullScreen({children,open,onClose,infoModal=false,onGoBack=
                       <Icon type={'Close'} />
                   </IconButton>
               </IconCloseFull>
-              {onGoBack && arrow? 
+              {onGoBack && arrow?
                 <IconGoBackFull >
                     <IconButton onClick={onGoBack} aria-label="goBack">
                         <Icon type={'ArrowBack'} />

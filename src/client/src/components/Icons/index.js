@@ -1,8 +1,11 @@
-import { AiOutlineClose } from 'react-icons/ai';
-import { BsCheckCircle,BsExclamationTriangle,BsXOctagon,BsInfoCircle } from 'react-icons/bs';
+import Close from '@material-ui/icons/Close';
+import BsInfoCircle from '@material-ui/icons/InfoOutlined';
+import BsXOctagon from '@material-ui/icons/ErrorOutlineRounded';
+import BsExclamationTriangle from '@material-ui/icons/WarningRounded';
+import BsCheckCircle from '@material-ui/icons/CheckCircleOutline';
 import styled, {css, keyframes} from 'styled-components/macro';
 
-export const IconCLose = styled(AiOutlineClose)`
+export const IconCLose = styled(Close)`
 
     position: absolute;
     top: 7px;

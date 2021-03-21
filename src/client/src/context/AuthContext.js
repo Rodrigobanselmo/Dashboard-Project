@@ -5,7 +5,6 @@ import {DASHBOARD,SIGN} from '../routes/routesNames'
 import {useNotification} from './NotificationContext'
 import {useLoaderScreen} from './LoaderContext'
 import {GetUserData} from '../services/firestoreUser'
-import { useDispatch } from 'react-redux'
 import {LogOut} from '../services/firebaseAuth'
 
 const AuthContext = React.createContext()
