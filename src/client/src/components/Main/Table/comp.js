@@ -67,13 +67,17 @@ TableTabs.Head = function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow style={{maxWidth:'300px'}}>
-{/*       <TableCellComponent padding="checkbox">
-          <Checkbox
-            indeterminate={false}
-            checked={false}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          />
-        </TableCellComponent> */}
+        {props.selected &&
+          <TableCellComponent padding="checkbox">
+              <Checkbox
+                indeterminate={false}
+                checked={props.rowCount > 0 && props.selected.length === props.rowCount}
+                onChange={props.onSelectAllClick}
+                color={'primary'}
+                inputProps={{ 'aria-label': 'select all desserts' }}
+                />
+            </TableCellComponent>
+          }
         {props.data.headCells.map((headCell) => (
           <TableCellComponent
             key={headCell.id}
@@ -95,23 +99,26 @@ TableTabs.Head = function EnhancedTableHead(props) {
   );
 }
 
-TableTabs.TableRows = function RowComponent(row, index,data, selected=[]) {
+TableTabs.TableRows = function RowComponent(row, index,data, selected,handleClick) {
 
   const labelId = `enhanced-table-checkbox-${index}`;
   var dateStart = row?.creation  && row.creation  && row.creation !== 0 ? NormalizeData(new Date(row.creation),'normal') : 'Indisponível';
   var dateEnd = row?.end  && row.end  && row.end !== 0 ? NormalizeData(new Date(row.end),'normal') : 'Presente';
-  //const orderCells = [{name:'CNPJ'},{name:'responsavel'},{name:'creation',type:'start/end'},{name:'status',type:'status'}]
 
-  const isItemSelected = selected.indexOf(row.CNPJ) !== -1;
+  const isItemSelected = selected ? selected.indexOf(row?.CNPJ ?? row?.id ) !== -1 : false;
 
   return (
     <TableRowComponent key={`${row[data.orderCells.id]}`}>
-{/*         <TableCellComponent padding="checkbox">
+      {selected &&
+        <TableCellComponent padding="checkbox">
           <Checkbox
             checked={isItemSelected}
+            onClick={(e)=>handleClick(e,row?.CNPJ ?? row?.id)}
             inputProps={{ 'aria-labelledby': labelId }}
-          />
-        </TableCellComponent> */}
+            color={'primary'}
+            />
+        </TableCellComponent>
+        }
         {data.orderCells.order.map((item,indexItem)=>{
           return(
             item.type ?

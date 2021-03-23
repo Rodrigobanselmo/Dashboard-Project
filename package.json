@@ -10,6 +10,8 @@
     "dev": "concurrently \"yarn start_node\" \"yarn start_client\" "
   },
   "dependencies": {
+    "@unform/core": "^2.1.6",
+    "@unform/web": "^2.1.6",
     "axios": "^0.21.1",
     "concurrently": "^6.0.0",
     "cors": "^2.8.5",

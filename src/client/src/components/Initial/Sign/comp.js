@@ -6,15 +6,15 @@ import {ModalMui} from '../../Main/Modal/ModalMui'
 
 
 function Pop(props) {
-    
+
     return (
-  
+
       <DivIcon confirm={props.confirm} show={props.warn.type !=='none'} >
         {props.warn.type === 'load' ? <LottieAnimation  lotti='loader' height={30} width={30} isClickToPauseDisabled={true} />
         :
         <div style={{position:'relative'}} className="App">
           <BootstrapTooltip placement="right"  title={props.warn.body}>
-            <div style={{height:25,width:25,marginRight:-3,display:'flex',justifyContent:'center',alignItems:'center'}} > 
+            <div style={{height:25,width:25,marginRight:-3,display:'flex',justifyContent:'center',alignItems:'center'}} >
             {props.warn.type ==='check' ? <IconCheck/> :
               props.warn.type ==='warn' ?<IconWarn/> :
               props.warn.type ==='error' ? <IconError/>:
@@ -25,7 +25,7 @@ function Pop(props) {
         }
       </DivIcon>
     )
-  
+
 }
 
 export default function Sign({children, ...restProps }) {
@@ -48,18 +48,18 @@ Sign.VideoBackground = function VideoBackground() {
 
 Sign.Errors =  function Errors(props) {
     return(
-      <Error data-testid="error"><IconError color='#fff'/>{`    ${props.error}`}</Error>
+      <Error data-testid="error"><IconError />{`    ${props.error}`}</Error>
     )
 }
-  
+
 Sign.Logo =  function Logo() {
     return(
       <Container>
         <NavLogo to='/'/>
-      </Container>  
+      </Container>
     )
 }
-  
+
 Sign.InputEmail = function InputEmail(props) {
     return(
       <div style={{display:'flex',flexDirection:'row',alignItems:'center',position:'relative'}}>
@@ -77,7 +77,7 @@ Sign.InputEmail = function InputEmail(props) {
       </div>
     )
 }
-  
+
 Sign.InputPass =  function InputPass(props) {
     return(
       <div style={{display:'flex',flexDirection:'row',alignItems:'center',position:'relative'}}>
@@ -96,7 +96,7 @@ Sign.InputPass =  function InputPass(props) {
       </div>
     )
 }
-  
+
 Sign.InputConfirmPass =  function InputConfirmPass(props) {
     return(
       <div style={{display:'flex',flexDirection:'row',alignItems:'center',position:'relative'}}>
@@ -114,7 +114,7 @@ Sign.InputConfirmPass =  function InputConfirmPass(props) {
       </div>
     )
 }
-  
+
 Sign.ContinueButton =  function ContinueButton(props) {
     return(
       <Submit login={props.login} onClick={props.handleSignIn} type="submit" data-testid="sign-in">
@@ -122,7 +122,7 @@ Sign.ContinueButton =  function ContinueButton(props) {
       </Submit>
     )
 }
-  
+
 Sign.ForgotPassword =  function ForgotPassword(props) {
     return(
       <TextForgotten login={props.login}>
@@ -130,7 +130,7 @@ Sign.ForgotPassword =  function ForgotPassword(props) {
       </TextForgotten>
     )
 }
-  
+
 Sign.Duvida =  function Duvida() {
     return(
       <TextSmall>

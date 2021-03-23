@@ -49,7 +49,6 @@ export default function Modal({open,setOpen,notification,currentUser,setLoad,set
     const [receitaFederal, setReceitaFederal] = useState(initialStateReceita) //dados dos email inseridos nos inputs
     const [infoModal, setInfoModal] = useState({title:'',text:''}) //para mandar pro modalFullScreen e dizer se ao fechar da um alerta
     const [position, setPosition] = useState(1) //posicao do carrousel
-    console.log(data)
 
     function onClose(allGood) {
         setOpen(false)
@@ -84,10 +83,9 @@ export default function Modal({open,setOpen,notification,currentUser,setLoad,set
                     </div>
                     <div style={{display:'flex',flexDirection:'column',alignItems:'center',maxWidth:600,margin:'auto'}}>
                         <div style={{alignItems:'center',display:'flex',flexDirection:'column',margin:'0px 20px'}}>
-                            {console.log(10)}
                             <AddModal.Header second/>
                             <AddModal.Input setData={setData} data={data} notification={notification} onCheckCNPJExists={onCheckCNPJExists} companyId={currentUser.company.id}/>
-                            <AddModal.Continue setLoad={setLoad} setReceitaFederal={setReceitaFederal} onGetCNPJ={onGetCNPJ} data={data} setData={setData} disable={!(data?.status && data.status ==='Check')} notification={notification} setPosition={setPosition}/> 
+                            <AddModal.Continue setLoad={setLoad} setReceitaFederal={setReceitaFederal} onGetCNPJ={onGetCNPJ} data={data} setData={setData} disable={!(data?.status && data.status ==='Check')} notification={notification} setPosition={setPosition}/>
                         </div>
                     </div>
                     <div style={{margin:'auto',zIndex:1,height:'100vh',width:'100vw',overflowY:'scroll',overflowX:'visible', alignItems:'center',justifyContent:'center'}}>
@@ -99,7 +97,7 @@ export default function Modal({open,setOpen,notification,currentUser,setLoad,set
                         <div style={{alignItems:'center',display:'flex',flexDirection:'column',margin:'0px 20px'}}>
                             <AddModal.Header />
                             <AddModal.LastInput setData={setData} data={data} notification={notification} onCheckCNPJExists={onCheckCNPJExists} companyId={currentUser.company.id}/>
-                            <AddModal.Continue done setLoad={setLoad} data={data} setData={setData} notification={notification} onNewCompany={onNewCompany}/> 
+                            <AddModal.Continue done setLoad={setLoad} data={data} setData={setData} notification={notification} onNewCompany={onNewCompany}/>
                         </div>
                     </div>
                 </Carrousel>

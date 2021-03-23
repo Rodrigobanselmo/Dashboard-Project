@@ -83,7 +83,16 @@ const TableComponent = withStyles((theme) => ({
 }))((props) => <Table {...props} />);
 
 
-export default function EnhancedTable({rowPage=false,rowComponent,headComponent:Head,data,pagination=false,initialOrder='name',select=false}) {
+export default function EnhancedTable({
+    rowPage=false,
+    rowComponent,
+    headComponent:Head,
+    data,
+    pagination=false,
+    initialOrder='name',
+    selected,
+    setSelected
+}) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState(initialOrder);
@@ -106,6 +115,34 @@ export default function EnhancedTable({rowPage=false,rowComponent,headComponent:
     setPage(0);
   };
 
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = data.rows.map((n) => n?.id ?? n?.CNPJ );
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    setSelected(newSelected);
+  };
 
   const emptyRows = rowPage ? rowsPerPage - Math.min(rowsPerPage, data.rows.length - page * rowsPerPage) : 0;
 
@@ -123,11 +160,14 @@ export default function EnhancedTable({rowPage=false,rowComponent,headComponent:
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
                 data={data}
+                selected={selected}
+                onSelectAllClick={handleSelectAllClick}
+                rowCount={data.rows.length}
             />
             <TableBodyComponent>
                 {stableSort(data.rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row,index)=>rowComponent(row,index,data))}
+                .map((row,index)=>rowComponent(row,index,data,selected,handleClick))}
                 {emptyRows > 0 && pagination && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                     <TableCell className={classes.tableCell} colSpan={60} />
@@ -136,7 +176,7 @@ export default function EnhancedTable({rowPage=false,rowComponent,headComponent:
             </TableBodyComponent>
             </TableComponent>
         </TableContainerComponent>
-        {pagination ? 
+        {pagination ?
             <TablePaginationComponent
             rowsPerPageOptions={[]}
             component="div"

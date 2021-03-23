@@ -7,7 +7,7 @@ import {
 import Tabs from '../../../components/Main/MuiHelpers/Tabs'
 import {FilterComponent,LoadingContent} from '../../../components/Main/Table/comp'
 import Table from './table';
-
+import {onGetAllCompanies} from './func'
 
 export default function Container({children}) {
     return (
@@ -17,19 +17,23 @@ export default function Container({children}) {
     );
 }
 
-Container.TableTabs =  function FilterComponentw({dataRows,setDataRows,tabsLabel,setOpen}) {
+Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,setDataRows,tabsLabel,setOpen,currentUser,notification}) {
 
   const [loadContent, setLoadContent] = React.useState(true)
   const [search, setSearch] = React.useState('')
+
+  React.useEffect(() => {
+    onGetAllCompanies(currentUser.company.id,setDataRows,setLoadContent,notification)
+  }, [])
 
   function TableContainer() {
 
     return (
       <Table
+        selected={selected}
+        setSelected={setSelected}
         loadContent={loadContent}
-        setLoadContent={setLoadContent}
         dataRows={dataRows}
-        setDataRows={setDataRows}
         search={search}
         >
       </Table>

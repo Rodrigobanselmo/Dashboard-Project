@@ -8,7 +8,7 @@ import {useNotification} from '../../../../context/NotificationContext'
 import {filterObject} from '../../../../helpers/ObjectArray'
 export default function EnhancedTable({currentUser,notification,setOpen,usersRows,setUsersRows}) {
 
-    const tabsLabel = ['Sua Empresa', 'Contratantes', 'Laboratório']
+    const tabsLabel = ['Sua Empresa'/* , 'Contratantes', 'Laboratório' */]
 
     const [search, setSearch] = React.useState('')
     const [loadContent, setLoadContent] = React.useState(true)

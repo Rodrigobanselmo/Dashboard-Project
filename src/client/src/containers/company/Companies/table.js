@@ -1,17 +1,7 @@
-import React, {useState,useEffect} from 'react'
+import React from 'react'
 import Table from '../../../components/Main/Table'
-import {onGetAllCompanies} from './func'
-import {useNotification} from '../../../context/NotificationContext'
-import {useAuth} from '../../../context/AuthContext'
 
-function TableCompany({setDataRows,dataRows,loadContent,setLoadContent,search}) {
-
-  const {currentUser} = useAuth()
-  const notification = useNotification()
-
-  React.useEffect(() => {
-    onGetAllCompanies(currentUser.company.id,setDataRows,setLoadContent,notification)
-  }, [])
+function TableCompany({dataRows,loadContent,search,setSelected,selected}) {
 
   const headCells = [
     { id: 'CNPJ', disablePadding: true, label: 'CNPJ' },
@@ -36,6 +26,8 @@ function TableCompany({setDataRows,dataRows,loadContent,setLoadContent,search}) 
       <Table
           loadContent={loadContent}
           dataRows={dataRows}
+          setSelected={setSelected}
+          selected={selected}
           search={search}
           headCells={headCells}
           serachParams={serachParams}
