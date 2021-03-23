@@ -37,7 +37,7 @@ export default function TableTabs({children, tabsLabel, ...restProps }) {
   );
 }
 
-TableTabs.FilterComponents =  React.memo(function FilterComponent(props) {
+export function FilterComponent(props) {
 
 
   const [onTimeOut,onClearTime] = useTimeOut()
@@ -55,7 +55,7 @@ TableTabs.FilterComponents =  React.memo(function FilterComponent(props) {
       {props.children}
     </FilterComponents>
   )
-})
+}
 
 
 TableTabs.Head = function EnhancedTableHead(props) {
@@ -131,7 +131,7 @@ TableTabs.TableRows = function RowComponent(row, index,data, selected=[]) {
   );
 }
 
-TableTabs.LoadingContent = function Loading() {
+export function LoadingContent() {
 
 
   return (

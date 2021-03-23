@@ -3,9 +3,8 @@ import TableMui from '../MuiHelpers/Table'
 import TableTabs from './comp'
 import {filterObject} from '../../../helpers/ObjectArray'
 
-export default function EnhancedTable({loadContent,setLoadContent,orderCells,dataRows,tabsLabel,headCells,serachParams,children}) {
+export default function EnhancedTable({loadContent,orderCells,dataRows,search,headCells,serachParams,children}) {
 
-    const [search, setSearch] = React.useState('')
     const [selected, setSelected] = React.useState([]);
 
     const data = {
@@ -14,7 +13,7 @@ export default function EnhancedTable({loadContent,setLoadContent,orderCells,dat
         orderCells:orderCells
     }
 
-    function TableContainer() {
+    function TableContainer({item}) {
 
         let filterData = {...data}
 
@@ -27,7 +26,7 @@ export default function EnhancedTable({loadContent,setLoadContent,orderCells,dat
           else if (serachParams[4] && filterObject(row,search,serachParams[4])) newData.push({...row})
           else if (serachParams[5] && filterObject(row,search,serachParams[5])) newData.push({...row})
         })
-
+        console.log(item);
         filterData.rows = newData
 
         return (
@@ -50,20 +49,8 @@ export default function EnhancedTable({loadContent,setLoadContent,orderCells,dat
 
 
     return (
-            <TableTabs tabsLabel={tabsLabel} component={TableContainer}>
-                <TableTabs.FilterComponents
-                    setLoadContent={setLoadContent}
-                    setSearch={setSearch}
-                    search={search}
-                    onCleanSearch={()=>setSearch('')}
-                    >
-                  {children}
-                </TableTabs.FilterComponents>
-                { loadContent ?
-                    <TableTabs.LoadingContent />
-                    :
-                    null
-                  }
-          </TableTabs>
+            <>
+                  <TableContainer/>
+          </>
     );
 }

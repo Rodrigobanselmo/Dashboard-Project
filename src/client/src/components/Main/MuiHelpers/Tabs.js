@@ -89,7 +89,7 @@ function TabItems(params) {
 
 }
 
-export default function SimpleTabs({component:Component, children, tabsLabel , ...props}) {
+export default function SimpleTabs({component:Component, children, tabsLabel=[] , ...props}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
