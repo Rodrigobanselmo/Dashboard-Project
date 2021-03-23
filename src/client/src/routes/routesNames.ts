@@ -22,3 +22,6 @@ export const APP_HOME = 'app';
 export const SERVICES_HOME = 'services';
 export const ABOUT_HOME = 'about';
 export const FAQ_HOME = 'faq';
+
+// testing
+export const TESTE = `${DASHBOARD}/teste`;

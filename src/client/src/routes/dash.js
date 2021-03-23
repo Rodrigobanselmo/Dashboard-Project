@@ -1,5 +1,7 @@
 import { Team, Perfil,Companies,Excel } from '../containers';
-import {TEAM,USER,DASHBOARD,COMPANY,DATA} from './routesNames'
+import {TEAM,USER,DASHBOARD,COMPANY,DATA,TESTE} from './routesNames'
+
+import Teste from '../Test/index.tsx';
 
 const routes = [
   {
@@ -42,8 +44,14 @@ const routes = [
     condition:[['admin','master']],
     Equal:[false],
   },
+
+  {
+    path: TESTE,
+    component: Teste,
+    exact:true,
+  },
 ];
 
 
 export default routes
-  
+

@@ -18,12 +18,13 @@ export default function EnhancedTable({currentUser,notification,setOpen,dataRows
 
     const [search, setSearch] = React.useState('')
     const [loadContent, setLoadContent] = React.useState(true)
-    
+    const [selected, setSelected] = React.useState([]);
+
     const data = {
         headCells:headCells,
         rows:dataRows
     }
-    
+
     React.useEffect(() => {
         onGetAllCompanies(currentUser.company.id,setDataRows,setLoadContent,notification)
     }, [])
@@ -41,13 +42,13 @@ export default function EnhancedTable({currentUser,notification,setOpen,dataRows
         })
 
         filterData.rows = newData
- 
+
         return (
             <>
             { loadContent ?
                 null
             :
-                <TableMui 
+                <TableMui
                     select
                     rowPage={data.rows.length}
                     pagination={false}
@@ -63,10 +64,10 @@ export default function EnhancedTable({currentUser,notification,setOpen,dataRows
 
     return (
             <TableTabs tabsLabel={tabsLabel} component={TableContainer}>
-                <TableTabs.FilterComponents 
+                <TableTabs.FilterComponents
                     setLoadContent={setLoadContent}
-                    setSearch={setSearch} 
-                    search={search} 
+                    setSearch={setSearch}
+                    search={search}
                     setOpen={setOpen}
                     onCleanSearch={()=>setSearch('')}
                 />

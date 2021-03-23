@@ -1,4 +1,4 @@
-import {TEAM,TEAM_MODAL_OPEN,COMPANY,COMPANY_MODAL_OPEN,DASHBOARD,DATA} from '../routes/routesNames'
+import {TEAM,TEAM_MODAL_OPEN,COMPANY,COMPANY_MODAL_OPEN,DASHBOARD,DATA,TESTE} from '../routes/routesNames'
 
 const itemsSubSubList = [
   {
@@ -600,6 +600,14 @@ const itemsList3 = [
   }
 ];
 
+const itemsListTest = [
+  {
+    text: "Table Check",
+    icon: 'Menu',
+    id:TESTE,
+    to: TESTE,
+  },
+];
 
 export const lists = [
   {
@@ -616,6 +624,13 @@ export const lists = [
     id:Math.random(),
     items: itemsList1
   },
+  {
+    category: "TESTE",
+    search:'Test',
+    text:'Test',
+    id:Math.random(),
+    items: itemsListTest
+  },
 /*   {
     category: "Gestão Financeira",
     id:Math.random(),
@@ -631,4 +646,5 @@ export const lists = [
     items: itemsList3
   }, */
 ];
+
 

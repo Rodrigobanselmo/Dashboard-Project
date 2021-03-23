@@ -15,7 +15,7 @@ function Team() {
   const {currentUser} = useAuth()
   const notification = useNotification()
   const query = new URLSearchParams(useLocation().search)
-  
+
   useEffect(() => {
     if (query.get('m') !== queryOld && query.get('m')) setOpen(true); setQueryOld(query.get('m'))
   }, [query])

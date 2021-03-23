@@ -15,15 +15,15 @@ interface IProps {
 
 const LoaderContext = createContext<IProps>({} as IProps);
 
-export function useLoaderScreen() {
+export const useLoaderScreen: any = () => {
   return useContext(LoaderContext);
-}
+};
 
 interface LoaderProviderProps {
   children: ReactNode;
 }
 
-export default function LoaderProvider({ children }: LoaderProviderProps) {
+const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
   const [load, setLoad] = useState(true);
 
   return (
@@ -32,4 +32,5 @@ export default function LoaderProvider({ children }: LoaderProviderProps) {
       {children}
     </LoaderContext.Provider>
   );
-}
+};
+export default LoaderProvider;

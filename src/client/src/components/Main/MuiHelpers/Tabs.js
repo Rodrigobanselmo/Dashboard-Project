@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     }))((props) => <Tab {...props} />);
 
 function TabItems(params) {
-    
+
 }
 
 export default function SimpleTabs({component:Component, children, tabsLabel , ...props}) {
@@ -107,11 +107,12 @@ export default function SimpleTabs({component:Component, children, tabsLabel , .
         </TabsStyled>
       </AppBar>
         {children}
-        {tabsLabel.map((item,index)=>(
+        {tabsLabel.map((item,index)=>{
+          return(
             <TabPanel key={index} value={value} index={index} >
                 <Component item={item}/>
             </TabPanel>
-        ))}
+        )})}
     </div>
   );
 }

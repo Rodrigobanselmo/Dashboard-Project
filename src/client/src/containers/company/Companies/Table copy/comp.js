@@ -1,11 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { lighten, makeStyles,withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -17,9 +10,7 @@ import {
   TableCellComponent,
   TableRowComponent,
   TextCell,
-  TypeContainer,
   HeadCellLabel,
-  UserContainer,
   StatusComponent,
   FilterComponents,
   UserAvatar,
@@ -30,6 +21,7 @@ import {
 } from './styles';
 import Tabs from '../../../../components/Main/MuiHelpers/Tabs'
 import {BootstrapTooltip} from '../../../../components/Main/MuiHelpers/Tooltip'
+import Checkbox from '@material-ui/core/Checkbox';
 import RichSelect from '../../../../components/Dashboard/Components/MultUsage/RichSelect'
 import useTimeOut from '../../../../hooks/useTimeOut';
 import {NormalizeData} from '../../../../helpers/DataHandler';
@@ -72,7 +64,14 @@ TableTabs.Head = function EnhancedTableHead(props) {
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow style={{maxWidth:'300px'}}>
+      <TableCellComponent padding="checkbox">
+          <Checkbox
+            indeterminate={false}
+            checked={false}
+            inputProps={{ 'aria-label': 'select all desserts' }}
+          />
+        </TableCellComponent>
         {props.data.headCells.map((headCell) => (
           <TableCellComponent
             key={headCell.id}
@@ -85,7 +84,7 @@ TableTabs.Head = function EnhancedTableHead(props) {
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
             >
-              <HeadCellLabel headCell={headCell.id}>{headCell.label}</HeadCellLabel>
+              <HeadCellLabel className={'noBreakText'} headCell={headCell.id}>{headCell.label}</HeadCellLabel>
             </TableSortLabel>
           </TableCellComponent>
         ))}
@@ -94,19 +93,30 @@ TableTabs.Head = function EnhancedTableHead(props) {
   );
 }
 
-TableTabs.TableRows = function RowComponent(row, index, data) {
+TableTabs.TableRows = function RowComponent(row, index,data, selected=[]) {
 
   const labelId = `enhanced-table-checkbox-${index}`;
-  var date = NormalizeData(new Date(row.creation),'string')
+  var dateStart = row?.creation  && row.creation  && row.creation !== 0 ? NormalizeData(new Date(row.creation),'normal') : 'Indisponível';
+  var dateEnd = row?.end  && row.end  && row.end !== 0 ? NormalizeData(new Date(row.end),'normal') : 'Presente';
+
+  const isItemSelected = selected.indexOf(row.CNPJ) !== -1;
 
   return (
-    <TableRowComponent key={`${row.email}${row.creation}`}>
-        <UserCell labelId={labelId} row={row}/>
-        <TypeCell data={data} row={row}/>
-        <TableCellComponent  align="left"><TextCell /* style={{maxWidth: 120,width:90}} */ >{date}</TextCell></TableCellComponent>
-{/*         <TableCellComponent align="left"><TextCell>{row.company}</TextCell></TableCellComponent>
-        <TableCellComponent align="left"><TextCell >{row.admin}</TextCell></TableCellComponent> */}
+    <TableRowComponent key={`${row.CNPJ}${index}`}>
+        <TableCellComponent padding="checkbox">
+          <Checkbox
+            checked={isItemSelected}
+            inputProps={{ 'aria-labelledby': labelId }}
+          />
+        </TableCellComponent>
+        <TableCellComponent style={{width:'20%'}} align="left"><TextCell style={{marginLeft:13,marginRight:25}}>{row.CNPJ}</TextCell></TableCellComponent>
+        <TableCellComponent style={{width:'27%'}} align="left"><TextCell style={{width:'90%',maxWidth:300}} >{row.name}</TextCell></TableCellComponent>
+        <TableCellComponent style={{width:'25%'}} align="left"><TextCell style={{width:'90%'}}>{row.responsavel}</TextCell></TableCellComponent>
+        <TableCellComponent style={{width:'18%'}} align="left"><TextCell style={{width:'90%'}} >{`${dateStart} - ${dateEnd}`}</TextCell></TableCellComponent>
         <StatusCell row={row}/>
+        {/* <UserCell labelId={labelId} row={row}/>
+        <TypeCell data={data} row={row}/>
+        <TableCellComponent align="left"><TextCell >{row.admin}</TextCell></TableCellComponent> */}
     </TableRowComponent>
   );
 }
@@ -121,53 +131,21 @@ TableTabs.LoadingContent = function Loading() {
   );
 }
 
-function UserCell({row,labelId}) {
-
-
-  return (
-    <TableCellComponent component="th" id={labelId} scope="row" padding="none">
-      <UserContainer >
-          <UserAvatar >
-              <GroupIcon style={{fontSize:28}} type={row.image}/>
-          </UserAvatar>
-          <TextNameEmail >{row.name?row.name:'Aguardando...'}<br/>
-          <EmailSpan >{row.email}</EmailSpan> </TextNameEmail>
-      </UserContainer>
-  </TableCellComponent>
-  )
-}
-
 function AddUserButton({onClick}) {
 
   return (
     <ButtonContainer onClick={onClick} className={'rowCenter'} >
       <Icons style={{fontSize:24,marginRight:5}} type={'Add'}/>
-      <p className={'noBreakText'}>Adicionar Usuário</p>
+      <p className={'noBreakText'}>Nova Empresa</p>
     </ButtonContainer>
   )
 }
 
-function TypeCell({row,data}) {
-
-  function arrayData(data) {
-    const array = []
-    data.map((item)=>{
-      array.push(item.name)
-    })
-    return array
-  }
-
-  return (
-    <TableCellComponent align="left">
-      <p className={'noBreakText'}/*  style={{width:100}} */ >{row.type}</p>
-    </TableCellComponent>
-  )
-}
 
 function StatusCell({row}) {
 
   return (
-    <TableCellComponent  align="left" >
+    <TableCellComponent /* style={{width:40}} */ align="center" >
       <BootstrapTooltip /* placement="right" */  title={row.status} styletooltip={{transform: 'translateY(5px)'}}>
         <StatusComponent status={row.status} />
       </BootstrapTooltip>

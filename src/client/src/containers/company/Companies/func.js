@@ -1,9 +1,9 @@
-import {GetAllUsersCompany} from '../../../../services/firestoreUser'
+import {GetAllCompanies} from '../../../services/firestoreCompany'
 
-export function onGetAllUsersCompany(companyId,setUsersRows,setLoadContent,notification) {
+export function onGetAllCompanies(companyId,setDataRows,setLoadContent,notification) {
     function checkSuccess(response) {
         setLoadContent(false)
-        setUsersRows([...response])
+        setDataRows([...response])
 
       }
 
@@ -14,5 +14,5 @@ export function onGetAllUsersCompany(companyId,setUsersRows,setLoadContent,notif
         }, 600);
       }
 
-    GetAllUsersCompany(companyId,checkSuccess,checkError)
+      GetAllCompanies(companyId,checkSuccess,checkError)
 }

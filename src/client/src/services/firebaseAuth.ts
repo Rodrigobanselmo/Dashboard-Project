@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable func-names */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */

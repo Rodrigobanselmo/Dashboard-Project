@@ -34,7 +34,7 @@
     "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
     "@typescript-eslint/explicit-module-boundary-types":"off",
-    "@typescript-eslint/explicit-function-return-type":"off",
+
     "@typescript-eslint/no-use-before-define": ["error"],
     "prettier/prettier": "error",
     "react/jsx-one-expression-per-line": "off",
@@ -42,12 +42,12 @@
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [1, {"extensions": [".tsx"] }],
     "import/prefer-default-export": "off",
-/*     "@typescript-eslint/explicit-function-return-type": [
+     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {
         "allowExpressions": true
       }
-    ], */
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",
