@@ -1,54 +1,48 @@
 import {GetCNPJ} from '../../../../services/handleCNPJ'
 import {SeeIfCNPJExists,CreateNewCompany} from '../../../../services/firestoreCompany'
-import {wordUpper,formatTel,formatCPFeCNPJeCEPeCNAE} from '../../../../helpers/StringHandle'
+import {wordUpper,formatTel,formatCPFeCNPJeCEPeCNAE} from '../../../../helpers/StringHandle' 
 
 export function onCreateNewCompany({data,setDataRows,receitaFederal,currentUser,notification,setLoad,onClose}) {
 
   var companyData = {
-    cnpj:formatCPFeCNPJeCEPeCNAE(data.cnpj),
-    nome: wordUpper((data.nome.trim()).split(" ")),
-    fantasia: wordUpper((data.fantasia.trim()).split(" ")),
-    type: data.tipo,
-    atv1: data.atividade_principal,
-    atv2: data.atividades_secundarias.filter(i=>i.text !== ''),
-    address: {
-      cep: formatCPFeCNPJeCEPeCNAE(data.address.cep),
-      city: data.address.municipio,
-      neighbor: data.address.bairro,
-      address: data.address.logradouro,
-      num: data.address.numero,
-      comp: data.address.complemento,
-      uf:data.address.uf,
-    },
-    contact:{
-      tel: formatTel(data.contact.telefone),
-      email: data.contact.email,
-      cel: formatTel(data.contact.celular),
-    },
+    CNPJ:formatCPFeCNPJeCEPeCNAE(receitaFederal.cnpj),
+    nome: wordUpper((receitaFederal.nome.trim()).split(" ")),
+    fantasia: wordUpper((receitaFederal.fantasia.trim()).split(" ")),
+    type: data.type,
+    atv1:receitaFederal.atividade_principal,
+    atv2:receitaFederal.atividades_secundarias.filter(i=>i.text !== ''),
+    cep: formatCPFeCNPJeCEPeCNAE(receitaFederal.cep),
+    city: receitaFederal.municipio,
+    neighbor: receitaFederal.bairro,
+    address: receitaFederal.logradouro,
+    num: receitaFederal.numero,
+    comp: receitaFederal.complemento,
+    tel: formatTel(receitaFederal.telefone),
+    email: receitaFederal.email,
+    uf:receitaFederal.uf,
+    cel: formatTel(receitaFederal.celular),
     responsavel:wordUpper((data.responsavel.trim()).split(" ")),
-    //fiscal:wordUpper((data.fiscal.trim()).split(" ")),
-    //fiscalCell:formatTel(data.fiscalCell),
+    fiscal:wordUpper((data.fiscal.trim()).split(" ")),
+    fiscalCell:formatTel(data.fiscalCell),
     identificacao:wordUpper((data.identificacao.trim()).split(" ")),
     status:'Ativo',
     creation:(new Date() - 1),
     end:0,
-    supervisorEmail:data.supervisorEmail.toLowerCase()
+    supervisor:data.supervisor.toLowerCase()
   }
 
-  let name = companyData.identificacao
+  let name = wordUpper((data.identificacao.trim()).split(" "))
   if (!name) {
-    name = companyData.fantasia
+    name = wordUpper((receitaFederal.fantasia.trim()).split(" "))
   }
   if (!name) {
-    name = companyData.nome
+    name = wordUpper((receitaFederal.nome.trim()).split(" "))
   }
 
   var readData = {
-    CNPJ:companyData.cnpj,
+    CNPJ:formatCPFeCNPJeCEPeCNAE(receitaFederal.cnpj),
     name: name,
-    nome: companyData.nome,
-    fantasia: companyData.fantasia,
-    responsavel:companyData.responsavel,
+    responsavel:wordUpper((data.responsavel.trim()).split(" ")),
     status:'Ativo',
     creation:(new Date() - 1),
     end:0,
@@ -81,7 +75,7 @@ export function onCheckCNPJExists(value,companyId,setData,notification){
         setData(data=>({...data,CNPJ:value, status:'Check',message:'CNPJ válido'}))
       }
     }
-
+  
     function checkError(error) {
       notification.error({message:error,modal:true})
       setData(data=>({...data,CNPJ:value, status:'Warn',message:error}))
@@ -103,7 +97,6 @@ export function onGetCNPJ(value,setData,notification,setReceitaFederal,setPositi
       })
       setLoad(false)
     } else {
-      console.log(response);
       setReceitaFederal(data=>({...data,...response}))
       setPosition(position=>position+1)
       setLoad(false)

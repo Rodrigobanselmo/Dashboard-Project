@@ -1,4 +1,4 @@
-import React, {useState,useRef} from 'react';
+import React, {useState} from 'react';
 import {Icons} from '../../../../components/Icons/iconsDashboard';
 import {Selection} from './style';
 import {ModalMui, ModalFullScreen} from '../../../../components/Main/MuiHelpers/Modal'
@@ -8,15 +8,14 @@ import useTimeOut from '../../../../hooks/useTimeOut';
 import {keepOnlyNumbers} from '../../../../helpers/StringHandle';
 import {ContinueButton} from '../../../../components/Main/MuiHelpers/Button'
 import {UserContainer,UserAvatar,GroupIcon,TextNameEmail} from '../../../../components/Dashboard/Components/Standard/Avatar'
-import Input, {InputEnd,InputUnform,SelectedEnd} from '../../../../components/Main/MuiHelpers/Input'
+import Input, {InputEnd,SelectedEnd} from '../../../../components/Main/MuiHelpers/Input'
 import InputMask from '../../../../components/Main/MuiHelpers/InputMask'
 import {HeaderPage,Page,MainTitle,Container,InputsContainer,Title,SubTitle,IconCloseFull,IconGoBackFull} from '../../../../components/Dashboard/Components/Standard/PageCarousel'
 import { isValid } from "@fnando/cnpj";
 import styled from "styled-components";
 import {NumberFormatCNPJ,NumberFormatCNAE,NumberFormatOnly,NumberFormatCEP, NumberFormatCPF,NumberFormatTel,NumberFormatCell} from '../../../../lib/textMask'
 import {HeaderForm,FormContainer,SubTitleForm,TitleForm,DividerForm,AddAnotherForm,ButtonForm} from '../../../../components/Dashboard/Components/Form/comp'
-import { useField } from '@unform/core'
-import * as Yup from 'yup'
+
 
 export default function AddCompany({children, ...restProps }) {
     return (
@@ -84,13 +83,12 @@ AddCompany.Input =  function EmailInput({setData,data,onCheckCNPJExists,notifica
     onClearTime()
     onTimeOut(()=>checkCNPJ(event.target.value),1000)
     let fullData = {...data}
-    if (event.target.value && event.target.value.length > 12) {
+    if (event.target.value && event.target.value.length > 10) {
       fullData = {...fullData,CNPJ:event.target.value, status:'Load',message:'Carregando...'}
-      setData(fullData)
-    } else if (fullData.CNPJ){
-      fullData = {...fullData,CNPJ:'', status:'none',message:''}
-      setData(fullData)
+    } else {
+      fullData = {...fullData,CNPJ:event.target.value, status:'none',message:''}
     }
+    setData(fullData)
   }
 
   const checkCNPJ = (value) => {
@@ -100,9 +98,9 @@ AddCompany.Input =  function EmailInput({setData,data,onCheckCNPJExists,notifica
         setData(data=>({...data,CNPJ:value, status:'Load',message:'Carregando...'}))
         onCheckCNPJExists(value,companyId,setData,notification)
       }
-    } else if (value && value.length == 14) {
+    } else if (value) {
         setData(data=>({...data,CNPJ:value, status:'Warn',message:'CNPJ mal formatado'}))
-    } else if (value=='') {
+    } else {
         setData(data=>({...data,CNPJ:value, status:'none',message:''}))
     }
   }
@@ -123,40 +121,22 @@ AddCompany.Input =  function EmailInput({setData,data,onCheckCNPJExists,notifica
             InputProps={{
               inputComponent: NumberFormatCNPJ,
             }}
-          />
+        />
     </InputsContainer>
   )
 }
 
-AddCompany.LastInput =  function InputLast({onNewCompany,unform}) {
-
-  const formRef = useRef()
-
-  const validation = Yup.object({})
-
-  const handleSubmit = React.useCallback(async (formData) => {
-    formRef.current.setErrors({})
-    try {
-      await validation.validate(formData, { abortEarly: false })
-      onNewCompany({...unform,...formData})
-      console.log('submitted: ', formData)
-    } catch (error) {
-      console.log('error',error);
-    }
-  }, [unform])
+AddCompany.LastInput =  function InputLast({setData,data}) {
 
   return(
     <InputsContainer>
-      <FormContainer
-         noValidate
-         ref={formRef}
-         onSubmit={handleSubmit}
-      >
-        <InputUnform
+        <InputEnd
             width={'100%'}
-            name={'responsavel'}
             title={'O Representante Legal é pessoa que possui o nome no contrato social da empresa, seja como dono, sócio ou sócio administrativo. É, portanto, quem representa a empresa diante da Receita Federal e sociedade.'}
+            value={data.responsavel}
+            onChange={({target})=>setData(data=>({...data,responsavel:target.value}))}
             labelWidth={300}
+/*             labelWidth={135} */
             label={'Responsavel Legal'}
             status={'Normal'}
             icon={'Info'}
@@ -165,7 +145,7 @@ AddCompany.LastInput =  function InputLast({onNewCompany,unform}) {
             inputProps={{style: {textTransform: 'capitalize'}}}
             option={'OBRIGATÓRIO EM DOCUMENTOS'}
           />
-{/*
+{/*         <FormContainer>
         <InputEnd
             width={'70%'}
             value={data.fiscal}
@@ -196,11 +176,12 @@ AddCompany.LastInput =  function InputLast({onNewCompany,unform}) {
             inputComponent={NumberFormatCell}
           />
           </FormContainer> */}
-        <InputUnform
+        <InputEnd
             width={'100%'}
-            name={'identificacao'}
             title={'Nome personalizado da empresa contratante para melhor identificação.'}
-            labelWidth={185}
+            value={data.identificacao}
+            onChange={({target})=>setData(data=>({...data,identificacao:target.value}))}
+            labelWidth={175}
             label={'Indentificão da Empresa'}
             status={'Normal'}
             option
@@ -209,11 +190,12 @@ AddCompany.LastInput =  function InputLast({onNewCompany,unform}) {
             variant="outlined"
             inputProps={{style: {textTransform: 'capitalize'}}}
           />
-        <InputUnform
+        <InputEnd
             width={'100%'}
-            name={'supervisorEmail'}
             title={'Email do surpervisor das atividades, aquele que está responsavel por determinar as medidas que serão tomadas.'}
-            labelWidth={150}
+            value={data.supervisor}
+            onChange={({target})=>setData(data=>({...data,supervisor:target.value}))}
+            labelWidth={175}
             label={'Email do Supervisor'}
             status={'Normal'}
             option
@@ -221,82 +203,51 @@ AddCompany.LastInput =  function InputLast({onNewCompany,unform}) {
             validation={true}
             variant="outlined"
           />
-        <ButtonForm type='submit' justfy='center' primary={'true'} style={{width:'fit-content'}}>
-          Criar Empresa
-        </ButtonForm>
-      </FormContainer>
+
     </InputsContainer>
   )
 }
 
-AddCompany.Form =  function Form({setUnform,data,setData,receitaFederal,setReceitaFederal,setPosition}) {
+AddCompany.Form =  function Form({data,setData,receitaFederal,setReceitaFederal,setPosition}) {
 
-  const formRef = useRef()
-
-  const validation = Yup.object({
-    nome: Yup.string().required('Nome da empresa não pode estar vazio.'),
-/*     password: Yup.string().required('Password is required'),
-    password_confirmation: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Password confirmation is required'), */
-  })
-
-  const handleSubmit = React.useCallback(async (formData) => {
-
-    formRef.current.setErrors({})
-
-    let form = {...formData}
-    form.tipo = receitaFederal.tipo
-    let address = {...form.address}
-    address.uf = receitaFederal.uf
-
-    try {
-      await validation.validate(formData, { abortEarly: false })
-      setPosition(position=>position+1)
-      setUnform({...form,address})
-      console.log('submittedOK: ', formData)
-    } catch (error) {
-      console.log('error',error);
-      const errors = {}
-      console.log('submittedError: ', formData)
-      error?.inner?.forEach((err) => {
-        errors[err.path] = err.message
-      })
-
-      formRef.current?.setErrors(errors)
-    }
-  }, [receitaFederal])
+  function changeArrayText(data,value,index) {
+    let object = {...data}
+    let array = [...object.atividades_secundarias]
+    array[index] = {...array[index],text:value}
+    object.atividades_secundarias = array
+    return object
+  }
+  function changeArrayCode(data,value,index) {
+    let object = {...data}
+    let array = [...object.atividades_secundarias]
+    array[index] = {...array[index],code:value}
+    object.atividades_secundarias = array
+    return object
+  }
 
   return(
-    <FormContainer
-      noValidate
-      ref={formRef}
-      onSubmit={handleSubmit}
-      key={`${data.CNPJ}${receitaFederal.nome}`}
-    >
+    <FormContainer >
       <HeaderForm className={'center'}>
         <TitleForm >Ultimas informaçãoes para cadastro da empresa</TitleForm>
         <SubTitleForm style={{marginBottom:'0px'}}>Os dados são obtidos a partir do site da Receita Federal e podem não ser os mais atualizados, confira e altera caso necessário.</SubTitleForm>
       </HeaderForm>
       <DividerForm >Principal</DividerForm>
-      <InputUnform
-          required
+      <InputEnd
           width={'75%'}
-          name="cnpj"
+          value={(keepOnlyNumbers(data.CNPJ))}
           labelWidth={45}
           label={'CNPJ'}
-          defaultValue={keepOnlyNumbers(data.CNPJ)}
-          disabled={true}
           status={'Normal'}
+          validation={false}
           variant="outlined"
           style={{marginRight:20}}
           inputComponent={NumberFormatCNPJ}
-        />
+          />
       <SelectedEnd
           width={'25%'}
           label={'Tipo'}
           labelWidth={36}
-          title={receitaFederal.tipo === data.type.toUpperCase() ? '' : 'O dado referente ao tipo de empresa obtido pela Receita Federal é inconsistente com o informado anteriormente. Estando ciente disso você pode mudar ou manter como está.'}
+          title={'O dado referente ao tipo de emrpesa obtido pela Receita Federal é inconsistente com o informado anteriormente. Estando ciente disso você pode mudar ou manter como está.'}
           status={'Warn'}
           icon={('Warn')}
           selected={1}
@@ -306,32 +257,32 @@ AddCompany.Form =  function Form({setUnform,data,setData,receitaFederal,setRecei
           sliceItems={receitaFederal?.tipo && receitaFederal.tipo === data.type.toUpperCase() ? 2:false}
           variant="outlined"
           />
-      <InputUnform
-          required
+      <InputEnd
           width={'100%'}
-          name="nome"
-          defaultValue={receitaFederal.nome}
+          value={receitaFederal.nome}
+          onChange={({target})=>setReceitaFederal(data=>({...data,nome:target.value.toUpperCase()}))}
           labelWidth={100}
           label={'Razão Social'}
           title={'Nome da Empresa'}
           status={'Normal'}
           icon={'Info'}
+          validation={true}
           variant="outlined"
           />
-      <InputUnform
+      <InputEnd
           width={'100%'}
-          defaultValue={receitaFederal.fantasia}
-          name="fantasia"
+          value={receitaFederal.fantasia}
+          onChange={({target})=>setReceitaFederal(data=>({...data,fantasia:target.value.toUpperCase()}))}
           labelWidth={73}
           label={'Fantasia'}
           status={'Normal'}
           variant="outlined"
       />
       <DividerForm >Área de Atuação Principal</DividerForm>
-        <InputUnform
+        <InputEnd
             width={'70%'}
-            name="atividade_principal[0].text"
-            defaultValue={receitaFederal.atividade_principal[0].text}
+            value={receitaFederal.atividade_principal[0].text}
+            onChange={({target})=>setReceitaFederal(data=>({...data,atividade_principal:[{...data.atividade_principal[0],text:target.value}]}))}
             labelWidth={125}
             label={'Atuação Prinpical'}
             status={'Normal'}
@@ -339,10 +290,10 @@ AddCompany.Form =  function Form({setUnform,data,setData,receitaFederal,setRecei
             variant="outlined"
             style={{marginRight:20}}
         />
-        <InputUnform
+        <InputEnd
             width={'30%'}
-            defaultValue={(keepOnlyNumbers(receitaFederal.atividade_principal[0].code))}
-            name="atividade_principal[0].code"
+            value={(keepOnlyNumbers(receitaFederal.atividade_principal[0].code))}
+            onChange={({target})=>setReceitaFederal(data=>({...data,atividade_principal:[{...data.atividade_principal[0],code:target.value}]}))}
             labelWidth={40}
             label={'CNAE'}
             status={'Normal'}
@@ -353,10 +304,10 @@ AddCompany.Form =  function Form({setUnform,data,setData,receitaFederal,setRecei
         <DividerForm >Áreas de Atuação Secundária</DividerForm>
         {receitaFederal.atividades_secundarias.map((item,index)=>(
           <div style={{width:'100%'}} key={index}>
-            <InputUnform
+            <InputEnd
                 width={'70%'}
-                defaultValue={receitaFederal.atividades_secundarias[index].text}
-                name={`atividades_secundarias[${index}].text`}
+                value={item.text}
+                onChange={({target})=>setReceitaFederal(data=>changeArrayText(data,target.value,index))}
                 labelWidth={125}
                 label={'Atuação Prinpical'}
                 status={'Normal'}
@@ -364,10 +315,10 @@ AddCompany.Form =  function Form({setUnform,data,setData,receitaFederal,setRecei
                 variant="outlined"
                 style={{marginRight:20}}
             />
-            <InputUnform
+            <InputEnd
                 width={'30%'}
-                name={`atividades_secundarias[${index}].code`}
-                defaultValue={(keepOnlyNumbers(receitaFederal.atividades_secundarias[index].code))}
+                value={(keepOnlyNumbers(item.code))}
+                onChange={({target})=>setReceitaFederal(data=>changeArrayCode(data,target.value,index))}
                 labelWidth={40}
                 label={'CNAE'}
                 status={'Normal'}
@@ -379,57 +330,57 @@ AddCompany.Form =  function Form({setUnform,data,setData,receitaFederal,setRecei
         ))}
         <AddAnotherForm onClick={()=>setReceitaFederal(data=>({...data,atividades_secundarias:[...data.atividades_secundarias,{text:'',code:''}]}))}>Adicionar Outra</AddAnotherForm>
         <DividerForm >Localidade</DividerForm>
-        <InputUnform
+        <InputEnd
             width={'50%'}
-            defaultValue={receitaFederal.logradouro}
-            name={`address.logradouro`}
+            value={receitaFederal.logradouro}
+            onChange={({target})=>setReceitaFederal(data=>({...data,logradouro:target.value}))}
             labelWidth={75}
             label={'Logradouro'}
             variant="outlined"
             style={{marginRight:20}}
             />
-        <InputUnform
+        <InputEnd
             width={'15%'}
-            defaultValue={receitaFederal.numero}
-            name={`address.numero`}
+            value={receitaFederal.numero}
+            onChange={({target})=>setReceitaFederal(data=>({...data,numero:target.value}))}
             labelWidth={63}
             label={'Número'}
             variant="outlined"
             style={{marginRight:20}}
             inputComponent={NumberFormatOnly}
             />
-        <InputUnform
+        <InputEnd
             width={'35%'}
-            defaultValue={receitaFederal.complemento}
-            name={`address.complemento`}
+            value={receitaFederal.complemento}
+            onChange={({target})=>setReceitaFederal(data=>({...data,complemento:target.value}))}
             labelWidth={96}
             label={'Complemento'}
             icon={'Info'}
             variant="outlined"
             />
-        <InputUnform
+        <InputEnd
             width={'20%'}
-            defaultValue={(keepOnlyNumbers(receitaFederal?.cep))}
-            name={`address.cep`}
+            value={(keepOnlyNumbers(receitaFederal.cep))}
+            onChange={({target})=>setReceitaFederal(data=>({...data,cep:target.value}))}
             labelWidth={33}
             label={'CEP'}
             variant="outlined"
             style={{marginRight:20}}
             inputComponent={NumberFormatCEP}
             />
-        <InputUnform
+        <InputEnd
             width={'30%'}
-            defaultValue={receitaFederal?.bairro}
-            name={`address.bairro`}
+            value={receitaFederal.bairro}
+            onChange={({target})=>setReceitaFederal(data=>({...data,bairro:target.value}))}
             labelWidth={50}
             label={'Bairro'}
             variant="outlined"
             style={{marginRight:20}}
             />
-        <InputUnform
+        <InputEnd
             width={'40%'}
-            defaultValue={receitaFederal?.municipio}
-            name={`address.municipio`}
+            value={receitaFederal.municipio}
+            onChange={({target})=>setReceitaFederal(data=>({...data,municipio:target.value}))}
             labelWidth={70}
             label={'Município'}
             icon={'Info'}
@@ -446,10 +397,10 @@ AddCompany.Form =  function Form({setUnform,data,setData,receitaFederal,setRecei
             variant="outlined"
             />
         <DividerForm >Contato</DividerForm>
-        <InputUnform
+        <InputEnd
           width={'100%'}
-          defaultValue={receitaFederal?.email ?? receitaFederal.email}
-          name={`contact.email`}
+          value={receitaFederal.email}
+          onChange={({target})=>setReceitaFederal(data=>({...data,email:target.value}))}
           labelWidth={135}
           title={'Endereço de email cadastrado na Receita Federal'}
           status={'Normal'}
@@ -457,26 +408,26 @@ AddCompany.Form =  function Form({setUnform,data,setData,receitaFederal,setRecei
           label={'Endereço de Email'}
           variant="outlined"
         />
-        <InputUnform
+        <InputEnd
           width={'50%'}
-          defaultValue={keepOnlyNumbers(receitaFederal?.telefone ?? receitaFederal.telefone)}
-          name={`contact.telefone`}
+          value={(keepOnlyNumbers(receitaFederal.telefone))}
+          onChange={({target})=>setReceitaFederal(data=>({...data,telefone:target.value}))}
           labelWidth={70}
           label={'Telefone'}
           variant="outlined"
           style={{marginRight:20}}
           inputComponent={NumberFormatTel}
         />
-        <InputUnform
+        <InputEnd
           width={'50%'}
-          defaultValue={keepOnlyNumbers(receitaFederal?.celular ?? receitaFederal.celular)}
-          name={`contact.celular`}
+          value={(keepOnlyNumbers(receitaFederal.celular))}
+          onChange={({target})=>setReceitaFederal(data=>({...data,celular:target.value}))}
           labelWidth={52}
           label={'Celular'}
           variant="outlined"
           inputComponent={NumberFormatCell}
         />
-        <ButtonForm type='submit' primary={'true'}>Continuar</ButtonForm>
+        <ButtonForm onClick={()=>setPosition(position=>position+1)} primary={'true'}>Continuar</ButtonForm>
     </FormContainer>
   )
 }
@@ -489,12 +440,11 @@ AddCompany.Continue =  function Continue({disable=false,setPosition,notification
     } else {
       setLoad(true)
       onGetCNPJ(data.CNPJ,setData,notification,setReceitaFederal,setPosition,setLoad)
-      //setPosition(po=>po+1)
     }
   }
 
   return(
-    <ContinueButton primary={'true'} onClick={onClickContinue} size={'medium'} disable={`${false}`}>
+    <ContinueButton primary={'true'} onClick={onClickContinue} size={'medium'} disable={`${disable}`}>
       {done ?
       <p>Criar Empresa</p>
       :

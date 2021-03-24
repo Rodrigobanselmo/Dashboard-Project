@@ -2,7 +2,7 @@ import NumberFormat from 'react-number-format';
 
 export function NumberFormatOnly(props) {
     const { inputRef, onChange, ...other } = props;
-  
+
     return (
       <NumberFormat
         {...other}
@@ -25,7 +25,7 @@ export function NumberFormatOnly(props) {
 
 export function NumberFormatCNPJ(props) {
     const { inputRef, onChange, ...other } = props;
-  
+
     return (
       <NumberFormat
         {...other}
@@ -45,7 +45,7 @@ export function NumberFormatCNPJ(props) {
   }
 export function NumberFormatCell(props) {
     const { inputRef, onChange, ...other } = props;
-  
+
     return (
       <NumberFormat
         {...other}
@@ -67,7 +67,7 @@ export function NumberFormatCell(props) {
 
   export function NumberFormatTel(props) {
     const { inputRef, onChange, ...other } = props;
-  
+
     return (
       <NumberFormat
         {...other}
@@ -89,7 +89,7 @@ export function NumberFormatCell(props) {
 
 export function NumberFormatCEP(props) {
     const { inputRef, onChange, ...other } = props;
-  
+
     return (
       <NumberFormat
         {...other}
@@ -104,13 +104,13 @@ export function NumberFormatCEP(props) {
         }}
         format="##.###-###"
         isNumericString
-        prefix="$"
+/*         prefix="$" */
       />
     );
   }
 export function NumberFormatCNAE(props) {
     const { inputRef, onChange, ...other } = props;
-  
+
     return (
       <NumberFormat
         {...other}
@@ -125,14 +125,15 @@ export function NumberFormatCNAE(props) {
         }}
         format="##.##-#-##"
         isNumericString
-        prefix="$"
+        allowLeadingZeros
+/*         prefix="$" */
       />
     );
   }
 
   export function NumberFormatCPF(props) {
     const { inputRef, onChange, ...other } = props;
-  
+
     return (
       <NumberFormat
         {...other}

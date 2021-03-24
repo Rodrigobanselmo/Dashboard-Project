@@ -24,7 +24,7 @@ export function CreateNewCompany(data,readData,companyId,checkSuccess,checkError
     if (docId !== null) {
       batchCreate()
     } else {
-      docId = v4() 
+      docId = v4()
       reduceRef.doc(docId).set({
         id:'companies',
         data:[]
@@ -36,9 +36,9 @@ export function CreateNewCompany(data,readData,companyId,checkSuccess,checkError
       checkError(errorCatch(error))
   });
 
-  function batchCreate() {    
+  function batchCreate() {
 
-    batch.set(companiesRef.doc(keepOnlyNumbers(data.CNPJ)),{...data})
+    batch.set(companiesRef.doc(keepOnlyNumbers(data.cnpj)),{...data})
     batch.update(reduceRef.doc(docId),{data:fb.firestore.FieldValue.arrayUnion({...readData})})
 
     batch.commit().then(() => {
@@ -48,7 +48,7 @@ export function CreateNewCompany(data,readData,companyId,checkSuccess,checkError
     });
   }
 
-/*   function batchCreates() {    
+/*   function batchCreates() {
     companiesRef.doc(keepOnlyNumbers(data.CNPJ)).get()
     .then((docSnapshot) => {
       if (docSnapshot.exists) {
@@ -68,9 +68,9 @@ export function CreateNewCompany(data,readData,companyId,checkSuccess,checkError
 }
 
 export function SeeIfCNPJExists(CNPJ,companyId,checkSuccess,checkError) {
-  
+
   var companiesRef = db.collection("company").doc(companyId).collection('companies')
-  
+
   console.log(CNPJ)
   companiesRef.where("CNPJ", "==", CNPJ).get()
   .then(function(querySnapshot) {
@@ -85,7 +85,7 @@ export function SeeIfCNPJExists(CNPJ,companyId,checkSuccess,checkError) {
   });
 }
 export function GetAllCompanies(companyId,checkSuccess,checkError) {
-  
+
   var dataRef = db.collection("company").doc(companyId).collection('reduceRead')
 
   dataRef.where("id", "==", 'companies').get()

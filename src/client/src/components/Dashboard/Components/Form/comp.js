@@ -1,8 +1,9 @@
 import styled, {css} from "styled-components";
 import {ContinueButton} from '../../../Main/MuiHelpers/Button'
 import {Icons} from '../../../Icons/iconsDashboard'
+import { Form } from "@unform/web";
 
-export const FormContainer = styled.div`
+export const FormContainer = styled(Form)`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -59,9 +60,9 @@ export const AddAnotherForm = styled.div`
 const ButtonF = styled(ContinueButton)`
 `;
 
-export function ButtonForm({children,...props}) { 
+export function ButtonForm({children,justify='flex-end',...props}) {
   return(
-    <div style={{display:'flex',width:'100%',justifyContent:'flex-end',marginTop:10}} >
+    <div style={{display:'flex',width:'100%',justifyContent:justify,marginTop:10}} >
         <ButtonF style={{width:200}} {...props} >{children}</ButtonF>
     </div>
   )

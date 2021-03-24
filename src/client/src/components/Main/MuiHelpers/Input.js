@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef,useEffect,useCallback} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import styled, {css} from "styled-components";
 import {Icons} from '../../../components/Icons/iconsDashboard'
@@ -8,9 +8,12 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import { fade } from '@material-ui/core/styles';
+import { useField } from '@unform/core'
+import { uniqueId } from 'lodash/util'
 // <Input key={index} status={emails[index]?.status && emails[index].status} icon={emails[index]?.status && emails[index].status} validation={(emails && emails[index] && emails[index]?.status && (emails[index].status === 'Check' || emails[index].status === 'Warn' || emails[index].status === 'Load'))} onBlur={({target})=>checkEmail(index,target.value)} onChange={addEmail(index)} size={'small'} label="Email" variant="outlined"  />
 
 
@@ -68,7 +71,10 @@ const OutlinedInputEnd = withStyles((theme) => ({
     marginDense: {
         margin:0,
     },
-}))((props) => <OutlinedInput {...props} />);
+    disabled: {
+      color: fade(theme.palette.text.contrastWhite,0.6),
+    },
+}))(({inpRef,...props}) => <OutlinedInput ref={inpRef} {...props} />);
 
 const SelectEnd = withStyles((theme) => ({
     root: {
@@ -124,7 +130,7 @@ export function InputEnd({validation=false,option=false,marginTop=10,marginBotto
     );
 }
 
-export function SelectedEnd({selected,setData,sliceItems=false,label,data=[],marginTop=10,marginBottom=10,status,icon,width='100%',title='OK',...props}) {
+export function SelectedEnd({selected,setData,sliceItems=false,label,data=[],marginTop=10,marginBottom=10,status,icon,width='100%',title='',...props}) {
 
     const [open, setOpen] = React.useState(false);
 
@@ -141,6 +147,7 @@ export function SelectedEnd({selected,setData,sliceItems=false,label,data=[],mar
     };
 
     return (
+      <BootstrapTooltip disableHoverListener={!Boolean(title)} placement="right" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={title} styletooltip={{transform: 'translateY(-2.5px)'}}>
         <FormControl variant="outlined" style={{width:width,marginTop,marginBottom}} >
             <InputLabelEnd margin={'dense'} htmlFor="outlined-age-native-simple">{label}</InputLabelEnd>
             <SelectEnd
@@ -165,5 +172,84 @@ export function SelectedEnd({selected,setData,sliceItems=false,label,data=[],mar
             }
             </SelectEnd>
         </FormControl>
+        </BootstrapTooltip>
     );
+}
+
+export function InputUnform({onChange,name,validation=false,option=false,marginTop=10,marginBottom=10,labelWidth,label,status,icon,width='100%',title='OK',...props}) {
+
+  const fieldRef = useRef()
+  const inputRef = useRef()
+  const errorRef = useRef()
+
+  const { fieldName, defaultValue, registerField, error } = useField(name)
+  const [id] = React.useState(uniqueId('textfield-'))
+
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: inputRef.current,
+      path: 'value',
+    })
+  }, [fieldName, registerField])
+
+  const setError = useCallback(
+    (error) => {
+      if (error) {
+        if (!errorRef.current.innerHTML) {
+          fieldRef.current.classList.add('Mui-error')
+        }
+        errorRef.current.innerHTML = error
+      } else {
+        if (errorRef.current.innerHTML) {
+          fieldRef.current.classList.remove('Mui-error')
+          errorRef.current.innerHTML = ''
+        }
+      }
+    },
+    [errorRef, fieldRef]
+  )
+
+  useEffect(() => {
+    setError(error)
+  }, [error, setError])
+
+  const handleChange = useCallback(
+    (e) => {
+      setError('')
+      if (onChange) {
+        onChange(e)
+      }
+    },
+    [onChange, setError]
+  )
+
+  return (
+      <FormControl style={{width:width,marginTop,marginBottom}} variant="outlined">
+        <InputLabelEnd margin={'dense'} htmlFor={id} >{label}{option && <span style={{fontSize:10,verticalAlign:'middle',marginLeft:8}}>{option===true?'(OPCIONAL)':`(${option})`}</span>}</InputLabelEnd>
+        <OutlinedInputEnd
+          id={id}
+          name={name}
+          defaultValue={defaultValue}
+          inpRef={fieldRef}
+          inputRef={inputRef}
+          onChange={handleChange}
+          margin={'dense'}
+          endAdornment={
+            <InputAdornment position="end">
+              {validation &&
+              <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={title} styletooltip={{transform: 'translateY(0px)'}}>
+                  <div>
+                      <IconEnd status={status} type={icon}/>
+                  </div>
+              </BootstrapTooltip>
+              }
+            </InputAdornment>
+          }
+          labelWidth={labelWidth+(option===true?60:0)}
+          {...props}
+        />
+        <FormHelperText style={{margin:4,padding:0,marginLeft:3}} ref={errorRef} error />
+      </FormControl>
+  );
 }
