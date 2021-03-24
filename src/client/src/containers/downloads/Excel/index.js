@@ -6,17 +6,17 @@ import './App.css';
 
 class App extends Component {
   state = {
-    name: '',
-    receiptId: 0,
-    price1: 0,
-    price2: 0,
+    name: '12312',
+    receiptId: 12312,
+    price1: 123,
+    price2: 123,
   }
 
   handleChange = ({ target: { value, name }}) => this.setState({ [name]: value })
 
   createAndDownloadPdf = () => {
-    axios.post('/api/excel/create', this.state).then(() => 
-      axios.get('/api/excel/fetch', { responseType: 'blob' })).then((res) => {
+    axios.post('http://localhost:3001/api/excel/create', this.state).then(() =>
+      axios.get('http://localhost:3001/api/excel/fetch', { responseType: 'blob' })).then((res) => {
       const excelBlob = new Blob([res.data], { type: 'application/xlsx' });
       saveAs(excelBlob, 'newExcel.xlsx');
     }).catch((error)=>{

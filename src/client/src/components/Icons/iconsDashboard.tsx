@@ -34,7 +34,10 @@ import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import Apps from '@material-ui/icons/Apps';
 import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined';
+import Edit from '@material-ui/icons/Edit';
 import MenuOpenOutlinedIcon from '@material-ui/icons/MenuOpenOutlined';
+import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
+import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined';
 
 import Facebook from '@material-ui/icons/Facebook';
 import YouTube from '@material-ui/icons/YouTube';
@@ -135,6 +138,12 @@ export const Icons: React.FC<SvgIcons | any> = ({ type, ...props }) => {
       return <Mail {...props} />;
     case 'RestorePage':
       return <RestorePage {...props} />;
+    case 'Edit':
+      return <Edit {...props} />;
+    case 'Archive':
+      return <ArchiveOutlinedIcon {...props} />;
+    case 'Unarchive':
+      return <UnarchiveOutlinedIcon {...props} />;
 
     case 'Errors':
       return <Error {...props} />;

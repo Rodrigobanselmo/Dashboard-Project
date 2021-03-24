@@ -2,36 +2,50 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import {Icons} from '../../Icons/iconsDashboard'
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
+
 export const ButtonContainer = styled.div`
-    height:30px;
-    padding:17px 10px;
-    border-radius: 8px;
-    font-size:15px;
-    color: ${({theme})=> theme.palette.primary.main };
-    border-color: ${({theme})=> theme.palette.background.line };
-    border-width: 1px;
-    border-style: solid;
-    width:45px;
-    transition: width 0.5s ease;
-    margin-left:10px;
-    cursor:pointer;
+height:30px;
+padding:17px 10px;
+border-radius: 8px;
+font-size:15px;
+color: ${({theme})=> theme.palette.primary.main };
+border-color: ${({theme})=> theme.palette.background.line };
+border-width: 1px;
+border-style: solid;
+width:45px;
+transition: width 0.5s ease;
+margin-left:10px;
+animation: ${fadeIn} 0.3s ease-in;
+
+cursor:pointer;
 
     & p {
-    transition: none;
-            color: transparent;
-            transition: all 0.5s ease;
-        }
-
-    &:hover {
-        & p {
-            color: ${({theme})=> theme.palette.text.primary };
-        }
-        border-color: ${({theme})=> theme.palette.primary.main  };
-        width:175px;
+      transition: none;
+        color: transparent;
+        transition: all 0.5s ease;
+      text-align:center;
+      flex:1;
     }
+
+&:hover {
+    & p {
+        color: ${({theme})=> theme.palette.text.primary };
+    }
+    border-color: ${({theme})=> theme.palette.primary.main  };
+    width:${props=>`${props.width}px`};
+  }
 
 `;
 
@@ -123,7 +137,8 @@ export const TextCell = styled.p`
 
 export const TableRowComponent = withStyles((theme) => ({
     root: {
-        '&:hover' : {backgroundColor:theme.palette.background.hoverPaperLighter}
+        cursor: 'pointer',
+        '&:hover' : {backgroundColor:theme.palette.background.hoverPaperLighter},
     },
 }))((props) => <TableRow {...props} />);
 

@@ -5,7 +5,7 @@ import {
   ButtonContainer
 } from './styles';
 import Tabs from '../../../components/Main/MuiHelpers/Tabs'
-import {FilterComponent,LoadingContent} from '../../../components/Main/Table/comp'
+import {FilterComponent,LoadingContent,AddUserButton} from '../../../components/Main/Table/comp'
 import Table from './table';
 import {onGetAllCompanies} from './func'
 
@@ -48,7 +48,13 @@ Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,
           search={search}
           onCleanSearch={()=>setSearch('')}
         >
-          <Container.AddUserButton onClick={()=>setOpen(true)}/>
+          <AddUserButton onClick={()=>setOpen(true)}/>
+          <div style={{flex:1}}/>
+          {selected.length > 0 &&
+          <AddUserButton text={'Editar'} icon={'Edit'} width={100} onClick={()=>setOpen(true)}/>
+          }
+          {/* <Container.AddUserButton text={'Desativar'} icon={'Archive'} width={140} onClick={()=>setOpen(true)}/> */}
+          {/* <Container.AddUserButton text={'Ativar'} icon={'Unarchive'} width={120} onClick={()=>setOpen(true)}/> */}
         </FilterComponent>
       { loadContent ?
           <LoadingContent />
@@ -59,15 +65,5 @@ Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,
   );
 }
 
-
-Container.AddUserButton =   function AddUserButton({onClick}) {
-
-  return (
-    <ButtonContainer onClick={onClick} className={'rowCenter'} >
-      <Icons style={{fontSize:24,marginRight:5}} type={'Add'}/>
-      <p className={'noBreakText'}>Nova Empresa</p>
-    </ButtonContainer>
-  )
-}
 
 

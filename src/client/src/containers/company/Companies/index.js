@@ -26,7 +26,6 @@ function Companies() {
     if (query.get('m') !== queryOld && query.get('m')) setOpen(true); setQueryOld(query.get('m'))
   }, [query])
 
-
   const tabsLabel = ['Todas'/* , 'Contratantes', 'Laboratório' */]
 
     return (

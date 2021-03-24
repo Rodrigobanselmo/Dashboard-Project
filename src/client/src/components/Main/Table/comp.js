@@ -22,11 +22,8 @@ import {
 import Tabs from '../MuiHelpers/Tabs'
 import {BootstrapTooltip} from '../MuiHelpers/Tooltip'
 import Checkbox from '@material-ui/core/Checkbox';
-import RichSelect from '../../Dashboard/Components/MultUsage/RichSelect'
 import useTimeOut from '../../../hooks/useTimeOut';
 import {NormalizeData} from '../../../helpers/DataHandler';
-import {filterObject} from '../../../helpers/ObjectArray'
-import TableMui from '../MuiHelpers/Table'
 
 
 export default function TableTabs({children, tabsLabel, ...restProps }) {
@@ -108,7 +105,7 @@ TableTabs.TableRows = function RowComponent(row, index,data, selected,handleClic
   const isItemSelected = selected ? selected.indexOf(row?.CNPJ ?? row?.id ) !== -1 : false;
 
   return (
-    <TableRowComponent key={`${row[data.orderCells.id]}`}>
+    <TableRowComponent onClick={(e)=>handleClick(e,row?.CNPJ ?? row?.id)} key={`${row[data.orderCells.id]}`}>
       {selected &&
         <TableCellComponent padding="checkbox">
           <Checkbox
@@ -148,16 +145,15 @@ export function LoadingContent() {
   );
 }
 
-function AddUserButton({onClick}) {
+export function AddUserButton({onClick, width=165,text='Nova Empresa',icon='Add',...restProps}) {
 
   return (
-    <ButtonContainer onClick={onClick} className={'rowCenter'} >
-      <Icons style={{fontSize:24,marginRight:5}} type={'Add'}/>
-      <p className={'noBreakText'}>Nova Empresa</p>
+    <ButtonContainer onClick={onClick} width={width} className={'rowCenter'}  {...restProps}>
+      <Icons style={{fontSize:24,marginRight:5}} type={icon}/>
+      <p  className={'noBreakText'}>{text}</p>
     </ButtonContainer>
   )
 }
-
 
 function StatusCell({row,item,index}) {
 
@@ -169,12 +165,21 @@ function StatusCell({row,item,index}) {
     </TableCellComponent>
   )
 }
+
 function NormalCell({row,item,index}) {
   return (
     <TableCellComponent className='noBreakText' align="left">
-      <TextCell style={{marginLeft:index==0?13:0,marginRight:20,maxWidth:200}}>
-        {row[item.name]}
-      </TextCell>
+      {row[item.name].length > 26 ?
+        <BootstrapTooltip placement="bottom"  title={row[item.name]} styletooltip={{transform: 'translateY(5px)'}}>
+          <TextCell style={{marginLeft:index==0?13:0,marginRight:20,maxWidth:200}}>
+            {row[item.name]}
+          </TextCell>
+        </BootstrapTooltip>
+        :
+        <TextCell style={{marginLeft:index==0?13:0,marginRight:20,maxWidth:200}}>
+          {row[item.name]}
+        </TextCell>
+      }
     </TableCellComponent>
   )
 }
