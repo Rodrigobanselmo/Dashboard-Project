@@ -13,6 +13,7 @@ export const TEAM_MODAL_OPEN = `${TEAM}?m=1`;
 export const USER = `${DASHBOARD}/user`;
 export const COMPANY = `${DASHBOARD}/empresas-cadastradas`;
 export const COMPANY_MODAL_OPEN = `${COMPANY}?m=1`;
+export const COMPANY_EDIT = `${COMPANY}/:cnpj`;
 export const DATA = `${DASHBOARD}/data`;
 
 // subList

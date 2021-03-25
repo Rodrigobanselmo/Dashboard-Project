@@ -9,7 +9,7 @@ const GroupIcon = styled(Icons)`
 
 
 const TitleTag = styled.div`
-  height: 70px; 
+  height: 70px;
   background-color: #26262A;
   width: 70px;
   margin-right: 18px;
@@ -22,6 +22,8 @@ const TitleTag = styled.div`
 const Title = styled.h1`
   margin: 0;
   font-size:30px;
+  display: inline-block;
+  margin-right: 18px;
   /* text-shadow: 1px 1px 1px #CE5937; */
 `;
 
@@ -34,18 +36,20 @@ const Header = styled.div`
   align-items:center;
 `;
 
-function HeaderComponent({icons, title, video=false}) {
+function HeaderComponent({icons, title,path, video=false}) {
 
     return (
         <Header >
             <TitleTag >
             <GroupIcon style={{fontSize:40}} type={icons}/>
             </TitleTag>
-            <div style={{marginRight:10}}>
-            <Title >{title}</Title>
-            <p>Dashboard / <span style={{color:'grey'}}>{title}</span> </p>
+            <div >
+              <div style={{marginRight:10, flexDirection:'row'}}>
+                <Title >{title}</Title>
+                {video && <GroupIcon style={{fontSize:26,marginBottom:-3} } type={'Video'}/>}
+              </div>
+            <p>Dashboard / <span style={{color:'grey'}}>{path ?? title}</span> </p>
             </div>
-            {video && <GroupIcon style={{fontSize:26,marginBottom:16} } type={'Video'}/>}
         </Header>
 
     )

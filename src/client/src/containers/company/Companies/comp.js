@@ -50,7 +50,7 @@ Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,
         >
           <AddUserButton onClick={()=>setOpen(true)}/>
           <div style={{flex:1}}/>
-          {selected.length > 0 &&
+          {selected.length == 1 &&
           <AddUserButton text={'Editar'} icon={'Edit'} width={100} onClick={()=>setOpen(true)}/>
           }
           {/* <Container.AddUserButton text={'Desativar'} icon={'Archive'} width={140} onClick={()=>setOpen(true)}/> */}

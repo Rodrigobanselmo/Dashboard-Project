@@ -1,5 +1,5 @@
-import { Team, Perfil,Companies,Excel } from '../containers';
-import {TEAM,USER,DASHBOARD,COMPANY,DATA,TESTE} from './routesNames'
+import { Team, Perfil,Companies,Excel,CompaniesEdit } from '../containers';
+import {TEAM,USER,DASHBOARD,COMPANY,DATA,TESTE,COMPANY_EDIT} from './routesNames'
 
 import Teste from '../Test/index.tsx';
 
@@ -22,6 +22,16 @@ const routes = [
   {
     path: COMPANY,
     component: Companies,
+    exact:true,
+    isPrivate:true,
+    privateRoute:DASHBOARD,
+    infoUser:['access'],
+    condition:[['admin','master']],
+    Equal:[true],
+  },
+  {
+    path: COMPANY_EDIT,
+    component: CompaniesEdit,
     exact:true,
     isPrivate:true,
     privateRoute:DASHBOARD,
