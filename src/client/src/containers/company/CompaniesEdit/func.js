@@ -1,18 +1,18 @@
-import {GetAllCompanies} from '../../../services/firestoreCompany'
+import {GetCompanie} from '../../../services/firestoreCompany'
 
-export function onGetAllCompanies(companyId,setDataRows,setLoadContent,notification) {
+export function onGetCompanie({companyId,cnpj,setData,setLoadContent,notification}) {
     function checkSuccess(response) {
         setLoadContent(false)
-        setDataRows([...response])
-
+        setData({...response})
+        console.log('data',{...response});
       }
 
       function checkError(error) {
         setLoadContent(false)
         setTimeout(() => {
-          notification.error({message:error,modal:true})
+          notification.error({message:error,modal:false})
         }, 600);
       }
 
-      GetAllCompanies(companyId,checkSuccess,checkError)
+      GetCompanie(companyId,cnpj,checkSuccess,checkError)
 }

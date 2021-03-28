@@ -1,7 +1,7 @@
 import { Team, Perfil,Companies,Excel,CompaniesEdit } from '../containers';
 import {TEAM,USER,DASHBOARD,COMPANY,DATA,TESTE,COMPANY_EDIT} from './routesNames'
 
-import Teste from '../Test/index.tsx';
+import Teste from '../Test/index';
 
 const routes = [
   {

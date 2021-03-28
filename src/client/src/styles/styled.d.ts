@@ -37,13 +37,13 @@ declare module '@material-ui/core/styles/createPalette' {
 
   interface TypePrimary {
     main?: string;
+    light?: string;
     contrastText?: string;
-    lighter?: string;
   }
   interface TypeSecondary {
     main?: string;
     contrastText?: string;
-    lighter?: string;
+    light?: string;
   }
 
   interface TypeText {
@@ -82,9 +82,10 @@ declare module '@material-ui/core/styles/createPalette' {
   interface PaletteOptions {
     status?: StatusPaletteColorOptions;
     drawer?: DrawerPaletteColorOptions;
-    backgorund?: TypeBackground;
+    background?: TypeBackground;
     primary?: TypePrimary;
     text?: TypeText;
+    type?: string;
     secondary?: TypeSecondary;
   }
 }

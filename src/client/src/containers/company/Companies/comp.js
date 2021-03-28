@@ -6,8 +6,11 @@ import {
 } from './styles';
 import Tabs from '../../../components/Main/MuiHelpers/Tabs'
 import {FilterComponent,LoadingContent,AddUserButton} from '../../../components/Main/Table/comp'
+import {COMPANY} from '../../../routes/routesNames.ts'
 import Table from './table';
 import {onGetAllCompanies} from './func'
+import {Link} from "react-router-dom";
+import {keepOnlyNumbers} from '../../../helpers/StringHandle';
 
 export default function Container({children}) {
     return (
@@ -51,7 +54,9 @@ Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,
           <AddUserButton onClick={()=>setOpen(true)}/>
           <div style={{flex:1}}/>
           {selected.length == 1 &&
-          <AddUserButton text={'Editar'} icon={'Edit'} width={100} onClick={()=>setOpen(true)}/>
+          <Link style={{textDecoration: 'none', }} to={`${COMPANY}/${keepOnlyNumbers(selected[0])}/0`}>
+            <AddUserButton text={'Editar'} icon={'Edit'} width={100} />
+          </Link>
           }
           {/* <Container.AddUserButton text={'Desativar'} icon={'Archive'} width={140} onClick={()=>setOpen(true)}/> */}
           {/* <Container.AddUserButton text={'Ativar'} icon={'Unarchive'} width={120} onClick={()=>setOpen(true)}/> */}

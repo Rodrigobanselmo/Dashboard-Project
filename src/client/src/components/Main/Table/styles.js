@@ -28,6 +28,7 @@ width:45px;
 transition: width 0.5s ease;
 margin-left:10px;
 animation: ${fadeIn} 0.3s ease-in;
+&:active {opacity: 0.8;}
 
 cursor:pointer;
 
@@ -37,6 +38,7 @@ cursor:pointer;
         transition: all 0.5s ease;
       text-align:center;
       flex:1;
+
     }
 
 &:hover {

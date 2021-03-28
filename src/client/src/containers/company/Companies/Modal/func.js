@@ -8,7 +8,7 @@ export function onCreateNewCompany({data,setDataRows,receitaFederal,currentUser,
     cnpj:formatCPFeCNPJeCEPeCNAE(data.cnpj),
     nome: wordUpper((data.nome.trim()).split(" ")),
     fantasia: wordUpper((data.fantasia.trim()).split(" ")),
-    type: data.tipo,
+    type: data.tipo.toUpperCase(),
     atv1: data.atividade_principal,
     atv2: data.atividades_secundarias.filter(i=>i.text !== ''),
     address: {
@@ -32,7 +32,11 @@ export function onCreateNewCompany({data,setDataRows,receitaFederal,currentUser,
     status:'Ativo',
     creation:(new Date() - 1),
     end:0,
-    supervisorEmail:data.supervisorEmail.toLowerCase()
+    supervisor:{
+      email:data.supervisorEmail.toLowerCase(),
+      name:'',
+      cell:'',
+    }
   }
 
   let name = companyData.identificacao

@@ -15,7 +15,7 @@ function Companies() {
   const [open, setOpen] = useState(false)
   const [queryOld, setQueryOld] = useState(false)
   const [dataRows, setDataRows] = useState([])
-  const [selected, setSelected] = React.useState([]);
+  const [selected, setSelected] = useState([]);
 
   const {setLoad} = useLoaderScreen();
   const {currentUser} = useAuth()

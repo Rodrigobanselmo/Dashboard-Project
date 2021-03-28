@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
     const TabStyled = withStyles((theme) => ({
         root: {
           textTransform: 'none',
-          minWidth: 200,
           color: theme.palette.text.contrastWhite,
           fontSize:15,
           marginRight: theme.spacing(4),
@@ -89,9 +88,9 @@ function TabItems(params) {
 
 }
 
-export default function SimpleTabs({component:Component, children, tabsLabel=[] , ...props}) {
+export default function SimpleTabs({component:Component, children,tabStayle={minWidth: 200}, tabsLabel=[],initialValue=0, ...props}) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(initialValue);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -102,7 +101,7 @@ export default function SimpleTabs({component:Component, children, tabsLabel=[] 
       <AppBar position="static" className={classes.tabHeader}>
         <TabsStyled value={value} onChange={handleChange} aria-label="simple tabs example">
             {tabsLabel.map((item,index)=>(
-                <TabStyled key={index} label={item} {...a11yProps(index)}/>
+                <TabStyled style={tabStayle} key={index} label={item} {...a11yProps(index)}/>
             ))}
         </TabsStyled>
       </AppBar>

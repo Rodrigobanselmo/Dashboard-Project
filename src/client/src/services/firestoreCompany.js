@@ -1,6 +1,6 @@
 import {db,fb} from '../lib/firebase.prod'
 import {errorCatch} from './firestoreUser'
-import {keepOnlyNumbers} from '../helpers/StringHandle'
+import {keepOnlyNumbers,formatCPFeCNPJeCEPeCNAE} from '../helpers/StringHandle'
 import {v4} from "uuid";
 
 
@@ -95,6 +95,23 @@ export function GetAllCompanies(companyId,checkSuccess,checkError) {
       response.push(...doc.data().data)
     })
     checkSuccess(response)
+  })
+  .catch((error) => {
+      checkError(errorCatch(error))
+  });
+}
+
+export function GetCompanie(companyId,cnpj,checkSuccess,checkError) {
+
+  var dataRef = db.collection("company").doc(companyId).collection('companies').doc(keepOnlyNumbers(cnpj))
+
+  dataRef.get()
+  .then(function(docSnapshots) {
+    if (docSnapshots.exists) {
+      checkSuccess(docSnapshots.data())
+    } else {
+      checkError(`A empresa com o CNPJ ${formatCPFeCNPJeCEPeCNAE(cnpj)} não é cadastrado em sua empresa ou possui formato inválido`)
+    }
   })
   .catch((error) => {
       checkError(errorCatch(error))

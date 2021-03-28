@@ -1,7 +1,6 @@
 import React, {useState,useEffect} from 'react'
 import Table from '../../../components/Main/Table'
 import {FilterComponent,LoadingContent} from '../../../components/Main/Table/comp'
-import {onGetAllCompanies} from './func'
 import Container from './comp'
 import Modal from './Modal'
 import Header from '../../../components/Dashboard/Components/Blocks/Header'
@@ -21,19 +20,23 @@ function Companies() {
   const {currentUser} = useAuth()
   const notification = useNotification()
 
-  let { cnpj } = useParams();
-  const tabsLabel = ['Todas', 'Contratantes', 'Laboratório']
+  let { cnpj,tabId } = useParams();
 
+  const tabsLabel = ['Principal', 'Organograma','Empregados', 'Informações Adicionais']
+
+    console.log('tabId',tabId);
     return (
         <>
             <Header icons={'Business'} path={'Gerenciar suas Empresas / Editar'} title={'Editar Empresa'} video={true}/>
-            <h3>ID: {cnpj}</h3>
             <Container style={{width:'100%',backgroundColor:'#1a1a1e',borderRadius:'15px'}}>
               <Container.TableTabs
                 data={data}
                 tabsLabel={tabsLabel}
                 notification={notification}
                 currentUser={currentUser}
+                cnpj={cnpj}
+                setData={setData}
+                tabId={tabId}
               />
             </Container>
         </>

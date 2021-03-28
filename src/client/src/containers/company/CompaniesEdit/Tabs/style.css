@@ -1,0 +1,46 @@
+
+svg.custom .node circle {
+	fill: #1b1c21;
+	stroke: #d9560b;
+	stroke-width: 1.5px;
+}
+
+svg.custom .node text {
+	fill: #F4F4F4;
+	stroke: #F4F4F4;
+	stroke-width: 0.7px;
+}
+
+svg.custom .node {
+	cursor: pointer;
+}
+
+svg.custom path.link {
+	fill: none;
+	stroke: #d9560b;
+	stroke-width: 1px;
+}
+/* stroke: #F27329; */
+
+svg.customLight .node circle {
+	fill: #F4F4F4;
+	stroke: #d9560b;
+	stroke-width: 1.5px;
+}
+
+svg.customLight .node text {
+	font-size: 16px;
+	fill: #1b1c21;
+	stroke: #1b1c21;
+	stroke-width: 0.7px;
+}
+
+svg.customLight .node {
+	cursor: pointer;
+}
+
+svg.customLight path.link {
+	fill: none;
+	stroke: #d9560b;
+	stroke-width: 1px;
+}
