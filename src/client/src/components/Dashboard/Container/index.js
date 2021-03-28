@@ -52,10 +52,10 @@ export default function MiniDrawer({children}) {
       <LoaderDashProvider open={open}>
         <CssBaseline />
         <NavSystem  open={open} setOpen={openNavDrawer}/>
-        {currentUser && currentUser?.status && currentUser.status === 'Ativo' ? 
+        {currentUser && currentUser?.status && currentUser.status === 'Ativo' ?
           <Sidebar open={open} setOpen={setOpen} lock={lock} onTimeOut={onTimeOut} onClearTimeOut={onClearTimeOut} setLock={setLock}/>
          : null }
-        <main className={classes.content}>
+        <main id = "someRandomID" className={classes.content}>
             <div className={classes.toolbar} />
               {children}
         </main>
