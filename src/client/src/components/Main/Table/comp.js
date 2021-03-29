@@ -40,14 +40,14 @@ export function FilterComponent(props) {
   const [onTimeOut,onClearTime] = useTimeOut()
 
   function onInputSearch(e) {
-    props.setLoadContent(true)
+    if (props.setLoadContent) props.setLoadContent(true)
     onClearTime()
-    onTimeOut(()=>props.setLoadContent(false),1000)
+    if (props.setLoadContent) onTimeOut(()=>props.setLoadContent(false),1000)
     props.setSearch(e.target.value)
 }
 
   return(
-    <FilterComponents>
+    <FilterComponents style={props?.styles??{}}>
       <InputSearch icons={Icons} onInputSearch={onInputSearch} search={props.search} onCleanSearch={()=>props.setSearch('')}/>
       {props.children}
     </FilterComponents>

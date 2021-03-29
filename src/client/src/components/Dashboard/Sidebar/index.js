@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom"
 
 
 function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
-  
+
   const activeRoute = useSelector(state => state.route)
   const dispatch = useDispatch()
   const [noHandle,value,onActionTimeOut] = useWaitAction();
@@ -25,18 +25,18 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
   const [collapse, setCollapse] = useState(true)
   const [nav, setNav] = useState(null)
   const [subNav, setSubNav] = useState(null)
-  
+
   const history = useHistory()
   const classes = useStyles();
 
   useEffect(() => {
     dispatch({ type: 'ROUTE', payload:window.location.pathname.slice(-1)==='/' ? window.location.pathname.slice(0,window.location.pathname.length-1): window.location.pathname })
 
-    return history.listen((location) => { 
+    return history.listen((location) => {
       dispatch({ type: 'ROUTE', payload:location.pathname.slice(-1)==='/' ? location.pathname.slice(0,location.pathname.length-1): location.pathname })
       setNav(null)
       setSubNav(null)
-    }) 
+    })
  },[history])
 
   function onClickList(item) {
@@ -101,7 +101,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
       onTimeOut(()=>{
         setOpen(true)
       },300)
-    } 
+    }
   }
 
   function onMouseLeaveDrawer() {
@@ -114,11 +114,11 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
   }
 
   function onFocusSearch() {
-    if (lock === true) setLock(true) 
-    else setLock('true') 
+    if (lock === true) setLock(true)
+    else setLock('true')
     setOpen(true)
   }
-  
+
   function onBlurSearch() {
     if (lock==='true' && search.trim() === '') {
       setLock(false)
@@ -132,11 +132,11 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
       setLock(false)
     }
   }
-  
+
   function onFilterNestedObjects(firstArrayOfObject) {
-    
-    function filterObject(objectToFilter) {      
-      return objectToFilter.text.toLowerCase().normalize("NFD").replace(/[^a-zA-Zs]/g, "").includes( search.toLowerCase().normalize("NFD").replace(/[^a-zA-Zs]/g, "") )
+
+    function filterObject(objectToFilter) {
+      return objectToFilter.text.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes( search.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "") )
     }
 
     const firstArrayFiltered = []
@@ -163,7 +163,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                   thirdArrayFiltered.push({...thirdObjectFiltered})
                   setAllOpen(allOpen=>[...allOpen,thirdObjectFiltered.id]);
                 } else if(filterObject(thirdObject)) thirdArrayFiltered.push({...thirdObject})
-              } 
+              }
             })
             if (thirdArrayFiltered.length > 0) {
               secondObjectFiltered.items = thirdArrayFiltered
@@ -180,11 +180,11 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
         else  firstArrayFiltered.push({...firstObject,items:[]})
       }
     })
-    
+
     return firstArrayFiltered
 
   }
-  
+
   React.useEffect(() => {
     if (search && search.length>=1) {
       const filteredList = onFilterNestedObjects(lists)
@@ -201,7 +201,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
     if (subNav) setSubNav(null)
   }
 
-  return (  
+  return (
     <Drawer
       onMouseEnter={onMouseEnterDrawer}
       onMouseLeave={onMouseLeaveDrawer}
@@ -224,8 +224,8 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
           <div className={clsx(classes.searchIcon,{
             [classes.closeIcon]: search && search.length>=1,
           })}>
-            <Icons style={search && search.length>=1?{fontSize:20,marginLeft:-2}:{fontSize:18}} 
-              type={search && search.length>=1?'HighlightOff':'Search'} 
+            <Icons style={search && search.length>=1?{fontSize:20,marginLeft:-2}:{fontSize:18}}
+              type={search && search.length>=1?'HighlightOff':'Search'}
               onClick={onCleanSearch}
               className={clsx(classes.SearchColored, {
               [classes.searchIconOpen]: !open,
@@ -261,13 +261,13 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                         [classes.iconColored]: value===item.id || nav===item.id || allOpen.find((i)=>i==item.id),
                         [classes.iconClose]: !open,
                         [classes.iconActive]: activeRoute.list===item.id,
-                        })} 
+                        })}
                         style={item?.style && item.style}>
-                        <Icons 
-                          type={item.icon} 
+                        <Icons
+                          type={item.icon}
                          />
                       </div>
-                      <p 
+                      <p
                         className={clsx(classes.listText, {
                           [classes.listTextOpen]: value===item.id || nav===item.id || allOpen.find((i)=>i==item.id),
                           [classes.listTextOpenActive]: activeRoute.list===item.id,
@@ -275,8 +275,8 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                       })}>
                         {item.text}
                       </p>
-                      {item?.items && <Icons 
-                        type={'KeyboardArrowRightIcon'} 
+                      {item?.items && <Icons
+                        type={'KeyboardArrowRightIcon'}
                         className={clsx(classes.arrow, {
                           [classes.arrowOpen]: value===item.id || nav===item.id || allOpen.find((i)=>i==item.id),
                           [classes.arrowActive]:  activeRoute.list===item.id,
@@ -300,17 +300,17 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                             [classes.circleOpenBig]: (subNav===subItem.id || activeRoute.subList===subItem.id|| allOpen.find((i)=>i==subItem.id)) && open,
                             [classes.circleActive]: activeRoute.subList===subItem.id,
                           })}/>
-                          <p 
+                          <p
                             className={clsx(classes.listText,classes.subListText, {
                               [classes.subListTextOpen]: subNav===subItem.id,
                               [classes.subListTextOpenActive]: activeRoute.subList===subItem.id,
                               [classes.listTextClose]: !open,
-                            })} 
+                            })}
                             >
                             {subItem.text}
                           </p>
-                          {subItem?.items && <Icons 
-                            type={'Add'} 
+                          {subItem?.items && <Icons
+                            type={'Add'}
                             className={clsx(classes.arrow, {
                               [classes.addOpen]: subNav===subItem.id,
                               [classes.arrowActive]: activeRoute.subList===item.id,
@@ -329,19 +329,19 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                                 [classes.subCircleOpenBig]: activeRoute.subSubList===subSubItem.id && !open,
                                 [classes.subCircleClose]: !open,
                               })}/>
-                              <p 
+                              <p
                                 className={clsx(classes.listText,classes.subSubListText, {
                                   [classes.subListTextOpen]: activeRoute.subSubList===subSubItem.id,
                                   [classes.listTextClose]: !open,
-                                })} 
+                                })}
                                 >
                                 {subSubItem.text}
                               </p>
                             </div>
-                          ))}   
+                          ))}
                         </Collapse>
                       </div>
-                    ))}   
+                    ))}
                   </Collapse>
                 </div>
               ))}
@@ -352,5 +352,5 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
     </Drawer>
   );
 }
-            
+
 export default React.memo(DrawerMenu)
