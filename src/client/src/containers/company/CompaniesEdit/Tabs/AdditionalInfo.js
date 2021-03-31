@@ -1,5 +1,5 @@
 import React, {useRef,useCallback,useEffect,useState} from 'react';
-import {Icons} from './../../../../components/Icons/iconsDashboard.tsx';
+import {Icons} from '../../../../components/Icons/iconsDashboard.js';
 import {
   ContainerDiv,
   ButtonContainer

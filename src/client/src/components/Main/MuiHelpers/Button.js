@@ -13,7 +13,7 @@ export const CancelButton = styled(Button)`
     border: 1px ${({theme})=>theme.palette.background.line} solid;
     color:${({theme})=>theme.palette.text.primary};
     font-weight:bold;
-    
+
     &:hover {
       background-color: transparent;
     }
@@ -63,5 +63,5 @@ export const ContinueButton = styled(Button)`
       background-color: #00000044;
     }
   }
-  
+
 `;

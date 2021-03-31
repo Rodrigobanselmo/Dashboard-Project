@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import clone from 'clone';
 import {v4} from "uuid";
 
 export const Container = styled.div`
@@ -9,72 +10,51 @@ export const Container = styled.div`
 `;
 
 export const dataFake = {
-    name: "initial",
-    num: 45,
-    numHide: 0,
     text: "Embraer S.a.",
     type: "Empresa",
     children: [
-        {
-            name: "0",
+/*         {
             text: "Nome do Setor 1",
             type: "Setor",
-            num: 0,
             children: [],
             childrenHide: false,
             nodeProps: {}
         },
         {
-            name: "1",
             text: "Nome do Setor 2",
             type: "Setor",
-            num: 18,
             children: [
                 {
-                    name: "1-0",
                     type: "Setor Desenvolvido",
-                    num: 10,
                     text: "Nome Desenvolvido 3",
                     children: [
                         {
-                            name: "1-0-0",
                             text: "Nome do Cargo 4",
-                            num: 5,
                             type: "Cargo",
                             children: [
                                 {
-                                    name: "1-0-0-0",
                                     text: "Nome do Cargo 5",
                                     children: [],
-                                    num: 0,
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
-                                    name: "1-0-0-1",
                                     text: "Nome do Cargo 6",
                                     children: [],
-                                    num: 0,
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
-                                    name: "1-0-0-2",
                                     text: "Nome do Cargo",
                                     children: [],
-                                    num: 0,
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
-                                    name: "1-0-0-3",
                                     children: [],
                                     text: "Nome do Cargo",
-                                    num: 0,
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
-                                    name: "1-0-0-4",
                                     text: "Nome do Cargo",
                                     children: [],
-                                    num: 0,
                                     type: "Cargo Desenvolvido"
                                 }
                             ],
@@ -82,29 +62,21 @@ export const dataFake = {
                             nodeProps: {}
                         },
                         {
-                            name: "1-0-1",
                             text: "Nome do Cargo",
-                            num: 3,
                             type: "Cargo",
                             children: [
                                 {
-                                    name: "1-0-1-0",
                                     text: "Nome do Cargo",
                                     children: [],
-                                    num: 0,
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
-                                    name: "1-0-1-1",
                                     children: [],
                                     text: "Nome do Cargo",
-                                    num: 0,
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
-                                    name: "1-0-1-2",
                                     text: "Nome do Cargo",
-                                    num: 0,
                                     children: [],
                                     type: "Cargo Desenvolvido"
                                 }
@@ -113,51 +85,37 @@ export const dataFake = {
                     ]
                 },
                 {
-                    name: "1-1",
                     type: "Setor Desenvolvido",
-                    num: 6,
                     text: "Nome Desenvolvido",
                     children: [
                         {
-                            name: "1-1-0",
                             text: "Nome do Cargo",
-                            num: 0,
                             type: "Cargo",
                             children: []
                         },
                         {
-                            name: "1-1-1",
                             text: "Nome do Cargo",
-                            num: 3,
                             type: "Cargo",
                             children: [
                                 {
-                                    name: "1-1-1-0",
                                     text: "Nome do Cargo",
-                                    num: 0,
                                     children: [],
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
-                                    name: "1-1-1-1",
                                     children: [],
                                     text: "Nome do Cargo",
-                                    num: 0,
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
-                                    name: "1-1-1-2",
                                     text: "Nome do Cargo",
                                     children: [],
-                                    num: 0,
                                     type: "Cargo Desenvolvido"
                                 }
                             ]
                         },
                         {
-                            name: "1-1-2",
                             text: "Nome do Cargo",
-                            num: 0,
                             type: "Cargo",
                             children: []
                         }
@@ -170,51 +128,37 @@ export const dataFake = {
             nodeProps: {}
         },
         {
-            name: "2",
             text: "Nome do Setor",
             type: "Setor",
-            num: 6,
             children: [
                 {
-                    name: "2-0",
                     type: "Setor Desenvolvido",
-                    num: 0,
                     text: "Nome Desenvolvido",
                     children: []
                 },
                 {
-                    name: "2-1",
                     type: "Setor Desenvolvido",
-                    num: 3,
                     text: "Nome Desenvolvido",
                     children: [
                         {
-                            name: "2-1-0",
                             text: "Nome do Cargo",
-                            num: 0,
                             type: "Cargo",
                             children: []
                         },
                         {
-                            name: "2-1-1",
                             text: "Nome do Cargo",
-                            num: 0,
                             type: "Cargo",
                             children: []
                         },
                         {
-                            name: "2-1-2",
                             text: "Nome do Cargo",
-                            num: 0,
                             type: "Cargo",
                             children: []
                         }
                     ]
                 },
                 {
-                    name: "2-2",
                     type: "Setor Desenvolvido",
-                    num: 0,
                     text: "Nome Desenvolvido",
                     children: []
                 }
@@ -223,78 +167,56 @@ export const dataFake = {
             nodeProps: {}
         },
         {
-            name: "3",
             text: "Nome do Setor",
             type: "Setor",
-            num: 10,
             children: [
                 {
-                    name: "3-0",
                     type: "Setor Desenvolvido",
-                    num: 0,
                     text: "Nome Desenvolvido",
                     children: []
                 },
                 {
-                    name: "3-1",
                     type: "Setor Desenvolvido",
-                    num: 0,
                     text: "Nome Desenvolvido",
                     children: []
                 },
                 {
-                    name: "3-2",
                     type: "Setor Desenvolvido",
-                    num: 7,
                     text: "Nome Desenvolvido",
                     children: [
                         {
-                            name: "3-2-0",
-                            text: "Nome do Cargo",
-                            num: 3,
+                            text: "Nome do Cargo77",
                             type: "Cargo",
                             children: [
                                 {
-                                    name: "3-2-0-0",
                                     text: "Nome do Cargo",
-                                    children: [],
-                                    num: 0,
-                                    type: "Cargo Desenvolvido"
-                                },
-                                {
-                                    name: "3-2-0-1",
-                                    text: "Nome do Cargo",
-                                    num: 0,
                                     children: [],
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
-                                    name: "3-2-0-2",
                                     text: "Nome do Cargo",
-                                    num: 0,
+                                    children: [],
+                                    type: "Cargo Desenvolvido"
+                                },
+                                {
+                                    text: "Nome do Cargo123",
                                     children: [],
                                     type: "Cargo Desenvolvido"
                                 }
                             ]
                         },
                         {
-                            name: "3-2-1",
-                            text: "Nome do Cargo",
-                            num: 0,
+                            text: "Nome do Cargo543",
                             type: "Cargo",
                             children: []
                         },
                         {
-                            name: "3-2-2",
                             text: "Nome do Cargo",
-                            num: 0,
                             type: "Cargo",
                             children: []
                         },
                         {
-                            name: "3-2-3",
-                            text: "Nome do Cargo",
-                            num: 0,
+                            text: "Nome do Cargo345",
                             type: "Cargo",
                             children: []
                         }
@@ -305,91 +227,206 @@ export const dataFake = {
             nodeProps: {}
         },
         {
-            name: "4",
-            text: "Nome do Setor",
+            text: "Nome do Setor345",
             type: "Setor",
-            num: 3,
             children: [
                 {
-                    name: "4-0",
                     type: "Setor Desenvolvido",
-                    num: 0,
                     text: "Nome Desenvolvido",
                     children: []
                 },
                 {
-                    name: "4-1",
                     type: "Setor Desenvolvidos",
-                    num: 0,
                     text: "Mecanico",
                     children: []
                 },
                 {
-                    name: "4-2",
                     type: "Setor Desenvolvido",
-                    num: 0,
                     text: "Nome Desenvolvido",
                     children: []
                 }
             ],
             childrenHide: false,
             nodeProps: {}
-        }
+        } */
     ],
     childrenHide: false,
     nodeProps: {}
 }
 
-export function onAdd({nodeKey,setDataState,dataState,setSizeHeight}) {
+export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
 
     let dataCopy = {...dataState};
     const [...indexes] = nodeKey.split('-');
-    dataCopy.num = dataCopy.num + 1;
+
 
     if (nodeKey === 'initial') {
-      dataCopy.children.push({
-        name: `${dataCopy.children.length}`,
-        text: 'Nome do Setor',
-        type: 'Setor',
-        num:0,
-        children: []
-      })
+      if (dataInitial) {
+        dataCopy.children.push({
+          name: `${dataInitial.children.length}`,
+          type: type,
+          text: title,
+          children: []
+        })
+     // console.log(dataInitial.children.length);
+    } else if (dataCopy?.childrenHide) {
+        dataCopy.childrenHide.push({
+          name: `${dataCopy.childrenHide.length}`,
+          text: title,
+          type: type,
+          children: []
+        })
+      } else {
+        dataCopy.children.push({
+          name: `${dataCopy.children.length}`,
+          text: title,
+          type: type,
+          children: []
+        })
+      }
     } else if (indexes.length == 1) {
-      dataCopy.children[indexes[0]].num = dataCopy.children[indexes[0]].num + 1
-      dataCopy.children[indexes[0]].children.push({
-        name: `${indexes[0]}-${dataCopy.children[indexes[0]].children.length}`,
-        type: 'Setor Desenvolvido',
-        num:0,
-        text: 'Nome Desenvolvido',
-        children: []
-      })
+      if (dataInitial) {
+        const index1 = dataCopy.children.findIndex(i=>i.name == indexes[0])
+        dataCopy.children[index1].children.push({
+          name: `${indexes[0]}-${dataInitial.children[indexes[0]].children.length-1}`,
+          type: type,
+          text: title,
+          children: []
+        })
+        //console.log(`${dataInitial.children[indexes[0]].children.length}`);
+      } else if (dataCopy.children[indexes[0]]?.childrenHide) {
+        dataCopy.children[indexes[0]].childrenHide.push({
+          name: `${indexes[0]}-${dataCopy.children[indexes[0]].childrenHide.length}`,
+          type: type,
+          text: title,
+          children: []
+        })
+      } else {
+        dataCopy.children[indexes[0]].children.push({
+          type: type,
+          text: title,
+          children: []
+        })
+        console.log('dataCopy2',dataCopy);
+      }
     } else if (indexes.length == 2) {
-      dataCopy.children[indexes[0]].num = dataCopy.children[indexes[0]].num + 1
-      dataCopy.children[indexes[0]].children[indexes[1]].num = dataCopy.children[indexes[0]].children[indexes[1]].num + 1
-      dataCopy.children[indexes[0]].children[indexes[1]].children.push({
-        name: `${indexes[0]}-${indexes[1]}-${dataCopy.children[indexes[0]].children[indexes[1]].children.length}`,
-        text: 'Nome do Cargo',
-        num:0,
-        type: 'Cargo',
-        children: []
-      })
+      if (dataInitial) {
+        const index1 = dataCopy.children.findIndex(i=>i.name == indexes[0])
+        const index2 = dataCopy.children[index1].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}`)
+        dataCopy.children[index1].children[index2].children.push({
+          name: `${indexes[0]}-${indexes[1]}-${dataInitial.children[indexes[0]].children[indexes[1]].children.length-1}`,
+          type: type,
+          text: title,
+          children: []
+        })
+      } else if (dataCopy.children[indexes[0]].children[indexes[1]]?.childrenHide) {
+        dataCopy.children[indexes[0]].children[indexes[1]].childrenHide.push({
+          name: `${indexes[0]}-${indexes[1]}-${dataCopy.children[indexes[0]].children[indexes[1]].childrenHide.length}`,
+          text: title,
+          num:0,
+          type: type,
+          children: []
+        })
+      } else {
+        dataCopy.children[indexes[0]].children[indexes[1]].children.push({
+          name: `${indexes[0]}-${indexes[1]}-${dataCopy.children[indexes[0]].children[indexes[1]].children.length}`,
+          text: title,
+          type: type,
+          children: []
+        })
+      }
     } else if (indexes.length == 3) {
-      dataCopy.children[indexes[0]].num = dataCopy.children[indexes[0]].num + 1
-      dataCopy.children[indexes[0]].children[indexes[1]].num = dataCopy.children[indexes[0]].children[indexes[1]].num + 1
-      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num = dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num + 1
-      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.push({
-        name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.length}`,
-        text: 'Nome do Cargo',
-        num:0,
-        type: 'Cargo Desenvolvido',
-      })
-    }
-    console.log(dataCopy);
-    if (dataCopy.num > 10) {
-      setSizeHeight(500+dataCopy.num*20)
+      if (dataInitial) {
+        const index1 = dataCopy.children.findIndex(i=>i.name == indexes[0])
+        const index2 = dataCopy.children[index1].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}`)
+        const index3 = dataCopy.children[index1].children[index2].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}-${indexes[2]}`)
+        dataCopy.children[index1].children[index2].children[index3].children.push({
+          name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${dataInitial.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.length-1}`,
+          type: type,
+          text: title,
+          children: []
+        })
+      } else if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]]?.childrenHide) {
+        dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].childrenHide.push({
+          name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].childrenHide.length}`,
+          text: title,
+          type: type,
+          children: []
+        })
+      } else {
+        dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.push({
+          name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.length}`,
+          text: title,
+          type: type,
+          children: []
+        })
+      }
     }
     setDataState({...dataCopy})
   }
+
+export function onDelete({nodeKey,setDataState,dataState,setPrevFilter}) {
+
+  let dataCopy = {...dataState};
+  const [...indexes] = nodeKey.split('-');
+  //if (addIdRecursively) addIdRecursively([dataCopy])
+  if (setPrevFilter) setPrevFilter('16524563612')
+
+  if (nodeKey === 'initial') {
+  } else if (indexes.length == 1) {
+    if (setPrevFilter) {
+      const index1 = dataCopy.children.findIndex(i=>i.name == indexes[0])
+      dataCopy.children = [...dataCopy.children.slice(0,index1),...dataCopy.children.slice(Number(index1)+1,dataCopy.children.length)]
+
+    } else dataCopy.children = [...dataCopy.children.slice(0,indexes[0]),...dataCopy.children.slice(Number(indexes[0])+1,dataCopy.children.length)]
+  } else if (indexes.length == 2) {
+    if (setPrevFilter) {
+      const index1 = dataCopy.children.findIndex(i=>i.name == indexes[0])
+      const index2 = dataCopy.children[index1].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}`)
+      dataCopy.children[index1].children = [...dataCopy.children[index1].children.slice(0,index2),...dataCopy.children[index1].children.slice(Number(index2)+1,dataCopy.children[index1].children.length)]
+
+    } else dataCopy.children[indexes[0]].children = [...dataCopy.children[indexes[0]].children.slice(0,indexes[1]),...dataCopy.children[indexes[0]].children.slice(Number(indexes[1])+1,dataCopy.children[indexes[0]].children.length)]
+  } else if (indexes.length == 3) {
+    if (setPrevFilter) {
+      const index1 = dataCopy.children.findIndex(i=>i.name == indexes[0])
+      const index2 = dataCopy.children[index1].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}`)
+      const index3 = dataCopy.children[index1].children[index2].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}-${indexes[2]}`)
+      dataCopy.children[index1].children[index2].children = [...dataCopy.children[index1].children[index2].children.slice(0,index3),...dataCopy.children[index1].children[index2].children.slice(Number(index3)+1,dataCopy.children[index1].children[index2].children.length)]
+
+    } else dataCopy.children[indexes[0]].children[indexes[1]].children = [...dataCopy.children[indexes[0]].children[indexes[1]].children.slice(0,indexes[2]),...dataCopy.children[indexes[0]].children[indexes[1]].children.slice(Number(indexes[2])+1,dataCopy.children[indexes[0]].children[indexes[1]].children.length)]
+  } else if (indexes.length == 4) {
+    if (setPrevFilter) {
+      const index1 = dataCopy.children.findIndex(i=>i.name == indexes[0])
+      const index2 = dataCopy.children[index1].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}`)
+      const index3 = dataCopy.children[index1].children[index2].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}-${indexes[2]}`)
+      const index4 = dataCopy.children[index1].children[index2].children[index3].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}`)
+      dataCopy.children[index1].children[index2].children[index3].children = [...dataCopy.children[index1].children[index2].children[index3].children.slice(0,index4),...dataCopy.children[index1].children[index2].children[index3].children.slice(Number(index4)+1,dataCopy.children[index1].children[index2].children[index3].children.length)]
+
+    } else dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.slice(0,indexes[3]),...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.slice(Number(indexes[3])+1,dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.length)]
+  }
+  console.log('antes',{...dataCopy});
+  setDataState({...dataCopy})
+}
+
+export function onEdit({nodeKey,setDataState,dataState,}) {
+
+
+  let dataCopy = {...dataState};
+  const [...indexes] = nodeKey.split('-');
+
+  if (nodeKey === 'initial') {
+  } else if (indexes.length == 1) {
+
+  } else if (indexes.length == 2) {
+
+  } else if (indexes.length == 3) {
+
+  } else if (indexes.length == 4) {
+    dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.filter(i=>i.name=nodeKey)
+  }
+  setDataState({...dataCopy})
+}
+
 
 export function onContract({nodeKey,setDataState,dataState,setSizeHeight}) {
 
@@ -401,58 +438,52 @@ export function onContract({nodeKey,setDataState,dataState,setSizeHeight}) {
       dataCopy.children = [...dataCopy.childrenHide]
       dataCopy.childrenHide = false
       dataCopy.nodeProps = {}
-      dataCopy.num = dataCopy.numHide
-      dataCopy.numHide = 0
+      //dataCopy.num = //dataCopy.numHide
+      //dataCopy.numHide = 0
     } else {
       dataCopy.childrenHide = [...dataCopy.children]
       dataCopy.children = []
       dataCopy.nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
-      dataCopy.numHide = dataCopy.num
-      dataCopy.num = 0
+      //dataCopy.numHide = //dataCopy.num
+      //dataCopy.num = 0
     }
   } else if (indexes.length == 1) {
     if (dataCopy.children[indexes[0]]?.childrenHide) {
       dataCopy.children[indexes[0]].children = [...dataCopy.children[indexes[0]].childrenHide]
       dataCopy.children[indexes[0]].childrenHide = false
       dataCopy.children[indexes[0]].nodeProps = {}
-      dataCopy.num = dataCopy.num + dataCopy.children[indexes[0]].num
+      //dataCopy.num = //dataCopy.num + dataCopy.children[indexes[0]].num
     } else {
       dataCopy.children[indexes[0]].childrenHide = [...dataCopy.children[indexes[0]].children]
       dataCopy.children[indexes[0]].children = []
       dataCopy.children[indexes[0]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
-      dataCopy.num = dataCopy.num - dataCopy.children[indexes[0]].num
+      //dataCopy.num = //dataCopy.num - dataCopy.children[indexes[0]].num
     }
   } else if (indexes.length == 2) {
     if (dataCopy.children[indexes[0]].children[indexes[1]]?.childrenHide) {
       dataCopy.children[indexes[0]].children[indexes[1]].children = [...dataCopy.children[indexes[0]].children[indexes[1]].childrenHide]
       dataCopy.children[indexes[0]].children[indexes[1]].childrenHide = false
       dataCopy.children[indexes[0]].children[indexes[1]].nodeProps = {}
-      dataCopy.num = dataCopy.num + dataCopy.children[indexes[0]].children[indexes[1]].num
+      //dataCopy.num = //dataCopy.num + dataCopy.children[indexes[0]].children[indexes[1]].num
     } else {
       dataCopy.children[indexes[0]].children[indexes[1]].childrenHide = [...dataCopy.children[indexes[0]].children[indexes[1]].children]
       dataCopy.children[indexes[0]].children[indexes[1]].children = []
       dataCopy.children[indexes[0]].children[indexes[1]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
-      dataCopy.num = dataCopy.num - dataCopy.children[indexes[0]].children[indexes[1]].num
+      //dataCopy.num = //dataCopy.num - dataCopy.children[indexes[0]].children[indexes[1]].num
     }
   } else if (indexes.length == 3) {
     if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]]?.childrenHide) {
       dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].childrenHide]
       dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].childrenHide = false
       dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].nodeProps = {}
-      dataCopy.num = dataCopy.num + dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num
+      //dataCopy.num = //dataCopy.num + dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num
     } else {
       dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].childrenHide = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children]
       dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children = []
       dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
-      dataCopy.num = dataCopy.num - dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num
+      //dataCopy.num = //dataCopy.num - dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num
     }
   }
-  if (dataCopy.num > 10) {
-    setSizeHeight(500+dataCopy.num*20)
-  } else {
-    setSizeHeight(500)
-  }
-  console.log(dataCopy)
   setDataState({...dataCopy})
 }
 

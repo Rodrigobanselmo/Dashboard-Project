@@ -12,7 +12,7 @@ import {
 } from './NavbarElements';
 import {SIGN,APP_HOME,ABOUT_HOME,SERVICES_HOME,FAQ_HOME} from '../../../routes/routesNames'
 import {NavLogo} from '../../Main/NavLogo'
-import {Icons} from '../../Icons/iconsDashboard.tsx'
+import {Icons} from '../../Icons/iconsDashboard'
 
 const Navbar = ({ toggle }) => {
   const [scrollNav, setScrollNav] = useState(false);

@@ -38,6 +38,7 @@ import Edit from '@material-ui/icons/Edit';
 import MenuOpenOutlinedIcon from '@material-ui/icons/MenuOpenOutlined';
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import Facebook from '@material-ui/icons/Facebook';
 import YouTube from '@material-ui/icons/YouTube';
@@ -45,19 +46,22 @@ import LinkedIn from '@material-ui/icons/LinkedIn';
 import Twitter from '@material-ui/icons/Twitter';
 import Instagram from '@material-ui/icons/Instagram';
 
-import { SvgIconProps } from '@material-ui/core/SvgIcon';
+// import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 import LottieAnimation from '../../lib/lottie';
 // import { AiOutlineClose } from 'react-icons/ai';
 // import { BsCheckCircle,BsExclamationTriangle,BsXOctagon,BsInfoCircle } from 'react-icons/bs';
 
-interface SvgIcons extends SvgIconProps {
+/* interface SvgIcons extends SvgIconProps {
   type: string;
+  color: string;
+  styles: any;
 }
+export const Icons: React.FC<SvgIcons | any> = ({ type, ...props }) => { */
 
 // eslint-disable-next-line react/prop-types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const Icons: React.FC<SvgIcons | any> = ({ type, ...props }) => {
+export const Icons = ({ type, ...props }) => {
   switch (type) {
     case 'Twitter':
       return <Twitter {...props} />;
@@ -120,6 +124,8 @@ export const Icons: React.FC<SvgIcons | any> = ({ type, ...props }) => {
       return <ArrowForwardOutlinedIcon {...props} />;
     case 'KeyboardArrowDownIcon':
       return <KeyboardArrowDownIcon {...props} />;
+    case 'ArrowDrop':
+      return <ArrowDropDownIcon {...props} />;
     case 'Add':
       return <Add {...props} />;
     case 'Search':

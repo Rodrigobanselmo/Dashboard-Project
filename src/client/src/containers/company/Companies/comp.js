@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icons} from './../../../components/Icons/iconsDashboard.tsx';
+import {Icons} from '../../../components/Icons/iconsDashboard';
 import {
   ContainerDiv,
   ButtonContainer

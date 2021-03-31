@@ -61,7 +61,7 @@ export function Principal({data,setData}) {
         selected={1}
         value={1}
         setData={(selected)=>null}
-        data={[data?.type,...selectorType.filter(i=>i !== data?.type)]}
+        data={[data?.type.toUpperCase(),...selectorType.filter(i=>i.toUpperCase() !== data?.type.toUpperCase())]}
         variant="outlined"
       />
       { data?.type.toLowerCase() === 'filial' &&

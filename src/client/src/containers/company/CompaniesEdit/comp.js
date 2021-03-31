@@ -1,5 +1,5 @@
 import React, {useRef,useCallback,useEffect,useState} from 'react';
-import {Icons} from './../../../components/Icons/iconsDashboard.tsx';
+import {Icons} from '../../../components/Icons/iconsDashboard';
 import {
   ContainerDiv,
   ButtonContainer
@@ -8,7 +8,7 @@ import {onGetCompanie} from './func'
 import Tabs from '../../../components/Main/MuiHelpers/Tabs'
 import {LoadingContent} from '../../../components/Main/Loader/LoadingContent'
 import {Principal} from './Tabs/Principal'
-import {Organograma} from './Tabs/Organograma'
+import {Organograma} from './Tabs/Organograma/index'
 import {AdditionalInfo} from './Tabs/AdditionalInfo'
 
 export default function Container({children}) {
@@ -35,7 +35,7 @@ Container.TableTabs =  function TableTabs({tabsLabel,data,cnpj,tabId,setData,cur
         return <Principal data={data}/>
 
         case 'Informações Adicionais':
-        return <AdditionalInfo data={data}/>
+        return <AdditionalInfo cnpj={cnpj} currentUser={currentUser} notification={notification}/>
 
         case 'Organograma':
         return <Organograma data={data}/>

@@ -39,6 +39,7 @@ function Companies() {
                 tabId={tabId}
               />
             </Container>
+            <div style={{height:200,width:1}}/>
         </>
     )
 }

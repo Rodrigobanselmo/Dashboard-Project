@@ -1,5 +1,5 @@
 import React, {useState,useRef} from 'react';
-import {Icons} from '../../../Icons/iconsDashboard.tsx';
+import {Icons} from '../../../Icons/iconsDashboard';
 import RichTooltip from './RichTooltip'
 import styled from "styled-components";
 
