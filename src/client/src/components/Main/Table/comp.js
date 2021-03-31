@@ -47,7 +47,7 @@ export function FilterComponent(props) {
 }
 
   return(
-    <FilterComponents style={props?.styles??{}}>
+    <FilterComponents style={props?.style??{}}>
       <InputSearch icons={Icons} onInputSearch={onInputSearch} search={props.search} onCleanSearch={()=>props.setSearch('')}/>
       {props.children}
     </FilterComponents>

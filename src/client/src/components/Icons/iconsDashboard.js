@@ -39,6 +39,7 @@ import MenuOpenOutlinedIcon from '@material-ui/icons/MenuOpenOutlined';
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import AllOut from '@material-ui/icons/AllOut';
 
 import Facebook from '@material-ui/icons/Facebook';
 import YouTube from '@material-ui/icons/YouTube';
@@ -150,6 +151,8 @@ export const Icons = ({ type, ...props }) => {
       return <ArchiveOutlinedIcon {...props} />;
     case 'Unarchive':
       return <UnarchiveOutlinedIcon {...props} />;
+    case 'AllOut':
+      return <AllOut {...props} />;
 
     case 'Errors':
       return <Error {...props} />;

@@ -26,9 +26,11 @@ import {v4} from "uuid";
 import { useResizeDetector } from 'react-resize-detector';
 import {dataFake,onAdd,onDelete,onEdit,onContract} from './func';
 import {CardEdit} from './comp';
-import {FilterComponent} from '../../../../../components/Main/Table/comp'
+import {FilterComponent,AddUserButton} from '../../../../../components/Main/Table/comp'
 import { ViewArray } from '@material-ui/icons';
 import clone from 'clone';
+import {ContinueButton} from '../../../../../components/Main/MuiHelpers/Button'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Container = styled.div`
   align-items: center;
@@ -37,7 +39,7 @@ const Container = styled.div`
 	background-color: ${({theme})=>theme.palette.background.paper};
 `;
 
-export function Organograma({data,cnpj,currentUser}) {
+export function Organograma({data,cnpj,currentUser,notification}) {
 
   const [position, setPosition] = useState({top:0,left:0,nodeKey:'',fromTop:0})
   const [positionScroll, setPositionScroll] = useState(0)
@@ -45,6 +47,8 @@ export function Organograma({data,cnpj,currentUser}) {
   const [dataBeforeFilter,setDataBeforeFilter] = useState(clone(dataFake))
   const [dataState, setDataState] = useState(clone(dataFake))
   const [show, setShow] = useState(false)
+  const [save, setSave] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [sizeHeight, setSizeHeight] = useState(500)
   const [filter, setFilter] = useState('')
   const [prevFilter, setPrevFilter] = useState('')
@@ -55,9 +59,6 @@ export function Organograma({data,cnpj,currentUser}) {
   const ContainerMain = document.getElementById('someRandomID');
 
   useEffect(() => {
-/*     if (dataState.num > 10) {
-      setSizeHeight(500+dataState.num*20)
-    } */
     ContainerMain.addEventListener('scroll', setScrollPosition);
     return function cleanupListener() {
       ContainerMain.removeEventListener('scroll', setScrollPosition)
@@ -72,21 +73,14 @@ export function Organograma({data,cnpj,currentUser}) {
     if (bool) setShow(false)
   };
 
-  function onClick(event, nodeKey) {
-    event && event.preventDefault();
-    setPosition({top:event.pageY,left:event.pageX,nodeKey:nodeKey})
-    setShow(true)
-  }
-
   function onRightClick(event, nodeKey) {
     event && event.preventDefault();
     setPosition({top:event.pageY,left:event.pageX,nodeKey:nodeKey,fromTop:positionScroll})
     setShow(true)
-    console.log(nodeKey)
-    //alert(`Right clicked ${nodeKey}`);
   }
 
   function onAddChild({nodeKey,title,type}) {
+    setSave(true)
     if (nodeKey === 'initial') {
       onAdd({nodeKey,setDataState:setDataInitial,dataState:dataInitial,setSizeHeight,title,type})
       onAdd({nodeKey,setDataState:setDataBeforeFilter,dataState:dataBeforeFilter,setSizeHeight,title,type})
@@ -99,20 +93,21 @@ export function Organograma({data,cnpj,currentUser}) {
   }
 
   function onDeleteChild({nodeKey}) {
+    setSave(true)
     if (nodeKey === 'initial') {
     } else {
-      onDelete({nodeKey,setDataState:setDataInitial,dataState:dataInitial});
-      onDelete({nodeKey,setDataState:setDataBeforeFilter,dataState:dataBeforeFilter});
-      if (filter && filter==prevFilter) onDelete({nodeKey,setDataState,dataState,setPrevFilter})
+      onDelete({nodeKey,setDataState:setDataInitial,dataState:dataInitial,setPrevFilter});
+      onDelete({nodeKey,setDataState:setDataBeforeFilter,dataState:dataBeforeFilter,setPrevFilter});
     }
   }
 
-  function onEditChild({nodeKey}) {
+  function onEditChild({nodeKey,text,type}) {
+    setSave(true)
     if (nodeKey === 'initial') {
     } else {
-      onDelete({nodeKey,setDataState:setDataInitial,dataState:dataInitial});
-      onDelete({nodeKey,setDataState:setDataBeforeFilter,dataState:dataBeforeFilter});
-      if (filter && filter==prevFilter) onAdd({nodeKey,setDataState,dataState})
+      onEdit({nodeKey,setDataState:setDataInitial,dataState:dataInitial,text,type,setPrevFilter});
+      onEdit({nodeKey,setDataState:setDataBeforeFilter,dataState:dataBeforeFilter,text,type,setPrevFilter});
+      //if (filter && filter==prevFilter) onEdit({nodeKey,setDataState,dataState,text,type,setPrevFilter});
     }
   }
 
@@ -194,7 +189,7 @@ export function Organograma({data,cnpj,currentUser}) {
     addIdRecursively([root]);
 
 
-    if (filter && filter!=prevFilter) {
+    if (filter && filter!=prevFilter && filter !== 'expandAllNodes') {
       root = buildSubTree(root) || root;
       setDataState(root)
     } else if (!filter) {
@@ -207,16 +202,38 @@ export function Organograma({data,cnpj,currentUser}) {
     setSizeHeight(200+num*20)
   }, [filter,dataInitial,dataBeforeFilter])
 
+  function onSave() {
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 1500);
+    setSave(false)
+  }
 
-
+  function onHandleExpand() {
+    var root = {};
+    root = {...dataInitial};
+    root = clone(root);
+    setDataBeforeFilter({...root})
+  }
 
   return (
       <Container ref={ref}>
-        <FilterComponent
-          setSearch={setFilter}
-          search={filter}
-          onCleanSearch={()=>setFilter('')}
-        />
+        <div style={{display:'flex',flexDirection:'row', alignItems:'center',marginTop:15}}>
+          <FilterComponent
+            style={{margin:0,marginRight:10,padding:0}}
+            setSearch={setFilter}
+            search={filter}
+            onCleanSearch={()=>setFilter('')}
+            />
+          <div style={{position: 'relative'}}>
+            <ContinueButton disable={`${loading || !save}`} style={{width:100,padding:2.5,opacity:loading?0.6:1}} onClick={onSave} primary={!save?'outlined':'true'} size={'medium'}>
+              Salvar
+            </ContinueButton>
+            {loading && <CircularProgress size={24} style={{color: theme.palette.primary.main,position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}} />}
+          </div>
+          <AddUserButton style={{marginRight:20}} onClick={onHandleExpand} text={'Expandir Todos'} icon={'AllOut'} width={180} />
+        </div>
         {width >10 &&
         <Tree
         svgProps={{

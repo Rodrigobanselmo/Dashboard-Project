@@ -58,6 +58,14 @@ export const ContinueButton = styled(Button)`
       padding: 8px 12px;
       font-size:16px;
     `};
+    ${props => props.primary === 'outlined' && css`
+      border: 1px ${({theme})=>theme.palette.background.line} solid;
+      background-color: transparent;
+      ${props => props.disable === 'true' && css`
+        color:${({theme})=>theme.palette.text.secondary};
+      }
+    `};
+    `};
 
     > .MuiTouchRipple-root span {
       background-color: #00000044;

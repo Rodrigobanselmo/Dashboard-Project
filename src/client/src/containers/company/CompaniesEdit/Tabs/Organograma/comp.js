@@ -20,7 +20,7 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
     event.preventDefault();
     if (text==='Editar' && position.nodeKey !== 'initial') {
       setOpen(text)
-      if (open !== 'Editar') setData({title:'',type:''})
+      if (open !== 'Editar') setData({title:getEditInfo('title'),type:getEditInfo('type')})
     }
     if (text==='Adicionar' && position.nodeKey.split('-').length != 4) {
       setOpen(text)
@@ -42,13 +42,28 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
   function onSave() {
     setOpen('none')
     removeMenu({bool:true})
-    if (open==='Editar' && position.nodeKey !== 'initial') {onEditChild({nodeKey:position.nodeKey,title:data.title,type:data.type})}
+    if (open==='Editar' && position.nodeKey !== 'initial') {onEditChild({nodeKey:position.nodeKey,text:data.title,type:data.type})}
     if (open==='Adicionar' && position.nodeKey.split('-').length != 4) onAddChild({nodeKey:position.nodeKey,title:data.title,type:data.type})
-    if (open==='Deletar' && position.nodeKey !== 'initial') {
-      console.log(9)
-      onDeleteChild({nodeKey:position.nodeKey})
-    }
+    if (open==='Deletar' && position.nodeKey !== 'initial') { onDeleteChild({nodeKey:position.nodeKey}) }
     //onAddChild(e,position.nodeKey)
+  }
+
+  function getEditInfo(variable) {
+    const [...indexes] = position.nodeKey.split('-');
+    if (indexes.length == 1) {
+      if (variable==='title') return dataState?.children[indexes[0]]?.text
+      if (variable==='type') return dataState?.children[indexes[0]]?.type
+    } else if (indexes.length == 2) {
+      if (variable==='title') return dataState?.children[indexes[0]].children[indexes[1]]?.text
+      if (variable==='type') return dataState?.children[indexes[0]].children[indexes[1]]?.type
+    } else if (indexes.length == 3 ) {
+      if (variable==='title') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]]?.text
+      if (variable==='type') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]]?.type
+    } else if (indexes.length == 4 ) {
+      if (variable==='title') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[2]]?.text
+      if (variable==='type') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[2]]?.type
+    }
+    return false
   }
 
   function onOptions() {
@@ -155,7 +170,7 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
           </>
           }
           <ContinueButton disable={data.title == '' || data.type == '' ? open ==='Deletar' ? 'false' : 'true' : 'false'} style={{width:'100%',padding:0,marginBottom:10,marginTop:8}} onClick={onSave} primary={open ==='Deletar'?'':'true'} /* onClick={onClickContinue}  */size={'medium'}>
-            <p>{open}</p>
+            <p>{open==='Editar'?"Salvar":open}</p>
           </ContinueButton>
         </ContainerInputs>
         }

@@ -35,10 +35,10 @@ Container.TableTabs =  function TableTabs({tabsLabel,data,cnpj,tabId,setData,cur
         return <Principal data={data}/>
 
         case 'Informações Adicionais':
-        return <AdditionalInfo cnpj={cnpj} currentUser={currentUser} notification={notification}/>
+        return <AdditionalInfo data={data}/>
 
         case 'Organograma':
-        return <Organograma data={data}/>
+        return <Organograma data={data} cnpj={cnpj} currentUser={currentUser} notification={notification}/>
 
         default:
         return <div>134</div>

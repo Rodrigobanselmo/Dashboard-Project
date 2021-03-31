@@ -1,7 +1,4 @@
 import React, {useState,useEffect} from 'react'
-import Table from '../../../components/Main/Table'
-import {FilterComponent,LoadingContent} from '../../../components/Main/Table/comp'
-import {onGetAllCompanies} from './func'
 import Container from './comp'
 import Modal from './Modal'
 import Header from '../../../components/Dashboard/Components/Blocks/Header'
