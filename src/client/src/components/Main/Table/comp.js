@@ -96,18 +96,18 @@ TableTabs.Head = function EnhancedTableHead(props) {
   );
 }
 
-TableTabs.TableRows = function RowComponent(row, index,data, selected,handleClick) {
+TableTabs.TableRows = function RowComponent(row, index,data,selected,handleClick,handleCellClick,styleCell) {
 
   const labelId = `enhanced-table-checkbox-${index}`;
   var dateStart = row?.creation  && row.creation  && row.creation !== 0 ? NormalizeData(new Date(row.creation),'normal') : 'Indisponível';
   var dateEnd = row?.end  && row.end  && row.end !== 0 ? NormalizeData(new Date(row.end),'normal') : 'Presente';
 
-  const isItemSelected = selected ? selected.indexOf(row?.CNPJ ?? row?.id ) !== -1 : false;
+  const isItemSelected = selected ? selected.indexOf(row?.CNPJ ?? row?.cnpj ?? row?.id ) !== -1 : false;
 
   return (
-    <TableRowComponent onClick={(e)=>handleClick(e,row?.CNPJ ?? row?.id)} key={`${row[data.orderCells.id]}`}>
+    <TableRowComponent key={`${row[data.orderCells.id]}`}>
       {selected &&
-        <TableCellComponent padding="checkbox">
+        <TableCellComponent style={styleCell?{...styleCell}:{padding:'10px 0'}} padding="checkbox">
           <Checkbox
             checked={isItemSelected}
             onClick={(e)=>handleClick(e,row?.CNPJ ?? row?.id)}
@@ -120,15 +120,15 @@ TableTabs.TableRows = function RowComponent(row, index,data, selected,handleClic
           return(
             item.type ?
               (item.type === 'status' ?
-                <StatusCell key={indexItem} item={item} row={row} index={indexItem}/>
+                <StatusCell key={indexItem} onClick={(e)=>handleCellClick(e,row?.CNPJ ?? row?.cnpj ?? row?.id,row,index)} item={item} row={row} index={indexItem}/>
                 :
                 item.type === 'start/end' ?
-                <NormalCell key={indexItem} item={item} row={{creation:`${dateStart} - ${dateEnd}`}} index={indexItem}/>
+                <NormalCell key={indexItem} onClick={(e)=>handleCellClick(e,row?.CNPJ ?? row?.cnpj ?? row?.id,row,index)} item={item} row={{creation:`${dateStart} - ${dateEnd}`}} index={indexItem}/>
                 :
-                <UserCell labelId={labelId} row={row}/>
+                <UserCell onClick={(e)=>handleCellClick(e,row?.CNPJ ?? row?.cnpj ?? row?.id,row,index)} labelId={labelId} row={row}/>
               )
               :
-              <NormalCell key={indexItem} item={item} row={row} index={indexItem}/>
+              <NormalCell key={indexItem} onClick={(e)=>handleCellClick(e,row?.CNPJ ?? row?.cnpj ?? row?.id,row,index)} item={item} row={row} index={indexItem}/>
           )
         })}
     </TableRowComponent>
@@ -155,10 +155,10 @@ export function AddUserButton({onClick, width=165,text='Nova Empresa',icon='Add'
   )
 }
 
-function StatusCell({row,item,index}) {
+function StatusCell({row,item,index,onClick}) {
 
   return (
-    <TableCellComponent /* style={{width:40}} */ align="center" >
+    <TableCellComponent onClick={onClick}/* style={{width:40}} */ align="center" >
       <BootstrapTooltip /* placement="right" */  title={row.status} styletooltip={{transform: 'translateY(5px)'}}>
         <StatusComponent status={row.status} />
       </BootstrapTooltip>
@@ -166,9 +166,9 @@ function StatusCell({row,item,index}) {
   )
 }
 
-function NormalCell({row,item,index}) {
+function NormalCell({row,item,index,onClick}) {
   return (
-    <TableCellComponent className='noBreakText' align="left">
+    <TableCellComponent onClick={onClick} className='noBreakText' align="left">
       {row[item.name].length > 26 ?
         <BootstrapTooltip placement="bottom"  title={row[item.name]} styletooltip={{transform: 'translateY(5px)'}}>
           <TextCell style={{marginLeft:index==0?13:0,marginRight:20,maxWidth:200}}>
@@ -184,11 +184,11 @@ function NormalCell({row,item,index}) {
   )
 }
 
-function UserCell({row,labelId}) {
+function UserCell({row,labelId,onClick}) {
 
 
   return (
-    <TableCellComponent component="th" id={labelId} scope="row" padding="none">
+    <TableCellComponent onClick={onClick} component="th" id={labelId} scope="row" padding="none">
       <UserContainer >
           <UserAvatar >
               <GroupIcon style={{fontSize:28}} type={row.image}/>

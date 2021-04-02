@@ -147,7 +147,7 @@ export const TableRowComponent = withStyles((theme) => ({
 export const TableCellComponent = withStyles((theme) => ({
     root: {
         borderBottom: `1px ${theme.palette.background.line} solid`,
-        padding:'20px 0px',
+        padding:'0px 0px',
         color: theme.palette.text.contrastWhite,
     },
 }))((props) => <TableCell {...props} />);

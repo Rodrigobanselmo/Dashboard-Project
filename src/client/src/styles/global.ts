@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { darken } from '@material-ui/core/styles';
 
 export const GlobalStyle = createGlobalStyle`
   *, *:before, *:after {
@@ -28,7 +29,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   * ::-webkit-scrollbar-track {
       background: #1a1a1e;
-
+      //background: ${darken('#26262A', 0.4)};
   }
 
   .noBreakText {

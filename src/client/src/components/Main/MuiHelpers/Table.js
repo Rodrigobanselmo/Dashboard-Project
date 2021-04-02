@@ -91,7 +91,9 @@ export default function EnhancedTable({
     pagination=false,
     initialOrder='name',
     selected,
-    setSelected
+    setSelected,
+    styleCell,
+    handleCellClick
 }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -167,7 +169,7 @@ export default function EnhancedTable({
             <TableBodyComponent>
                 {stableSort(data.rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row,index)=>rowComponent(row,index,data,selected,handleClick))}
+                .map((row,index)=>rowComponent(row,index,data,selected,handleClick,handleCellClick?handleCellClick:handleClick,styleCell))}
                 {emptyRows > 0 && pagination && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                     <TableCell className={classes.tableCell} colSpan={60} />

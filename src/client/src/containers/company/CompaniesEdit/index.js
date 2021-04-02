@@ -5,6 +5,7 @@ import Container from './comp'
 import Modal from './Modal'
 import Header from '../../../components/Dashboard/Components/Blocks/Header'
 import {useLoaderScreen} from '../../../context/LoaderContext'
+import {useLoaderDash} from '../../../context/LoadDashContext'
 import {useNotification} from '../../../context/NotificationContext'
 import {useAuth} from '../../../context/AuthContext'
 import { useParams } from 'react-router-dom';
@@ -17,12 +18,20 @@ function Companies() {
   const [selected, setSelected] = React.useState([]);
 
   const {setLoad} = useLoaderScreen();
+  const {setLoadDash} = useLoaderDash();
   const {currentUser} = useAuth()
   const notification = useNotification()
 
   let { cnpj,tabId } = useParams();
 
   const tabsLabel = ['Principal', 'Organograma','Empregados', 'Informações Adicionais']
+
+    useEffect(() => {
+      setTimeout(() => {
+        setLoadDash(false)
+      }, 500);
+      return clearTimeout()
+    }, [])
 
     console.log('tabId',tabId);
     return (

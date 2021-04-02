@@ -39,6 +39,7 @@ function Companies() {
                 tabsLabel={tabsLabel}
                 selected={selected}
                 setSelected={setSelected}
+                setLoad={setLoad}
               />
             </Container>
             <Modal setDataRows={setDataRows} open={open} setOpen={setOpen} currentUser={currentUser} notification={notification} setLoad={setLoad}/>

@@ -17,7 +17,7 @@ export const LoadDashboard = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0c0c0d88;
+  background-color: #0c0c0d;
   z-index: 1001;
   position: fixed;
   width: 100%;

@@ -9,7 +9,7 @@ function Application() {
 
   return (
       <Container>
-          <Switch>  
+          <Switch>
             {dash.map((route, i) => (
               <RouteComponent key={i} {...route} />
             ))}

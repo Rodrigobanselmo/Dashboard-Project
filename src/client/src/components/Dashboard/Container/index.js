@@ -48,8 +48,8 @@ export default function MiniDrawer({children}) {
   }
 
   return (
-    <div className={`classes ${classes.root}`}>
       <LoaderDashProvider open={open}>
+      <div className={`classes ${classes.root}`}>
         <CssBaseline />
         <NavSystem  open={open} setOpen={openNavDrawer}/>
         {currentUser && currentUser?.status && currentUser.status === 'Ativo' ?
@@ -59,7 +59,7 @@ export default function MiniDrawer({children}) {
             <div className={classes.toolbar} />
               {children}
         </main>
-        </LoaderDashProvider>
     </div>
+    </LoaderDashProvider>
   );
 }

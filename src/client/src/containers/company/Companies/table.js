@@ -1,7 +1,7 @@
 import React from 'react'
 import Table from '../../../components/Main/Table'
 
-function TableCompany({dataRows,loadContent,search,setSelected,selected}) {
+function TableCompany({dataRows,loadContent,search,setSelected,selected,handleCellClick}) {
 
   const headCells = [
     { id: 'CNPJ', disablePadding: true, label: 'CNPJ' },
@@ -11,7 +11,7 @@ function TableCompany({dataRows,loadContent,search,setSelected,selected}) {
     { id: 'status', align:true, disablePadding: false, label: 'Status' },
   ];
 
-  const serachParams = ['CNPJ','name','responsavel','status']
+  const searchParams = ['CNPJ','name','responsavel','status']
 
   const orderCells = {id:'CNPJ',order:[
     {name:'CNPJ'},
@@ -30,8 +30,10 @@ function TableCompany({dataRows,loadContent,search,setSelected,selected}) {
           selected={selected}
           search={search}
           headCells={headCells}
-          serachParams={serachParams}
+          searchParams={searchParams}
           orderCells={orderCells}
+          handleCellClick={handleCellClick}
+          styleCell={{padding:'10px 0'}}
           >
       </Table>
     )

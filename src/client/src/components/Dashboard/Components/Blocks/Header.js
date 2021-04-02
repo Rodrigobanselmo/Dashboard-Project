@@ -37,7 +37,7 @@ const Header = styled.div`
 `;
 
 function HeaderComponent({icons, title,path, video=false}) {
-
+    console.log('header')
     return (
         <Header >
             <TitleTag >
