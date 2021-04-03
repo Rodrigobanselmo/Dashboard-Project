@@ -40,8 +40,9 @@ Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,se
 
   return (
     <NewTabs tabValue={tabValue} setTabValue={setTabValue} tabsLabel={tabsLabel} >
+      <div style={{paddingRight:27,paddingLeft:27}}>
         <FilterComponent
-          style={{marginLeft:10}}
+          style={{marginLeft:-12}}
           setLoadContent={setLoadContent}
           setSearch={setSearch}
           search={search}
@@ -72,6 +73,7 @@ Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,se
           handleCellClick={handleCellClick}
         />
       </TabPanel>
+      </div>
     </NewTabs>
   );
 }

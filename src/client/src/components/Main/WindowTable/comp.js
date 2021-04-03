@@ -3,6 +3,7 @@ import {BootstrapTooltip} from '../MuiHelpers/Tooltip'
 import clsx from "clsx";
 import {Icons} from '../../Icons/iconsDashboard';
 import styled, {css} from "styled-components";
+import {NormalizeData} from '../../../helpers/DataHandler';
 
 const StatusComponent = styled.div`
     background-color: ${({theme})=> (theme.palette.status.fail) };
@@ -31,6 +32,7 @@ function NormalCell({column, classes, item, rowSize, onClick}) {
       style={{
         flexBasis: column.width || false,
         height: rowSize,
+        minWidth:column.minWidth || false,
         marginTop:5,
         maxWidth:column.width
       }}
@@ -81,10 +83,17 @@ function StatusCell({column, classes, item, rowSize, onClick}) {
 
 export function RowCell({column, classes, item, rowSize, onClick}) {
 
+  if (item.type === 'start/end') {
+    var dateStart = item?.creation  && item.creation  && item.creation !== 0 ? NormalizeData(new Date(item.creation),'normal') : 'Indisponível';
+    var dateEnd = item?.end  && item.end  && item.end !== 0 ? NormalizeData(new Date(item.end),'normal') : 'Presente';
+  }
   return (
     <>
       { column.type == 'status' ?
         <StatusCell onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
+      :
+        item.type === 'start/end' ?
+        <NormalCell onClick={onClick} column={column} classes={classes} item={{creation:`${dateStart} - ${dateEnd}`}} rowSize={rowSize}/>
       :
         <NormalCell onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
       }

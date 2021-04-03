@@ -11,11 +11,19 @@ const Block = styled.div`
   width: 20px;
   background-color: ${props=>props.theme.palette.background.paper};
 `;
+const BlockLeft = styled.div`
+  position: absolute;
+  bottom: 0px;
+  left: 20px;
+  height: 21px;
+  width: 20px;
+  background-color: ${props=>props.theme.palette.background.paper};
+`;
 
 const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,selected,handleCellClick}) => {
 
   const headCells = [
-    { id: 'CNPJ', label: 'CNPJ' },
+    { id: 'CNPJ', label: 'CNPJ', minWidth: 220},
     { id: 'name',  label: 'Identificação', width: 220},
     { id: 'responsavel', label: 'Responsável Legal', width: 220 },
     { id: 'creation', label: 'Início/Fim',width: 170, type:'start/end' },
@@ -36,7 +44,7 @@ const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,sel
     return (
       <>
       {!loadContent ?
-        <div style={{height:filterRowCells.length > 7?'fit-content': filterRowCells.length*55+80,overflowY:'hidden',marginBottom:0,paddingBottom:20,position:'relative'}}>
+        <div style={{height:filterRowCells.length > 7?'fit-content': filterRowCells.length*55+80,marginBottom:0,overflowY: 'hidden',paddingBottom:20,position:'relative'}}>
           <WindowTable
             headCells={headCells}
             rowsCells={filterRowCells}
@@ -46,6 +54,7 @@ const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,sel
             initialOrder={'name'}
           />
           <Block />
+          <BlockLeft/>
         </div>
       :null}
       </>

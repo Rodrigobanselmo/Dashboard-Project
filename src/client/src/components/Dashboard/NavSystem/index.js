@@ -24,15 +24,22 @@ import {useNotification} from '../../../context/NotificationContext'
 import {useAuth} from '../../../context/AuthContext'
 import {navList} from '../../../constants/itemsNav'
 
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 import {LogOut} from '../../../services/firebaseAuth'
-import {useStyles} from './styles'
+import {useStyles,DarkModeSwitch as DarkModeSwitchMui} from './styles'
 import {onLogout} from './func'
 import {Icons} from '../../Icons/iconsDashboard'
 
 import {DASHBOARD} from '../../../routes/routesNames'
 import {AbreviarNome,InitialsName} from '../../../helpers/StringHandle'
+import { DarkModeSwitch } from 'react-toggle-dark-mode';
 
 export default function NavBar({open,setOpen}) {
+
+  const [openProfile, setOpenProfile] = React.useState(false);
+  const [darkMode, setDarkMode] = React.useState(true);
+  const anchorRef = React.useRef(null);
 
   const {load,setLoad} = useLoaderScreen();
   //const {setLoadDash,loadDash}= useLoaderDash();
@@ -68,11 +75,11 @@ export default function NavBar({open,setOpen}) {
 
   function onProfileClick(action) {
     action ==='logout' && onLogout({setLoad,notification})
-  }
+  };
 
-  const [openProfile, setOpenProfile] = React.useState(false);
-  const anchorRef = React.useRef(null);
-
+  const handleDarkModeChange = () => {
+    setDarkMode(!darkMode)
+  };
 
   return (
       <AppBar
@@ -113,6 +120,17 @@ export default function NavBar({open,setOpen}) {
             />
           </div>
           <div className={classes.sectionDesktop}>
+          <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={darkMode ? 'Modo Escuro':'Modo Claro'} styletooltip={{transform: 'translateY(10px)'}}>
+            <IconButton style={{marginRight:-10,marginLeft:5}} aria-label={'Dark Mode'}>
+              <DarkModeSwitch
+                style={{ marginTop: -3 }}
+                checked={darkMode}
+                onChange={handleDarkModeChange}
+                size={25}
+              />
+            </IconButton>
+          </BootstrapTooltip>
+          <DarkModeSwitchMui checked={darkMode} onChange={handleDarkModeChange} />
             {navList.map((item, index) => (
               <div key={index}>
               {item.visible === 'all' || (currentUser?.access && item.visible.includes(currentUser.access)) ?

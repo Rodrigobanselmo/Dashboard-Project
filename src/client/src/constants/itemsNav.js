@@ -19,13 +19,13 @@ export const navList = [
     id:Math.random(),
     visible:'all',
   },
-  {
+/*   {
     text: "Gerenciar Usuários",
     icon: 'Admin',
     visible:['admin','master'],
     id:Math.random(),
     to: TEAM
-  },
+  }, */
   {
     text: "Notificações",
     icon: 'Notifications',

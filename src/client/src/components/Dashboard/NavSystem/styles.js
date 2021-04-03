@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { Transform } from 'nodemailer/lib/xoauth2';
+import { makeStyles,withStyles } from '@material-ui/core/styles';
+import Switch from '@material-ui/core/Switch';
 
 export const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -100,6 +100,8 @@ export const useStyles = makeStyles((theme) => ({
     display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
+      alignItems:'center',
+      justifyContent: 'center',
     },
   },
   sectionMobile: {
@@ -123,3 +125,17 @@ export const useStyles = makeStyles((theme) => ({
     marginRight:20
   },
 }));
+
+export const DarkModeSwitch = withStyles((theme) => ({
+  switchBase: {
+    color: theme.palette.primary.main,
+    '&$checked': {
+      color: theme.palette.primary.main,
+    },
+    '&$checked + $track': {
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
+  checked: {},
+  track: {},
+}))((props) => <Switch {...props} />);

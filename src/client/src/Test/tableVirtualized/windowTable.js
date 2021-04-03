@@ -21,21 +21,31 @@ import Checkbox from '@material-ui/core/Checkbox';
 import useTimeOut from '../../hooks/useTimeOut';
 import {NormalizeData} from '../../helpers/DataHandler';
 import {RowCell} from './windowComp'
+import styled from "styled-components";
+
+const Head = styled(TableHead)`
+  &&&.MuiTableHead-root {
+    //background-color: red;
+  }
+`;
 
 const useTableStyles = makeStyles(theme => ({
   root: {
-    display: "block",
-    flex: 1
+    flex: 1,
+    borderBottom: `2px ${theme.palette.background.line} solid`,
+    borderLeft: `2px ${theme.palette.background.line} solid`,
+    borderRadius:10,
   },
   table: {
     height: "100%",
-    width: "100%",
-    borderRadius:10
+    overflow: 'scroll hidden',
+    borderRight: `2px ${theme.palette.background.line} solid`,
   },
-  list: {},
-  thead: {},
+  list: {
+  },
+  thead: {
+  },
   tbody: {
-    width: "100%"
   },
   row: {
     display: "flex",
@@ -44,13 +54,14 @@ const useTableStyles = makeStyles(theme => ({
     alignItems: "center",
     boxSizing: "none",
     minWidth: "100%",
-    width: "100%",
     borderBottom: `2px ${theme.palette.background.line} solid`,
     borderRight: `1px ${theme.palette.background.line} solid`,
     cursor: 'pointer',
     '&:hover' : {backgroundColor:darken(theme.palette.background.paper,0.13)},
     // borderRight: `2px ${theme.palette.background.line} solid`,
     // borderLeft: `2px ${theme.palette.background.line} solid`,
+    //overflow: 'visible hidden',
+    overflow: 'hidden hidden',
   },
   headerRow: {
     display: "flex",
@@ -59,13 +70,12 @@ const useTableStyles = makeStyles(theme => ({
     alignItems: "center",
     boxSizing: "border-box",
     minWidth: "100%",
-    width: "100%",
     backgroundColor:darken(theme.palette.background.paper,0.25),
     borderBottom: `2px ${theme.palette.background.line} solid`,
-    borderLeft: `2px ${theme.palette.background.line} solid`,
+    //borderLeft: `2px ${theme.palette.background.line} solid`,
     borderTop: `2px ${theme.palette.background.line} solid`,
     borderTopLeftRadius: 10,
-    borderTopRightRadius: 10
+    borderTopRightRadius: 10,
   },
   rowCheck: {
     display:'flex',
@@ -77,7 +87,7 @@ const useTableStyles = makeStyles(theme => ({
     backgroundColor:darken(theme.palette.background.paper,0.25),
     borderTop: `1px ${theme.palette.background.line} solid`,
     borderBottom: `1px ${theme.palette.background.line} solid`,
-    borderLeft: `2px ${theme.palette.background.line} solid`,
+    //borderLeft: `2px ${theme.palette.background.line} solid`,
     borderRight: `2px ${theme.palette.background.line} solid`,
   },
   cell: {
@@ -160,6 +170,7 @@ const TableColumns = memo(({ classes, columns, order, orderBy, onRequestSort,row
             style={{
               flexBasis: column.width || false,
               height: rowSize,
+              minWidth:column.minWidth || false,
               transform: colIndex != 0 ?`translateX(${-colIndex-4}px)`:`translateX(0px)`,
             }}
             scope="col"
@@ -246,59 +257,67 @@ const createItemData = memoize((classes, columns, data, setSelected, selected, h
 }));
 
 const ReactWindowTable = ({ data, columns, initialOrder='creation',setSelected,selected,handleCellClick,rowSize }) => {
-  const classes = useTableStyles();
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState(initialOrder);
+    const classes = useTableStyles();
+    const [order, setOrder] = useState('asc');
+    const [orderBy, setOrderBy] = useState(initialOrder);
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+    const handleRequestSort = (event, property) => {
+      const isAsc = orderBy === property && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
+    };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = data.map((n) => n?.id ?? n?.CNPJ );
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
+    const handleSelectAllClick = (event) => {
+      if (event.target.checked) {
+        const newSelected = data.map((n) => n?.id ?? n?.CNPJ );
+        setSelected(newSelected);
+        return;
+      }
+      setSelected([]);
+    };
 
 
 
-  console.log('ReactWindowTable')
-  const dataRowsOrdered = stableSort(data, getComparator(order, orderBy))
-  const itemData = createItemData(classes, columns, dataRowsOrdered,setSelected,selected,handleCellClick,rowSize );
+    console.log('ReactWindowTable')
+    const dataRowsOrdered = stableSort(data, getComparator(order, orderBy))
+    const itemData = createItemData(classes, columns, dataRowsOrdered,setSelected,selected,handleCellClick,rowSize );
+    const TableMinWidth = () => {
+      var minWithTable = 0
+      columns.map((column)=>{
+        if (column?.width) minWithTable = minWithTable+column.width
+        else if (column?.minWidth) minWithTable  = minWithTable+column.minWidth
+      })
+      return minWithTable
+    };
 
-  return (
-    <div className={classes.root}>
-      <Table className={classes.table} component="div">
-        <TableHead component="div" className={classes.thead}>
-          <TableColumns  rowSize={rowSize} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} classes={classes} columns={columns} selected={selected} onSelectAllClick={handleSelectAllClick} rowCount={data.length} />
-        </TableHead>
+    return (
+      <div className={classes.root}>
+        <Table style={{minWidth:TableMinWidth()+45}} className={classes.table} component="div">
+          <Head component="div" >
+            <TableColumns  rowSize={rowSize} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} classes={classes} columns={columns} selected={selected} onSelectAllClick={handleSelectAllClick} rowCount={data.length} />
+          </Head>
 
-        <TableBody style={{height:300}} component="div" className={classes.tbody}>
-          <AutoSizer>
-            {({ height, width }) => (
-              <List
-                className={classes.list}
-                height={height}
-                width={width}
-                itemCount={data.length}
-                itemSize={rowSize}
-                itemKey={itemKey}
-                itemData={itemData}
-              >
-                {Row}
-              </List>
-            )}
-          </AutoSizer>
-        </TableBody>
+          <TableBody style={{height:300}} component="div" >
+            <AutoSizer>
+              {({ height, width }) => (
+                <List
+                  className={classes.list}
+                  height={height}
+                  width={width}
+                  itemCount={data.length}
+                  itemSize={rowSize}
+                  itemKey={itemKey}
+                  itemData={itemData}
+                >
+                  {Row}
+                </List>
+              )}
+            </AutoSizer>
+          </TableBody>
 
-      </Table>
-    </div>
-  )
+        </Table>
+      </div>
+    )
 };
 
 const useStyles = makeStyles(theme => ({
@@ -308,14 +327,16 @@ const useStyles = makeStyles(theme => ({
   container: {
     flexGrow: 1,
     height: 440,
+    overflow: 'hidden hidden',
+    //overflow: 'hidden hidden',
   },
   paper: {
     height: "100%",
     display: "flex",
     flexDirection: "column",
+    //overflow: 'visible hidden',
+    overflow: 'hidden hidden',
     marginBottom:20,
-    borderRight: `2px ${theme.palette.background.line} solid`,
-    borderBottom: `2px ${theme.palette.background.line} solid`,
     borderRadius:10
   },
 }));
@@ -326,11 +347,11 @@ const App = ({rowsCells,headCells,setSelected,selected,handleCellClick,initialOr
   return (
 
     <div className={classes.root}>
-      <Container  maxWidth="lg" className={classes.container}>
+      <div  className={classes.container}>
         <div className={classes.paper}>
           <ReactWindowTable data={rowsCells} rowSize={rowSize} columns={headCells} setSelected={setSelected} selected={selected} handleCellClick={handleCellClick} initialOrder={initialOrder} />
         </div>
-      </Container>
+      </div>
     </div>
   );
 };

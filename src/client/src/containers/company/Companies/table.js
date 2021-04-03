@@ -3,19 +3,10 @@ import WindowTable from '../../../components/Main/WindowTable'
 import {filterObject} from '../../../helpers/ObjectArray'
 import styled from "styled-components";
 
-const Block = styled.div`
-  position: absolute;
-  bottom: 0px;
-  right: 20px;
-  height: 31px;
-  width: 20px;
-  background-color: ${props=>props.theme.palette.background.paper};
-`;
-
 const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,selected,handleCellClick}) => {
 
   const headCells = [
-    { id: 'CNPJ', label: 'CNPJ' },
+    { id: 'CNPJ', label: 'CNPJ',minWidth:220},
     { id: 'name',  label: 'Identificação', width: 220},
     { id: 'responsavel', label: 'Responsável Legal', width: 220 },
     { id: 'creation', label: 'Início/Fim',width: 170, type:'start/end' },
@@ -36,7 +27,7 @@ const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,sel
     return (
       <>
       {!loadContent ?
-        <div style={{height:filterRowCells.length > 7?'fit-content': filterRowCells.length*55+90,overflowY:'hidden',marginBottom:20,paddingBottom:30,position:'relative'}}>
+        <div style={{marginBottom:20,paddingBottom:30,position:'relative'}}>
           <WindowTable
             headCells={headCells}
             rowsCells={filterRowCells}
@@ -45,7 +36,6 @@ const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,sel
             handleCellClick={handleCellClick}
             initialOrder={'name'}
           />
-          <Block />
         </div>
       :null}
       </>

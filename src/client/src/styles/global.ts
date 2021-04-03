@@ -19,9 +19,10 @@ export const GlobalStyle = createGlobalStyle`
 
   * ::-webkit-scrollbar {
       width: 5px;
+      height:8px;
   }
   * ::-webkit-scrollbar-thumb:hover {
-      background: #777;
+      background: #333333;
     }
   * ::-webkit-scrollbar-thumb {
     background: #26262A;

@@ -31,6 +31,7 @@ function NormalCell({column, classes, item, rowSize, onClick}) {
       style={{
         flexBasis: column.width || false,
         height: rowSize,
+        minWidth:column.minWidth || false,
         marginTop:5,
         maxWidth:column.width
       }}

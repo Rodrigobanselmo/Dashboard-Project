@@ -9,7 +9,7 @@ const createRow = () => ({
   status: 'Ativo',
 });
 
-const createData = (qty = 30) => {
+const createData = (qty = 3) => {
   let data = [];
 
   for (let i = 0; i < qty; i++) {
