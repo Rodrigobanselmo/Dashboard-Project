@@ -83,7 +83,7 @@ function StatusCell({column, classes, item, rowSize, onClick}) {
 
 export function RowCell({column, classes, item, rowSize, onClick}) {
 
-  if (item.type === 'start/end') {
+  if (column.type === 'start/end') {
     var dateStart = item?.creation  && item.creation  && item.creation !== 0 ? NormalizeData(new Date(item.creation),'normal') : 'Indisponível';
     var dateEnd = item?.end  && item.end  && item.end !== 0 ? NormalizeData(new Date(item.end),'normal') : 'Presente';
   }
@@ -92,7 +92,7 @@ export function RowCell({column, classes, item, rowSize, onClick}) {
       { column.type == 'status' ?
         <StatusCell onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
       :
-        item.type === 'start/end' ?
+        column.type === 'start/end' ?
         <NormalCell onClick={onClick} column={column} classes={classes} item={{creation:`${dateStart} - ${dateEnd}`}} rowSize={rowSize}/>
       :
         <NormalCell onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
