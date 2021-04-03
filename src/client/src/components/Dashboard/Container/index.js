@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Sidebar from '../Sidebar'
 import NavSystem from '../NavSystem'
-import LoaderDashProvider from '../../../context/LoadDashContext'
+import {LoaderDashboard} from '../../../components/Main/Loader'
 import {useAuth} from '../../../context/AuthContext'
 import useTimeOut from '../../../hooks/useTimeOut'
 
@@ -48,7 +48,7 @@ export default function MiniDrawer({children}) {
   }
 
   return (
-      <LoaderDashProvider open={open}>
+      <LoaderDashboard open={open}>
       <div className={`classes ${classes.root}`}>
         <CssBaseline />
         <NavSystem  open={open} setOpen={openNavDrawer}/>
@@ -60,6 +60,6 @@ export default function MiniDrawer({children}) {
               {children}
         </main>
     </div>
-    </LoaderDashProvider>
+    </LoaderDashboard>
   );
 }

@@ -12,7 +12,7 @@ import {onGetAllCompanies} from './func'
 import {Link} from "react-router-dom";
 import {keepOnlyNumbers} from '../../../helpers/StringHandle';
 import {useHistory} from "react-router-dom";
-import {useLoaderDash} from '../../../context/LoadDashContext'
+//import {useLoaderDash} from '../../../context/LoadDashContext'
 
 export default function Container({children}) {
     return (
@@ -27,7 +27,7 @@ Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,
   const [loadContent, setLoadContent] = React.useState(true)
   const [search, setSearch] = React.useState('')
   const history = useHistory();
-  const {setLoadDash} = useLoaderDash();
+  //const {setLoadDash} = useLoaderDash();
 
   React.useEffect(() => {
     onGetAllCompanies(currentUser.company.id,setDataRows,setLoadContent,notification)
@@ -35,7 +35,7 @@ Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,
 
   function handleCellClick(e,rowId) {
     history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
-    setLoadDash(true)
+    //setLoadDash(true)
   }
 
   function TableContainer() {

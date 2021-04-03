@@ -10,6 +10,7 @@ import { RouteComponent, home, auth } from './routes';
 import { AuthProvider } from './context/AuthContext.js';
 import NotificationProvider from './context/NotificationContext.js';
 import LoaderProvider from './context/LoaderContext';
+import { LoaderContext } from './context/LoadDashContext';
 
 export const App: React.FC = () => {
   return (
@@ -20,17 +21,19 @@ export const App: React.FC = () => {
             <Route {...home}>
               <Home />
             </Route>
-            <NotificationProvider>
-              <LoaderProvider>
-                <AuthProvider>
-                  <Switch>
-                    {auth.map((route: any) => (
-                      <RouteComponent key={route.path} {...route} />
-                    ))}
-                  </Switch>
-                </AuthProvider>
-              </LoaderProvider>
-            </NotificationProvider>
+            <LoaderContext>
+              <NotificationProvider>
+                <LoaderProvider>
+                  <AuthProvider>
+                    <Switch>
+                      {auth.map((route: any) => (
+                        <RouteComponent key={route.path} {...route} />
+                      ))}
+                    </Switch>
+                  </AuthProvider>
+                </LoaderProvider>
+              </NotificationProvider>
+            </LoaderContext>
           </Switch>
         </Router>
         <GlobalStyle />

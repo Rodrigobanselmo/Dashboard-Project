@@ -3,6 +3,7 @@ import Container from './comp'
 import Modal from './Modal'
 import Header from '../../../components/Dashboard/Components/Blocks/Header'
 import {useLoaderScreen} from '../../../context/LoaderContext'
+import {useLoaderDashboard} from '../../../context/LoadDashContext'
 import {useNotification} from '../../../context/NotificationContext'
 import {useAuth} from '../../../context/AuthContext'
 import { useLocation } from 'react-router-dom';
@@ -14,6 +15,7 @@ function Companies() {
   const [dataRows, setDataRows] = useState([])
   const [selected, setSelected] = useState([]);
 
+  const { setLoaderDash } = useLoaderDashboard();
   const {setLoad} = useLoaderScreen();
   const {currentUser} = useAuth()
   const notification = useNotification()
@@ -40,6 +42,7 @@ function Companies() {
                 selected={selected}
                 setSelected={setSelected}
                 setLoad={setLoad}
+                setLoaderDash={setLoaderDash}
               />
             </Container>
             <Modal setDataRows={setDataRows} open={open} setOpen={setOpen} currentUser={currentUser} notification={notification} setLoad={setLoad}/>

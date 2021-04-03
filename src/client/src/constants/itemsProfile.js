@@ -1,6 +1,5 @@
 import {LogOut} from '../services/firebaseAuth'
 import {useLoaderScreen} from '../context/LoaderContext'
-import {useLoaderDash} from '../context/LoadDashContext'
 
 
 export const itemsProfile = [

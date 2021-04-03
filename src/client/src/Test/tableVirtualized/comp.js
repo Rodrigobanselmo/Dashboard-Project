@@ -12,7 +12,7 @@ import {onGetAllCompanies} from './func'
 import {Link} from "react-router-dom";
 import {keepOnlyNumbers} from '../../helpers/StringHandle';
 import {useHistory} from "react-router-dom";
-import {useLoaderDash} from '../../context/LoadDashContext'
+//////import {useLoaderDash} from '../../context/LoadDashContext'
 import TableComponent from './table';
 
 export default function Container({children}) {
@@ -28,7 +28,7 @@ Container.TableTabs =  function FilterComponentw({setSelected,selected,rowsCells
   const [loadContent, setLoadContent] = React.useState(true)
   const [search, setSearch] = React.useState('')
   const history = useHistory();
-  const {setLoadDash} = React.useCallback(()=>useLoaderDash(),[]);
+  /////const {setLoadDash} = React.useCallback(()=>useLoaderDash(),[]);
   const [tabValue, setTabValue] = React.useState(0);
 
   React.useEffect(() => {

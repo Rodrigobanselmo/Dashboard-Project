@@ -17,9 +17,9 @@ import Badge from '@material-ui/core/Badge';
 import RichTooltip from '../Components/MultUsage/RichTooltip'
 import {BootstrapTooltip} from '../../Main/MuiHelpers/Tooltip'
 import { Link } from 'react-router-dom';
-import {itemsProfile} from '../../../constants/itemsProfile' 
+import {itemsProfile} from '../../../constants/itemsProfile'
 import {useLoaderScreen} from '../../../context/LoaderContext'
-import {useLoaderDash} from '../../../context/LoadDashContext'
+//import {useLoaderDash} from '../../../context/LoadDashContext'
 import {useNotification} from '../../../context/NotificationContext'
 import {useAuth} from '../../../context/AuthContext'
 import {navList} from '../../../constants/itemsNav'
@@ -35,12 +35,12 @@ import {AbreviarNome,InitialsName} from '../../../helpers/StringHandle'
 export default function NavBar({open,setOpen}) {
 
   const {load,setLoad} = useLoaderScreen();
-  const {setLoadDash,loadDash}= useLoaderDash();
+  //const {setLoadDash,loadDash}= useLoaderDash();
   const notification = useNotification();
   const {currentUser} = useAuth();
 
   function ReactLink(props) {
-    return( 
+    return(
       <>
       {props.to ?
         <Link {...props}>
@@ -57,7 +57,7 @@ export default function NavBar({open,setOpen}) {
 
 
   const classes = useStyles();
-  
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -90,7 +90,7 @@ export default function NavBar({open,setOpen}) {
             edge="start"
             className={clsx(classes.menuButton)}
           >
-            {open ? 
+            {open ?
             <MenuOpen />
             :
             <MenuIcon />
@@ -115,7 +115,7 @@ export default function NavBar({open,setOpen}) {
           <div className={classes.sectionDesktop}>
             {navList.map((item, index) => (
               <div key={index}>
-              {item.visible === 'all' || (currentUser?.access && item.visible.includes(currentUser.access)) ? 
+              {item.visible === 'all' || (currentUser?.access && item.visible.includes(currentUser.access)) ?
                 <ReactLink to={item.to} style={{margin:'0px 5px'}}>
                   <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={item.text} styletooltip={{transform: 'translateY(10px)'}}>
                     <IconButton aria-label={item.text}>
@@ -124,7 +124,7 @@ export default function NavBar({open,setOpen}) {
                       </Badge>
                     </IconButton>
                   </BootstrapTooltip>
-                </ReactLink>   
+                </ReactLink>
               :null}
               </div>
             ))}

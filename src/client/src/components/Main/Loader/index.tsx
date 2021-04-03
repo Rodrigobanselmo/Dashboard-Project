@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { LoadFullScreen, LoadDashboard } from './Loader';
 import LottieAnimation from '../../../lib/lottie';
+import { useLoaderDashboard } from '../../../context/LoadDashContext';
 
 const SlideUp = keyframes`
     0% {
@@ -44,27 +45,22 @@ export const LoaderSimple: React.FC<LoadProps> = ({ load = false }) => {
 };
 
 interface LoaderDashboardProps {
-  load: boolean;
   open: boolean;
 }
 
 export const LoaderDashboard: React.FC<LoaderDashboardProps> = ({
-  load = false,
+  children,
   open = true,
 }) => {
+  const { loaderDash } = useLoaderDashboard();
   return (
     <>
-      {load && (
+      {loaderDash && (
         <LoadDashboard open={open}>
-          {/*           <LottieAnimation
-            lotti="loader"
-            height={50}
-            width={50}
-            isClickToPauseDisabled
-          /> */}
           <Image src="/images/logo-only.svg" alt="logo" />
         </LoadDashboard>
       )}
+      {children}
     </>
   );
 };

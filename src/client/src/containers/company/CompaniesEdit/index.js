@@ -5,10 +5,10 @@ import Container from './comp'
 import Modal from './Modal'
 import Header from '../../../components/Dashboard/Components/Blocks/Header'
 import {useLoaderScreen} from '../../../context/LoaderContext'
-import {useLoaderDash} from '../../../context/LoadDashContext'
 import {useNotification} from '../../../context/NotificationContext'
 import {useAuth} from '../../../context/AuthContext'
 import { useParams } from 'react-router-dom';
+import {useLoaderDashboard} from '../../../context/LoadDashContext'
 
 function Companies() {
 
@@ -18,7 +18,7 @@ function Companies() {
   const [selected, setSelected] = React.useState([]);
 
   const {setLoad} = useLoaderScreen();
-  const {setLoadDash} = useLoaderDash();
+  const { setLoaderDash } = useLoaderDashboard();
   const {currentUser} = useAuth()
   const notification = useNotification()
 
@@ -28,7 +28,7 @@ function Companies() {
 
     useEffect(() => {
       setTimeout(() => {
-        setLoadDash(false)
+        setLoaderDash(false)
       }, 500);
       return clearTimeout()
     }, [])
