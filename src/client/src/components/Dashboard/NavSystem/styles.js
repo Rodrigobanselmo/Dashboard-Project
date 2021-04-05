@@ -1,15 +1,24 @@
 import { makeStyles,withStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
+import {
+  lighten,
+  darken,
+  emphasize,
+  fade,
+  getLuminance,
+  getContrastRatio,
+} from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    backgroundColor:theme.palette.background.paper,
+    backgroundColor:theme.palette.background.nav,
     height:70,
     paddingTop:3,
   },
   menuButton: {
     marginRight: 36,
+    color: theme.palette.background.iconsPaper,
   },
   iconColor: {
     color: theme.palette.background.iconsPaper,
@@ -30,8 +39,8 @@ export const useStyles = makeStyles((theme) => ({
     transform:'scale(0.9)'
   },
   profile: {
-    border: `2.5px solid ${'#1a1a1e'}`,
-    backgroundColor:'#c9560b',
+    border: `2.5px solid ${theme.palette.background.nav}`,
+    backgroundColor:theme.palette.primary.main,
     height:46,
     width:46,
     borderRadius:25,
@@ -41,11 +50,11 @@ export const useStyles = makeStyles((theme) => ({
   },
   profileName: {
     fontWeight:'600',
-    color:'#D7D7D9'
+    color:theme.palette.text.primaryNav
   },
   profileCircleName: {
     fontWeight:'600',
-    color:'#D7D7D9'
+    color:theme.palette.text.primaryNav
   },
   divName: {
     marginTop:8,
@@ -55,10 +64,10 @@ export const useStyles = makeStyles((theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    borderColor: theme.palette.background.contrast,
+    borderColor: theme.palette.type =='dark' ? theme.palette.background.contrast : theme.palette.text.strong,
     borderStyle: 'solid',
     borderWidth:1,
-    backgroundColor: theme.palette.background.default,
+    backgroundColor:  theme.palette.type =='dark' ? theme.palette.background.default : theme.palette.background.paper,
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: '100%',
@@ -66,6 +75,11 @@ export const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(3),
       width: 'auto',
     },
+    //-webkit-box-shadow: inset 0px 0px 33px -6px rgba(0,0,0,0.48);
+    boxShadow: 'inset 0px 0px 33px -6px rgba(0,0,0,0.28)',
+    transition: theme.transitions.create(['background-color','color'], {
+      duration: 660,
+    }),
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -77,8 +91,14 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     color:theme.palette.text.primary,
   },
+  searchIconColor: {
+    color:theme.palette.text.primary,
+    transition: theme.transitions.create('color', {
+      duration: 660,
+    }),
+  },
   inputRoot: {
-    color: 'inherit',
+    color: theme.palette.text.primary,
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -137,5 +157,7 @@ export const DarkModeSwitch = withStyles((theme) => ({
     },
   },
   checked: {},
-  track: {},
+  track: {
+    backgroundColor:lighten(theme.palette.primary.main,0.3)
+  },
 }))((props) => <Switch {...props} />);

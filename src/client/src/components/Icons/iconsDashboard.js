@@ -47,6 +47,7 @@ import LinkedIn from '@material-ui/icons/LinkedIn';
 import Twitter from '@material-ui/icons/Twitter';
 import Instagram from '@material-ui/icons/Instagram';
 
+import OfflineBoltTwoToneIcon from '@material-ui/icons/OfflineBoltTwoTone';
 // import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 import LottieAnimation from '../../lib/lottie';
@@ -153,6 +154,8 @@ export const Icons = ({ type, ...props }) => {
       return <UnarchiveOutlinedIcon {...props} />;
     case 'AllOut':
       return <AllOut {...props} />;
+    case 'Risk':
+      return <OfflineBoltTwoToneIcon {...props} />;
 
     case 'Errors':
       return <Error {...props} />;

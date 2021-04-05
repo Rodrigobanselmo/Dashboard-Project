@@ -23,7 +23,7 @@ const createData = (qty = 3) => {
 export function onGetAllCompanies(companyId,setDataRows,setLoadContent,notification) {
     function checkSuccess(response) {
         setLoadContent(false)
-        setDataRows([...createData()])
+        setDataRows([...response])
 
       }
 

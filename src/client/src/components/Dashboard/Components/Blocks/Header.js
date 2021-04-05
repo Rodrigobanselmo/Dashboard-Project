@@ -36,7 +36,7 @@ const Header = styled.div`
   align-items:center;
 `;
 
-function HeaderComponent({icons, title,path, video=false}) {
+const HeaderComponent = React.memo(({icons, title,path, video=false}) => {
     console.log('header')
     return (
         <Header >
@@ -53,6 +53,6 @@ function HeaderComponent({icons, title,path, video=false}) {
         </Header>
 
     )
-}
+});
 
 export default HeaderComponent

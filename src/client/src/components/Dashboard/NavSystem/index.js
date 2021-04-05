@@ -34,6 +34,9 @@ import {Icons} from '../../Icons/iconsDashboard'
 import {DASHBOARD} from '../../../routes/routesNames'
 import {AbreviarNome,InitialsName} from '../../../helpers/StringHandle'
 import { DarkModeSwitch } from 'react-toggle-dark-mode';
+import usePersistedState from '../../../hooks/usePersistedState.js';
+import { useThemeContext } from '../../../context/ThemeContext.js';
+import {ThemeContext} from "styled-components";
 
 export default function NavBar({open,setOpen}) {
 
@@ -45,6 +48,8 @@ export default function NavBar({open,setOpen}) {
   //const {setLoadDash,loadDash}= useLoaderDash();
   const notification = useNotification();
   const {currentUser} = useAuth();
+  const { theme,setTheme } = useThemeContext();
+  const themes = React.useContext(ThemeContext)
 
   function ReactLink(props) {
     return(
@@ -78,7 +83,7 @@ export default function NavBar({open,setOpen}) {
   };
 
   const handleDarkModeChange = () => {
-    setDarkMode(!darkMode)
+    setTheme(theme =='dark' ? 'light' : 'dark')
   };
 
   return (
@@ -107,7 +112,7 @@ export default function NavBar({open,setOpen}) {
           <div className={classes.grow} />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
-              <SearchIcon style={{fontSize:18}} className={classes.iconColor}/>
+              <SearchIcon style={{fontSize:18}} className={classes.searchIconColor}/>
             </div>
             <InputBase
               placeholder="Pesquisar..."
@@ -120,17 +125,18 @@ export default function NavBar({open,setOpen}) {
             />
           </div>
           <div className={classes.sectionDesktop}>
-          <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={darkMode ? 'Modo Escuro':'Modo Claro'} styletooltip={{transform: 'translateY(10px)'}}>
+          <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={theme =='dark' ? 'Modo Escuro':'Modo Claro'} styletooltip={{transform: 'translateY(10px)'}}>
             <IconButton style={{marginRight:-10,marginLeft:5}} aria-label={'Dark Mode'}>
               <DarkModeSwitch
-                style={{ marginTop: -3 }}
-                checked={darkMode}
+                style={{ marginTop: -3}}
+                sunColor={themes.palette.background.iconsPaper}
+                checked={theme =='dark'}
                 onChange={handleDarkModeChange}
                 size={25}
               />
             </IconButton>
           </BootstrapTooltip>
-          <DarkModeSwitchMui checked={darkMode} onChange={handleDarkModeChange} />
+          <DarkModeSwitchMui checked={theme =='dark'} onChange={handleDarkModeChange} />
             {navList.map((item, index) => (
               <div key={index}>
               {item.visible === 'all' || (currentUser?.access && item.visible.includes(currentUser.access)) ?

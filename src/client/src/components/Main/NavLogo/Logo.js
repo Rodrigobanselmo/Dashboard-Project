@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styled, {css} from 'styled-components';
 
 export const NavLogoSC = styled(Link)`
-  color: #fff;
+  color: ${({theme})=> theme.palette.text.contrastWhite};
   justify-self: flex-start;
   cursor: pointer;
   font-size: 1.5rem;
@@ -12,10 +12,10 @@ export const NavLogoSC = styled(Link)`
   font-weight: bold;
   text-decoration: none;
   span {
-    color:#d9560b;
+    color:${({theme})=> theme.palette.primary.main};
   }
   &:hover {
-    color: #fff;
+    color: ${({theme})=> theme.palette.text.contrastWhite};
     transform: scale(1.02);
     transition: 0.15s ease-out;
     text-decoration: none;

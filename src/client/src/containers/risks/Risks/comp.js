@@ -1,18 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Icons} from '../../../components/Icons/iconsDashboard';
 import {
   ContainerDiv,
   ButtonContainer
 } from './styles';
-import Tabs from '../../../components/Main/MuiHelpers/Tabs'
+import NewTabs, {TabPanel} from '../../../components/Main/MuiHelpers/NewTabs'
 import {FilterComponent,LoadingContent,AddUserButton} from '../../../components/Main/Table/comp'
 import {COMPANY} from '../../../routes/routesNames.ts'
-import Table from './table';
 import {onGetAllCompanies} from './func'
 import {Link} from "react-router-dom";
 import {keepOnlyNumbers} from '../../../helpers/StringHandle';
 import {useHistory} from "react-router-dom";
-//import {useLoaderDash} from '../../../context/LoadDashContext'
+import TableComponent from './table';
 
 export default function Container({children}) {
     return (
@@ -22,12 +21,13 @@ export default function Container({children}) {
     );
 }
 
-Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,setDataRows,tabsLabel,setOpen,currentUser,notification,setLoad}) {
+
+Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,setDataRows,tabsLabel,setOpen,currentUser,notification,setLoad,setLoaderDash}) {
 
   const [loadContent, setLoadContent] = React.useState(true)
   const [search, setSearch] = React.useState('')
+  const [tabValue, setTabValue] = React.useState(0);
   const history = useHistory();
-  //const {setLoadDash} = useLoaderDash();
 
   React.useEffect(() => {
     onGetAllCompanies(currentUser.company.id,setDataRows,setLoadContent,notification)
@@ -35,27 +35,14 @@ Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,
 
   function handleCellClick(e,rowId) {
     history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
-    //setLoadDash(true)
+    setLoaderDash(true)
   }
 
-  function TableContainer() {
-
-    return (
-      <Table
-        selected={selected}
-        setSelected={setSelected}
-        loadContent={loadContent}
-        dataRows={dataRows}
-        search={search}
-        handleCellClick={handleCellClick}
-        >
-      </Table>
-    )
-}
-
   return (
-    <Tabs tabsLabel={tabsLabel} component={TableContainer}>
+    <NewTabs tabValue={tabValue} setTabValue={setTabValue} tabsLabel={tabsLabel} >
+      <div style={{paddingRight:27,paddingLeft:27}}>
         <FilterComponent
+          style={{marginLeft:-12}}
           setLoadContent={setLoadContent}
           setSearch={setSearch}
           search={search}
@@ -76,7 +63,18 @@ Container.TableTabs =  function FilterComponentw({setSelected,selected,dataRows,
         :
           null
       }
-    </Tabs>
+      <TabPanel key={0} value={tabValue} index={0} >
+        <TableComponent
+          rowsCells={dataRows}
+          selected={selected}
+          setSelected={setSelected}
+          loadContent={loadContent}
+          search={search}
+          handleCellClick={handleCellClick}
+        />
+      </TabPanel>
+      </div>
+    </NewTabs>
   );
 }
 

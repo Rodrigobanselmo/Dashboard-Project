@@ -7,20 +7,20 @@ const paddingSubItemPlus = 20;
 
 export const useStyles = makeStyles((theme) => ({
   drawer: {
-    backgroundColor:theme.palette.background.paper,
+    backgroundColor:theme.palette.background.drawer,
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
   },
   drawerOpen: {
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create(['width','background-color'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen+200,
     }),
   },
   drawerClose: {
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create(['width','background-color'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen+200,
     }),
@@ -48,7 +48,7 @@ export const useStyles = makeStyles((theme) => ({
     minHeight:'100vh',
   },
   arrow: {
-    color: theme.palette.background.iconsPaper,
+    color: theme.palette.drawer.icon,
     fontSize:18,
     transition: theme.transitions.create('transform', {
       easing: theme.transitions.easing.sharp,
@@ -69,7 +69,7 @@ export const useStyles = makeStyles((theme) => ({
   list: {
     display:'flex',
     flexDirection:'row',
-    padding: '10px 10px', 
+    padding: '10px 10px',
     paddingLeft:paddingLeft+paddingLeftPlus,
     width:'100%',
     cursor:'pointer',
@@ -82,6 +82,9 @@ export const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.background.hoverPaper,
     },
+    transition: theme.transitions.create('background-color', {
+      duration: 660,
+    }),
   },
   listTitle: {
     color: theme.palette.drawer.listTitle,
@@ -109,7 +112,7 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paperHighlight,
   },
   listText: {
-    whiteSpace: 'nowrap', 
+    whiteSpace: 'nowrap',
     overflowWrap: 'break-word',
     color: theme.palette.drawer.textListInactive,
     opacity: 1,
@@ -141,7 +144,7 @@ export const useStyles = makeStyles((theme) => ({
     }),
   },
   icon: {
-    color: theme.palette.background.iconsPaper,
+    color: theme.palette.drawer.icon,
     fontSize:22,
     position:'absolute',
     left:18,
@@ -210,6 +213,14 @@ export const useStyles = makeStyles((theme) => ({
   circleActive: {
     backgroundColor:theme.palette.primary.main,
   },
+  subListOpenContainer: {
+    borderRadius:5,
+    boxShadow: '0px 0px 33px -6px rgba(0,0,0,0.48)',
+  },
+  subListOpenContainerActive: {
+    borderRadius:0,
+    boxShadow: 'none',
+  },
   subList: {
     backgroundColor: theme.palette.drawer.backgroundListOpen,
     '&:hover': {
@@ -251,16 +262,20 @@ export const useStyles = makeStyles((theme) => ({
     },
   },
   subSubListOpen: {
-    color: theme.palette.background.inactive,
+    color: theme.palette.type !=='dark' ? theme.palette.drawer.textSubListActive :theme.palette.background.inactive,
     backgroundColor: theme.palette.drawer.subSubListActive,
     '&:hover': {
-      backgroundColor: '',
+      backgroundColor: 'transparent',
     },
   },
   subSubListText: {
     fontSize:12.5,
     maxWidth:130,
     minWidth:130,
+  },
+  subSubListTextActive: {
+    color: theme.palette.type !=='dark'?theme.palette.drawer.textSubListActive:theme.palette.drawer.textSubListSelected,
+
   },
   subCircle: {
     width:3,
@@ -286,11 +301,15 @@ export const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
     borderColor: theme.palette.background.contrast,
     borderStyle: 'solid',
+    boxShadow: 'inset 0px 0px 33px -6px rgba(0,0,0,0.10)',
     borderWidth:1,
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.type =='dark' ?theme.palette.background.default :theme.palette.background.drawer,
     margin:'10px 10px',
     marginTop:85,
     marginBottom:-7,
+    transition: theme.transitions.create('background-color', {
+      duration: 600,
+    }),
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -310,7 +329,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   SearchColored: {
     transform: `translateX(0px)`,
-    color: theme.palette.drawer.textListSelected,
+    color: theme.palette.text.primary,
     transition: theme.transitions.create('all', {
       easing: 'ease',
       duration: 700,
@@ -320,9 +339,10 @@ export const useStyles = makeStyles((theme) => ({
     transform: `translateX(-5px)`,
   },
   inputRoot: {
-    color: 'inherit',
+    color: theme.palette.text.primary,
   },
   inputInput: {
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    color: theme.palette.text.primary,
   },
 }));

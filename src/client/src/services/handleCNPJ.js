@@ -6,9 +6,8 @@ export function GetCNPJ(cnpj,checkSuccess,checkError) {
 
     axios.get(`http://localhost:3001/api/cnpj/${cnpj}`)
     .then(response => checkSuccess(response.data))
-    .catch(error => checkError(error))
+    .catch(error => checkError(typeof error === 'string' ? error : error?.message ? error.message : 'Erro ao consultar o servidor'))
 }
-
 
 /* export function GetCNPJe(cnpj,checkError) {
     // Limpa o CNPJ para conter somente numeros, removendo traços e pontos

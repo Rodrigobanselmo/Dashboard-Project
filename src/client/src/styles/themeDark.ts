@@ -1,10 +1,8 @@
-import { createMuiTheme } from '@material-ui/core/styles';
-import '@material-ui/core/styles/createPalette';
-import './styled.d';
+import { PaletteType } from '@material-ui/core';
 
-const ThemeColor = createMuiTheme({
+const dark = {
   palette: {
-    type: 'dark',
+    type: 'dark' as PaletteType,
     primary: {
       main: '#d9560b',
       light: '#F27329',
@@ -26,6 +24,8 @@ const ThemeColor = createMuiTheme({
       paperHighlight: '#d9560b12',
       attention: '#bb2011',
       attentionHover: '#aa2000',
+      drawer: '#1a1a1e',
+      nav: '#1a1a1e',
     },
     text: {
       contrastWhite: '#fff',
@@ -33,16 +33,19 @@ const ThemeColor = createMuiTheme({
       primary: '#D7D7D9',
       secondary: '#A8A8A3',
       secondaryLighter: '#ddd',
+      textNavName: '#D7D7D9cc',
       third: '#D7D7D944',
       hover: '#fff',
       disabled: 'rgba(0, 0, 0, 0.38)',
       hint: 'rgba(0, 0, 0, 0.38)',
       placeholder: '#626262',
       divider: '#ff0000',
+      primaryNav: '#D7D7D9',
     },
     drawer: {
       arrowOpen: '#d9560b',
       listTitle: '#D7D7D9',
+      icon: '#A8A8B3',
       textListSelected: '#D7D7D9',
       textListInactive: '#A8A8B388',
       circleSelected: '#d9560b77',
@@ -67,6 +70,6 @@ const ThemeColor = createMuiTheme({
       orange: '#F37735',
     },
   },
-});
+};
 
-export default ThemeColor;
+export default dark;

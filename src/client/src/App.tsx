@@ -4,18 +4,21 @@ import { ThemeProvider } from 'styled-components';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { GlobalStyle } from './styles/global';
-import themeColor from './styles/themeDark';
+import { GlobalStyleLight } from './styles/globalLight';
+import themeColor from './styles/theme';
 import { Home } from './pages';
 import { RouteComponent, home, auth } from './routes';
 import { AuthProvider } from './context/AuthContext.js';
+import { useThemeContext } from './context/ThemeContext.js';
 import NotificationProvider from './context/NotificationContext.js';
 import LoaderProvider from './context/LoaderContext';
 import { LoaderContext } from './context/LoadDashContext';
 
 export const App: React.FC = () => {
+  const { theme } = useThemeContext();
   return (
-    <MuiThemeProvider theme={themeColor}>
-      <ThemeProvider theme={themeColor}>
+    <MuiThemeProvider theme={themeColor(theme)}>
+      <ThemeProvider theme={themeColor(theme)}>
         <Router>
           <Switch>
             <Route {...home}>
@@ -36,7 +39,7 @@ export const App: React.FC = () => {
             </LoaderContext>
           </Switch>
         </Router>
-        <GlobalStyle />
+        {theme === 'dark' ? <GlobalStyle /> : <GlobalStyleLight />}
       </ThemeProvider>
     </MuiThemeProvider>
   );

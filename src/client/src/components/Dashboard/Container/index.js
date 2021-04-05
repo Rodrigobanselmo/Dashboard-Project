@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor:theme.palette.background.default,
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
+    transition: theme.transitions.create('background-color', {
+      duration: 660,
+    }),
   },
   content: {
     position:'relative',
@@ -28,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'scroll',
     backgroundColor:theme.palette.background.default,
     height:'100vh',
+    transition: theme.transitions.create('background-color', {
+      duration: 660,
+    }),
   },
 }));
 

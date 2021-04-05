@@ -18,16 +18,17 @@ export const DATA = `${DASHBOARD}/data`;
 
 // Fator de Risco
 export const RISK_FACTORS = `${DASHBOARD}/fatores-de-risco/:risk/:tabId?`;
-export const RISK_FACTORS_FIS = `${RISK_FACTORS}/fisicos`;
-export const RISK_FACTORS_QUI = `${RISK_FACTORS}/quimicos`;
-export const RISK_FACTORS_BIO = `${RISK_FACTORS}/biologicos`;
-export const RISK_FACTORS_ACI = `${RISK_FACTORS}/acidentes`;
-export const RISK_FACTORS_ERG = `${RISK_FACTORS}/ergonomicos`;
-export const RISK_FACTORS_PER = `${RISK_FACTORS}/periculosidade`;
-export const RISK_FACTORS_INS = `${RISK_FACTORS}/insalubridade`;
-export const RISK_FACTORS_NOC = `${RISK_FACTORS}/nocivos`;
-export const RISK_FACTORS_AMB = `${RISK_FACTORS}/ambientais`;
-export const RISK_FACTORS_OTHERS = `${RISK_FACTORS}/outros`;
+export const RISK_FACTORS_SLICE = `${DASHBOARD}/fatores-de-risco`;
+export const RISK_FACTORS_FIS = `${RISK_FACTORS_SLICE}/fisicos`;
+export const RISK_FACTORS_QUI = `${RISK_FACTORS_SLICE}/quimicos`;
+export const RISK_FACTORS_BIO = `${RISK_FACTORS_SLICE}/biologicos`;
+export const RISK_FACTORS_ACI = `${RISK_FACTORS_SLICE}/acidentes`;
+export const RISK_FACTORS_ERG = `${RISK_FACTORS_SLICE}/ergonomicos`;
+export const RISK_FACTORS_PER = `${RISK_FACTORS_SLICE}/periculosidade`;
+export const RISK_FACTORS_INS = `${RISK_FACTORS_SLICE}/insalubridade`;
+export const RISK_FACTORS_NOC = `${RISK_FACTORS_SLICE}/nocivos`;
+export const RISK_FACTORS_AMB = `${RISK_FACTORS_SLICE}/ambientais`;
+export const RISK_FACTORS_OTHERS = `${RISK_FACTORS_SLICE}/outros`;
 
 // subList
 // ...

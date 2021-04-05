@@ -96,6 +96,7 @@ export const useNotification = () => {
           ...props,
         },
       });
+      console.log(props)
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: { id: v4(), type, ...props },

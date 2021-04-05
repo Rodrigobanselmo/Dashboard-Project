@@ -3,20 +3,21 @@ import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Collapse from '@material-ui/core/Collapse';
-import {useStyles} from './SidebarElements'
+import {useStyles} from './styles'
 import {Icons} from '../../Icons/iconsDashboard'
 import {lists} from '../../../constants/itemsDrawer'
 import { useSelector,useDispatch } from 'react-redux'
 import InputBase from '@material-ui/core/InputBase';
 import useWaitAction from '../../../hooks/useWaitAction'
 import { useHistory } from "react-router-dom"
-
+import {ThemeContext} from "styled-components";
 
 function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
 
   const activeRoute = useSelector(state => state.route)
   const dispatch = useDispatch()
   const [noHandle,value,onActionTimeOut] = useWaitAction();
+  const theme = React.useContext(ThemeContext)
 
   const [allOpen, setAllOpen] = useState([])
   const [search, setSearch] = useState('')
@@ -30,12 +31,15 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
   const classes = useStyles();
 
   useEffect(() => {
+    const location = window.location.pathname.slice(-1)==='/' ? window.location.pathname.slice(1,window.location.pathname.length-1):  window.location.pathname.slice(1,window.location.pathname.length)
+    const [dashboard, ...route] = location.split('/')
+    console.log(route)
     dispatch({ type: 'ROUTE', payload:window.location.pathname.slice(-1)==='/' ? window.location.pathname.slice(0,window.location.pathname.length-1): window.location.pathname })
 
     return history.listen((location) => {
       dispatch({ type: 'ROUTE', payload:location.pathname.slice(-1)==='/' ? location.pathname.slice(0,location.pathname.length-1): location.pathname })
-      setNav(null)
-      setSubNav(null)
+      //setNav(null)
+      //setSubNav(null)
     })
  },[history])
 
@@ -78,6 +82,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
         else setAllOpen(allOpen=>[...allOpen,subItem.id])
       }
       else {
+        history.push(subItem.random ? `${subItem.to}${Math.floor(Math.random()*1000)}` : subItem.to)
         dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:1} })
         setSubNav(null)
       }
@@ -85,6 +90,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
       setSubNav(subNav===subItem.id ? null:subItem.id)
       if (subItem.items) {}
       else {
+        history.push(subItem.random ? `${subItem.to}${Math.floor(Math.random()*1000)}` : subItem.to)
         dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:1} })
         setSubNav(null)
       }
@@ -92,6 +98,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
   }
 
   function onClickSubSubList(item,subItem,subSubItem) {
+    history.push(subSubItem.random ? `${subSubItem.to}${Math.floor(Math.random()*1000)}` : subSubItem.to)
     dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:subSubItem.id} })
   }
 
@@ -251,7 +258,10 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
             })}>{list.category}</p>
             <List  disablePadding={true}>
               {list?.items && list.items.map((item) => (
-                <div key={item.id} >
+                <div key={item.id} className={clsx({
+                  [classes.subListOpenContainer]: item?.items && item.items.length > 0 && (value===item.id || nav===item.id || allOpen.find((i)=>i==item.id)),
+                  [classes.subListOpenContainerActive]: activeRoute.list===item.id && nav!==item.id,
+                })}>
                   <div onClick={()=>onClickList(item)}
                     className={clsx(classes.list, {
                       [classes.listOpen]: value===item.id || nav===item.id || allOpen.find((i)=>i==item.id),
@@ -286,9 +296,13 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                           [classes.barActive]: activeRoute.list===item.id,
                         })}/>
                   </div>
+                  <div >
                   <Collapse in={((value===item.id && collapse!=='same' && collapse!=='true' ) || (nav===item.id && collapse && collapse!=='same'))|| Boolean(allOpen.find((i)=>i==item.id)) }>
                     {((value===item.id || nav===item.id || (search && search.length>=1)) && item?.items) && item.items.map((subItem) => (
-                      <div key={subItem.id} >
+                      <div key={subItem.id} className={clsx({
+                        [classes.subListOpenContainer]: subItem?.items && subItem.items.length > 0 && (value===subItem.id || subNav===subItem.id || allOpen.find((i)=>i==subItem.id)),
+                        [classes.subListOpenContainerActive]: activeRoute.subList===subItem.id && subNav!==subItem.id,
+                      })}>
                         <div onClick={()=>onClickSubList(item,subItem)}
                         className={clsx(classes.list,classes.subList, {
                           [classes.subListOpen]: subNav===subItem.id,
@@ -331,7 +345,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                               })}/>
                               <p
                                 className={clsx(classes.listText,classes.subSubListText, {
-                                  [classes.subListTextOpen]: activeRoute.subSubList===subSubItem.id,
+                                  [classes.subSubListTextActive]: activeRoute.subSubList===subSubItem.id,
                                   [classes.listTextClose]: !open,
                                 })}
                                 >
@@ -343,6 +357,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                       </div>
                     ))}
                   </Collapse>
+                  </div>
                 </div>
               ))}
             </List>
