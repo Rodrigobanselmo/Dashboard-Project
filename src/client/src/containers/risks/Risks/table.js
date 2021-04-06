@@ -6,14 +6,16 @@ import styled from "styled-components";
 const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,selected,handleCellClick}) => {
 
   const headCells = [
-    { id: 'CNPJ', label: 'CNPJ',minWidth:220},
-    { id: 'name',  label: 'Identificação', width: 220},
-    { id: 'responsavel', label: 'Responsável Legal', width: 220 },
-    { id: 'creation', label: 'Início/Fim',width: 170, type:'start/end' },
-    { id: 'status', align:'center', label: 'Status', width: 110, type:'status'},
+    { id: 'desc', label: 'Descrição', type:'paragraph',minWidth:280,flex:9},
+    { id: 'ins',  label: 'Insalubre (NR 15)', type:'double',align:'center', minWidth: 180,flex:4},
+    { id: 'per', label: 'Periculoso (NR 16)', minWidth: 180 ,align:'center',flex:4},
+    { id: 'inss', label: 'Previdência (D.3048)',minWidth: 170 ,align:'center',flex:4},
+    { id: 'acgh', label: 'Normas Internacionais',minWidth: 170 ,align:'center',flex:4},
+    { id: 'padrao', label: 'Padrão', minWidth: 70, type:'status',align:'center',flex:1},
+    { id: 'status', label: 'Status', minWidth: 70, type:'status',align:'center',flex:1},
   ];
 
-  const searchParams = ['CNPJ','name','responsavel','status']
+  const searchParams = ['desc']
 
   const filterRowCells = []
   rowsCells.map((row)=>{
@@ -35,6 +37,7 @@ const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,sel
             selected={selected}
             handleCellClick={handleCellClick}
             initialOrder={'name'}
+            rowSize={60}
           />
         </div>
       :null}

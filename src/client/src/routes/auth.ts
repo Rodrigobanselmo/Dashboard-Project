@@ -11,26 +11,26 @@ const routes = [
   {
     path: DASHBOARD,
     component: Dashboard,
-    isPrivate: true,
-    privateRoute: GET_USER_DATA, // caso precise de mais rotas criar uma especifica pra isso e mandar um param
-    infoUser: ['name', 'status'],
-    condition: ['', 'Ativo'],
-    Equal: [false, true],
+    // isPrivate: true,
+    // privateRoute: GET_USER_DATA, // caso precise de mais rotas criar uma especifica pra isso e mandar um param
+    // infoUser: ['name', 'status'],
+    // condition: ['', 'Ativo'],
+    // Equal: [false, true],
   },
   {
     path: NO_AUTH,
     component: NoCompany,
-    isPrivate: true,
-    privateRoute: SIGN,
+    // isPrivate: true,
+    // privateRoute: SIGN,
   },
   {
     path: GET_USER_DATA,
     component: inputUserData,
-    isPrivate: true,
-    privateRoute: NO_AUTH,
-    infoUser: ['name', 'status'],
-    condition: ['', 'Ativo'],
-    Equal: [true, true],
+    // isPrivate: true,
+    // privateRoute: NO_AUTH,
+    // infoUser: ['name', 'status'],
+    // condition: ['', 'Ativo'],
+    // Equal: [true, true],
   },
 
   {

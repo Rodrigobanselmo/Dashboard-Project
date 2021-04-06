@@ -5,7 +5,7 @@ import {
   ButtonContainer
 } from './styles';
 import NewTabs, {TabPanel} from '../../../components/Main/MuiHelpers/NewTabs'
-import {FilterComponent,LoadingContent,AddUserButton} from '../../../components/Main/Table/comp'
+import {FilterComponent,LoadingContent,AddUserButton,FilterButton} from '../../../components/Main/Table/comp'
 import {COMPANY} from '../../../routes/routesNames.ts'
 import {onGetAllCompanies} from './func'
 import {Link} from "react-router-dom";
@@ -13,7 +13,7 @@ import {keepOnlyNumbers} from '../../../helpers/StringHandle';
 import {useHistory} from "react-router-dom";
 import TableComponent from './table';
 
-export default function Container({children}) {
+export function Container({children}) {
     return (
       <ContainerDiv >
         {children}
@@ -22,7 +22,7 @@ export default function Container({children}) {
 }
 
 
-Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,setDataRows,tabsLabel,setOpen,currentUser,notification,setLoad,setLoaderDash}) {
+export function TableContainer({setSelected,selected,dataRows,setDataRows,tabsLabel,setOpen,currentUser,notification,setLoad,setLoaderDash}) {
 
   const [loadContent, setLoadContent] = React.useState(true)
   const [search, setSearch] = React.useState('')
@@ -34,8 +34,8 @@ Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,se
   }, [])
 
   function handleCellClick(e,rowId) {
-    history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
-    setLoaderDash(true)
+    //history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
+    //setLoaderDash(true)
   }
 
   return (
@@ -58,6 +58,8 @@ Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,se
           {/* <Container.AddUserButton text={'Desativar'} icon={'Archive'} width={140} onClick={()=>setOpen(true)}/> */}
           {/* <Container.AddUserButton text={'Ativar'} icon={'Unarchive'} width={120} onClick={()=>setOpen(true)}/> */}
         </FilterComponent>
+        {/* <FilterButton style={{margin:0}} onClick={()=>setOpen(true)}/> */}
+
       { loadContent ?
           <LoadingContent />
         :

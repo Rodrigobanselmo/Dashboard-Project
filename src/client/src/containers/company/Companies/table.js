@@ -6,11 +6,11 @@ import styled from "styled-components";
 const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,selected,handleCellClick}) => {
 
   const headCells = [
-    { id: 'CNPJ', label: 'CNPJ',minWidth:220},
-    { id: 'name',  label: 'Identificação', width: 220},
-    { id: 'responsavel', label: 'Responsável Legal', width: 220 },
-    { id: 'creation', label: 'Início/Fim',width: 170, type:'start/end' },
-    { id: 'status', align:'center', label: 'Status', width: 110, type:'status'},
+    { id: 'CNPJ', label: 'CNPJ',minWidth:220,flex:7},
+    { id: 'name',  label: 'Identificação',minWidth:220,flex:5},
+    { id: 'responsavel', label: 'Responsável Legal',minWidth:220,flex:5},
+    { id: 'creation', label: 'Início/Fim',minWidth:220,flex:5, type:'start/end' },
+    { id: 'status', align:'center', label: 'Status',minWidth:100,flex:3, type:'status'},
   ];
 
   const searchParams = ['CNPJ','name','responsavel','status']

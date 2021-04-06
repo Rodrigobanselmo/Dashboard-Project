@@ -10,7 +10,7 @@ const GroupIcon = styled(Icons)`
 
 const TitleTag = styled.div`
   height: 70px;
-  background-color: #26262A;
+  background-color: ${({theme})=>theme.palette.background.contrast};
   width: 70px;
   margin-right: 18px;
   border-radius: 8px;

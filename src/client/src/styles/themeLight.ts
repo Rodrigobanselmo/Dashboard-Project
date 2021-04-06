@@ -13,9 +13,13 @@ const light = {
   palette: {
     type: 'light' as PaletteType,
     primary: {
-      main: '#F27329',
-      light: '#d9560b',
+      main: '#990829',
+      light: '#990829',
       contrastText: '#fff',
+      mainRealiza: '#990829',
+      lightRealiza: '#990829',
+      greyRealiza: '#8c8f8c',
+      greyDarkRealiza: '#5A5E5B',
     },
     secondary: {
       main: '#990000',
@@ -35,6 +39,15 @@ const light = {
       attentionHover: '#aa2000',
       drawer: '#fff',
       nav: '#1b1c21',
+    },
+    table: {
+      hover: '#eee',
+      textCell: '#1a1a1e',
+      textHeader: '#fff',
+      checkboxBack: '#fff',
+      line: '#ccc',
+      header: '#26262A',
+      everyOtherRow: '#f0f0f0',
     },
     text: {
       contrastWhite: '#fff',

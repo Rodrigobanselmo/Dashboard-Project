@@ -4,8 +4,8 @@ const dark = {
   palette: {
     type: 'dark' as PaletteType,
     primary: {
-      main: '#d9560b',
-      light: '#F27329',
+      main: '#990829',
+      light: '#990829',
       contrastText: '#fff',
     },
     secondary: {
@@ -26,6 +26,15 @@ const dark = {
       attentionHover: '#aa2000',
       drawer: '#1a1a1e',
       nav: '#1a1a1e',
+    },
+    table: {
+      hover: '#1a1a1e',
+      textCell: '#A8A8A3',
+      textHeader: '#A8A8A3',
+      line: '#A8A8B319',
+      header: '#1a1a1e',
+      everyOtherRow: '#1a1a1e',
+      checkboxBack: 'transparent',
     },
     text: {
       contrastWhite: '#fff',

@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react'
-import Container from './comp'
+import {Container,TableContainer} from './comp'
 import Header from '../../../components/Dashboard/Components/Blocks/Header'
 import Modal from './Modal'
 import {useLoaderScreen} from '../../../context/LoaderContext'
@@ -26,7 +26,7 @@ function Risks() {
         <>
             <Header icons={'Risk'} title={'Fatores de Risco'} video={true}/>
             <Container style={{width:'100%',backgroundColor:'#1a1a1e',borderRadius:'15px'}}>
-            <Container.TableTabs
+            <TableContainer
                 setDataRows={setDataRows}
                 dataRows={dataRows}
                 tabsLabel={tabsLabel}

@@ -5,11 +5,11 @@ export const risks = [
   {
     path: RISK_FACTORS,
     component: Risks,
-    exact: true,
-    isPrivate: true,
-    privateRoute: DASHBOARD,
-    infoUser: ['access'],
-    condition: [['admin', 'master']],
-    Equal: [true],
+    // exact: true,
+    // isPrivate: true,
+    // privateRoute: DASHBOARD,
+    // infoUser: ['access'],
+    // condition: [['admin', 'master']],
+    // Equal: [true],
   },
 ];

@@ -155,6 +155,16 @@ export function AddUserButton({onClick, width=165,text='Nova Empresa',icon='Add'
   )
 }
 
+export function FilterButton({onClick, width=165,text='Nova Empresa',icon='Add',...restProps}) {
+
+  return (
+    <ButtonContainer onClick={onClick} width={width} className={'rowCenter'}  {...restProps}>
+      <Icons style={{fontSize:24,marginRight:5}} type={icon}/>
+      <p  className={'noBreakText'}>{text}</p>
+    </ButtonContainer>
+  )
+}
+
 function StatusCell({row,item,index,onClick}) {
 
   return (

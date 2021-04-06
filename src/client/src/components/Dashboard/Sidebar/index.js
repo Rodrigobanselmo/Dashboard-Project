@@ -9,6 +9,7 @@ import {lists} from '../../../constants/itemsDrawer'
 import { useSelector,useDispatch } from 'react-redux'
 import InputBase from '@material-ui/core/InputBase';
 import useWaitAction from '../../../hooks/useWaitAction'
+import {BootstrapTooltip} from '../../Main/MuiHelpers/Tooltip'
 import { useHistory } from "react-router-dom"
 import {ThemeContext} from "styled-components";
 
@@ -31,10 +32,11 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
   const classes = useStyles();
 
   useEffect(() => {
-    const location = window.location.pathname.slice(-1)==='/' ? window.location.pathname.slice(1,window.location.pathname.length-1):  window.location.pathname.slice(1,window.location.pathname.length)
-    const [dashboard, ...route] = location.split('/')
-    console.log(route)
-    dispatch({ type: 'ROUTE', payload:window.location.pathname.slice(-1)==='/' ? window.location.pathname.slice(0,window.location.pathname.length-1): window.location.pathname })
+    //const location = window.location.pathname.slice(-1)==='/' ? window.location.pathname.slice(1,window.location.pathname.length-1):  window.location.pathname.slice(1,window.location.pathname.length)
+    //const [dashboard, ...route] = location.split('/')
+
+    const location = window.location.pathname.slice(-1)==='/' ? window.location.pathname.slice(0,window.location.pathname.length-1):  window.location.pathname
+    dispatch({ type: 'ROUTE', payload: location })
 
     return history.listen((location) => {
       dispatch({ type: 'ROUTE', payload:location.pathname.slice(-1)==='/' ? location.pathname.slice(0,location.pathname.length-1): location.pathname })
@@ -262,20 +264,18 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                   [classes.subListOpenContainer]: item?.items && item.items.length > 0 && (value===item.id || nav===item.id || allOpen.find((i)=>i==item.id)),
                   [classes.subListOpenContainerActive]: activeRoute.list===item.id && nav!==item.id,
                 })}>
+                  <BootstrapTooltip placement="right" id={item.id} enterDelay={1000} TransitionProps={{ timeout: {enter:500, exit: 50} }} title={item?.description ?? item.text} styletooltip={{transform: 'translateX(5px)'}}>
                   <div onClick={()=>onClickList(item)}
                     className={clsx(classes.list, {
                       [classes.listOpen]: value===item.id || nav===item.id || allOpen.find((i)=>i==item.id),
                       [classes.listActive]: activeRoute.list===item.id,
                     })} >
-                      <div  className={clsx(classes.icon, {
+                      <div style={item?.style && item.style}  className={clsx(classes.icon, {
                         [classes.iconColored]: value===item.id || nav===item.id || allOpen.find((i)=>i==item.id),
                         [classes.iconClose]: !open,
                         [classes.iconActive]: activeRoute.list===item.id,
-                        })}
-                        style={item?.style && item.style}>
-                        <Icons
-                          type={item.icon}
-                         />
+                      })} >
+                        <Icons type={item.icon}/>
                       </div>
                       <p
                         className={clsx(classes.listText, {
@@ -296,13 +296,14 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                           [classes.barActive]: activeRoute.list===item.id,
                         })}/>
                   </div>
-                  <div >
+                  </BootstrapTooltip>
                   <Collapse in={((value===item.id && collapse!=='same' && collapse!=='true' ) || (nav===item.id && collapse && collapse!=='same'))|| Boolean(allOpen.find((i)=>i==item.id)) }>
                     {((value===item.id || nav===item.id || (search && search.length>=1)) && item?.items) && item.items.map((subItem) => (
                       <div key={subItem.id} className={clsx({
                         [classes.subListOpenContainer]: subItem?.items && subItem.items.length > 0 && (value===subItem.id || subNav===subItem.id || allOpen.find((i)=>i==subItem.id)),
                         [classes.subListOpenContainerActive]: activeRoute.subList===subItem.id && subNav!==subItem.id,
                       })}>
+                        <BootstrapTooltip placement="right" id={subItem.id} enterDelay={1000} TransitionProps={{ timeout: {enter:500, exit: 50} }} title={subItem?.description ?? subItem.text} styletooltip={{transform: 'translateX(5px)'}}>
                         <div onClick={()=>onClickSubList(item,subItem)}
                         className={clsx(classes.list,classes.subList, {
                           [classes.subListOpen]: subNav===subItem.id,
@@ -328,8 +329,9 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                             className={clsx(classes.arrow, {
                               [classes.addOpen]: subNav===subItem.id,
                               [classes.arrowActive]: activeRoute.subList===item.id,
-                          })}/>}
+                            })}/>}
                         </div>
+                        </BootstrapTooltip>
 
                         <Collapse in={subNav===subItem.id || Boolean(allOpen.find((i)=>i==subItem.id))}>
                           {subItem?.items && subItem.items.map((subSubItem) => (
@@ -357,7 +359,6 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                       </div>
                     ))}
                   </Collapse>
-                  </div>
                 </div>
               ))}
             </List>

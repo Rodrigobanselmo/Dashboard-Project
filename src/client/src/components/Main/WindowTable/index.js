@@ -18,6 +18,17 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import {RowCell} from './comp'
+import styled from "styled-components";
+
+const Check = styled.div`
+  background-color: ${({theme})=>theme.palette.table.checkboxBack};
+  border-radius: 3px;
+  height: 17px;
+  width: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const useTableStyles = makeStyles(theme => ({
   root: {
@@ -28,9 +39,9 @@ const useTableStyles = makeStyles(theme => ({
   table: {
     height: "100%",
     overflow: 'scroll hidden',
-    borderRight: `1px ${theme.palette.background.line} solid`,
-    borderLeft: `1px ${theme.palette.background.line} solid`,
-    borderBottom: `2px ${theme.palette.background.line} solid`,
+    borderRight: `1px ${theme.palette.table.line} solid`,
+    borderLeft: `1px ${theme.palette.table.line} solid`,
+    borderBottom: `2px ${theme.palette.table.line} solid`,
     padding:0,
     marginBottom:-10
   },
@@ -45,15 +56,15 @@ const useTableStyles = makeStyles(theme => ({
     flexDirection: "row",
     flexWrap: "nowrap",
     alignItems: "center",
-    boxSizing: "none",
+    boxSizing: "border-box",
     minWidth: "100%",
-    borderBottom: `2px ${theme.palette.background.line} solid`,
-    borderLeft: `2px ${theme.palette.background.line} solid`,
-    borderRight: `2px ${theme.palette.background.line} solid`,
+    borderBottom: `2px ${theme.palette.table.line} solid`,
+    borderLeft: `2px ${theme.palette.table.line} solid`,
+    borderRight: `2px ${theme.palette.table.line} solid`,
     cursor: 'pointer',
-    '&:hover' : {backgroundColor:darken(theme.palette.background.paper,0.13)},
-    // borderRight: `2px ${theme.palette.background.line} solid`,
-    // borderLeft: `2px ${theme.palette.background.line} solid`,
+    '&:hover' : {backgroundColor:darken(theme.palette.table.hover,0.13)},
+    // borderRight: `2px ${theme.palette.table.line} solid`,
+    // borderLeft: `2px ${theme.palette.table.line} solid`,
     //overflow: 'visible hidden',
     overflow: 'hidden hidden',
   },
@@ -61,16 +72,17 @@ const useTableStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "row",
     flexWrap: "nowrap",
-    borderRight: `1px ${theme.palette.background.line} solid`,
-    borderLeft: `2px ${theme.palette.background.line} solid`,
+    borderRight: `1px ${theme.palette.table.line} solid`,
+    borderLeft: `2px ${theme.palette.table.line} solid`,
     alignItems: "center",
     boxSizing: "border-box",
     minWidth: "100%",
-    backgroundColor:darken(theme.palette.background.paper,0.25),
-    borderBottom: `2px ${theme.palette.background.line} solid`,
-    borderTop: `2px ${theme.palette.background.line} solid`,
+    backgroundColor:theme.palette.type !=='dark' ?theme.palette.table.header:darken(theme.palette.table.hover,0.25),
+    borderBottom: `2px ${theme.palette.table.line} solid`,
+    borderTop: `2px ${theme.palette.table.line} solid`,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
+    overflow: 'hidden hidden',
   },
   rowCheck: {
     display:'flex',
@@ -79,32 +91,38 @@ const useTableStyles = makeStyles(theme => ({
     padding:0,
     boxSizing: 'border-box',
     margin:0,
-    backgroundColor:darken(theme.palette.background.paper,0.25),
-    borderTop: `1px ${theme.palette.background.line} solid`,
-    borderBottom: `1px ${theme.palette.background.line} solid`,
-    //borderLeft: `2px ${theme.palette.background.line} solid`,
-    borderRight: `2px ${theme.palette.background.line} solid`,
+    backgroundColor:theme.palette.type !=='dark' ?theme.palette.table.header:darken(theme.palette.table.hover,0.25),
+    borderTop: `1px ${theme.palette.table.line} solid`,
+    borderBottom: `1px ${theme.palette.table.line} solid`,
+    //borderLeft: `2px ${theme.palette.table.line} solid`,
+    borderRight: `2px ${theme.palette.table.line} solid`,
   },
   cell: {
+    boxSizing: "border-box",
     display: "block",
     flexGrow: 0,
-    borderBottom: `0px ${theme.palette.background.line} solid`,
+    borderBottom: `0px ${theme.palette.table.line} solid`,
     flexShrink: 0,
+    color: theme.palette.table.textCell,
     // flex: 1
   },
   checkCell: {
+    boxSizing: "border-box",
     display:'flex',
     alignItems:'center',
     justifyContent:'center',
     padding:0,
-    borderBottom: `0px ${theme.palette.background.line} solid`,
+    borderBottom: `0px ${theme.palette.table.line} solid`,
     margin:0,
   },
   expandingCell: {
     flex: 1
   },
+  everyOtherRow: {
+    backgroundColor: theme.palette.table.everyOtherRow,
+  },
   column: {
-    color: theme.palette.text.secondary,
+    color: theme.palette.table.textHeader,
   }
 }));
 
@@ -141,7 +159,8 @@ const TableColumns = memo(({ classes, columns, order, orderBy, onRequestSort,row
   return (
     <TableRow component="div" className={clsx(classes.headerRow)}>
       {selected &&
-        <TableCell style={{height: rowSize}} className={clsx(classes.checkCell)}component="div" padding="checkbox">
+        <TableCell style={{height: rowSize,width:45}} className={clsx(classes.checkCell)}component="div" padding="checkbox">
+          <Check >
           <Checkbox
             indeterminate={false}
             checked={rowCount > 0 && selected.length === rowCount}
@@ -149,6 +168,7 @@ const TableColumns = memo(({ classes, columns, order, orderBy, onRequestSort,row
             color={'primary'}
             inputProps={{ 'aria-label': 'select all desserts' }}
             />
+         </Check >
         </TableCell>
       }
       {columns.map((column, colIndex) => {
@@ -156,31 +176,49 @@ const TableColumns = memo(({ classes, columns, order, orderBy, onRequestSort,row
           <TableCell
             key={colIndex}
             component="div"
-            variant="head"
             className={clsx(
               classes.cell,
               classes.column,
               !column.width && classes.expandingCell
             )}
             style={{
-              flexBasis: column.width || false,
+              flex:column.flex || false,
               height: rowSize,
               minWidth:column.minWidth || false,
-             // transform: colIndex != 0 ?`translateX(${-colIndex-4}px)`:`translateX(0px)`,
+              display:'flex',
+              justifyContent: column.align ? column.align : 'flex-start',
+              position:'relative',
+              alignItems:'center',
+              marginRight:'0.05%',
+              transform: column.align === 'center' ? `translateX(${colIndex>2?-colIndex/1.5:0}px)`:`translateX(0px)`,
+              //backgroundColor:colIndex ==0?'grey':colIndex ==1?'green':colIndex ==2?'red':colIndex ==3?'blue':colIndex ==4?'orange':colIndex ==4?'yellow':colIndex ==4?'black':'transparent',
             }}
-            scope="col"
             sortDirection={orderBy === column.id ? order : false}
           >
+            <div style={{position:'absolute',width:'85%'}}>
             <TableSortLabel
               active={orderBy === column.id}
               direction={orderBy === column.id ? order : 'asc'}
               onClick={createSortHandler(column.id)}
-              style={{width:column.align=='center'  ? '100%' : 'auto',transform: column.align  == 'center' ?`translateX(${10}px)`:`translateX(0px)`}}
+              style={{
+                //minWidth:column.minWidth||column.width|| false,
+                //transform: `translateY(${-16}px)`,
+                justifyContent: column.align ? column.align : 'flex-start',
+                //backgroundColor:colIndex ==1?'red':'transparent',
+                height: rowSize,
+                width:'100%',
+                transform: column.align === 'center' ? `translateX(${13}px)`:`translateX(0px)`,
+              }}
             >
-              <p style={{textAlign:column.align  ? column.align : "left",width:'100%',transform: column.align  == 'center' ?`translateX(${6}px)`:`translateX(0px)`,}}>
+              <p style={{
+                textAlign:column.align  ? column.align : "left",
+                //backgroundColor:colIndex ==3?'green':'transparent',
+                display: 'inline',height:'fit-content',
+              }}>
               {column.label}
               </p>
             </TableSortLabel>
+            </div>
           </TableCell>
         );
       })}
@@ -217,20 +255,24 @@ const Row = memo(({ index, style, data: { columns, items, classes, setSelected, 
 
   console.log('Row')
   return (
-    <TableRow component="div" style={{marginTop:30}}  className={classes.row} style={style}>
+    <TableRow component="div" style={{...style}}  className={clsx(classes.row,
+      index % 2 !== 0  && classes.everyOtherRow
+    )}>
       {selected &&
-        <TableCell component="div" className={clsx(classes.rowCheck)} style={{height: rowSize}} padding="checkbox">
+        <TableCell component="div" className={clsx(classes.rowCheck)} style={{height: rowSize,width:45}} padding="checkbox">
+          <Check >
           <Checkbox
             checked={isItemSelected}
             onClick={(e)=>handleClick(e,item?.id ?? item?.CNPJ)}
             inputProps={{ 'aria-labelledby': labelId }}
             color={'primary'}
             />
+          </Check>
         </TableCell>
       }
       {columns.map((column, colIndex) => {
         return (
-          <RowCell onClick={(e)=>handleCellClick(e,item?.CNPJ ?? item?.cnpj ?? item?.id,item)} key={item?.id ? item.id : item.CNPJ + colIndex} column={column} classes={classes} item={item} rowSize={rowSize}/>
+          <RowCell colIndex={colIndex} onClick={(e)=>handleCellClick(e,item?.CNPJ ?? item?.cnpj ?? item?.id,item)} key={item?.id ? item.id + colIndex: item.CNPJ + colIndex} column={column} classes={classes} item={item} rowSize={rowSize}/>
         );
       })}
     </TableRow>

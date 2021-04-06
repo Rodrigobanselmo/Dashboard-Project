@@ -5,7 +5,7 @@ import {
   COMPANY_MODAL_OPEN,
   DASHBOARD,
   DATA,
-  RISK_FACTORS,
+  RISK_FACTORS_SLICE,
   RISK_FACTORS_ERG,
   RISK_FACTORS_INS,
   RISK_FACTORS_NOC,
@@ -362,7 +362,7 @@ const itemsRisks = [
     onClick: () => {}
   },
   {
-    text: "Periculosidade",
+    text: "Periculosidade (NR 16)",
     to:RISK_FACTORS_PER,
     id:RISK_FACTORS_PER,
     onClick: () => {}
@@ -374,7 +374,7 @@ const itemsRisks = [
     onClick: () => {}
   },
   {
-    text: "Nocivos (INSS)",
+    text: "Nocivos (Previdência)",
     to:RISK_FACTORS_NOC,
     id:RISK_FACTORS_NOC,
     onClick: () => {}
@@ -530,6 +530,7 @@ const itemsList = [
   {
     text: "Home",
 /*     items: itemsSubList, */
+    description:'Página principal',
     to:DASHBOARD,
     icon: 'Apps',
     id:DASHBOARD,
@@ -539,6 +540,7 @@ const itemsList = [
     text: "Gerenciar Usuários",
 /*     items: itemsSubList, */
     to:TEAM,
+    description:'Gerenciamento e controle dos usuários cadastrados em sua plataforma',
     icon: 'Admin',
     id:TEAM,
     onClick: () => {}
@@ -547,6 +549,7 @@ const itemsList = [
     text: "Gerenciar Empresas",
 /*     items: itemsSubList, */
     to:COMPANY,
+    description:'Gerenciamento e controle das empresas contratantes',
     icon: 'Business',
     id:COMPANY,
     onClick: () => {}
@@ -555,6 +558,7 @@ const itemsList = [
     text: "Dados de Campo",
     icon: 'Storage',
     //items: itemsSubList2,
+    description:'Download dos dados obtidos em campo utilizando o App SimpleSST',
     to:DATA,
     id:DATA,
     onClick: () => {}
@@ -562,8 +566,9 @@ const itemsList = [
   {
     text: "Fatores de Risco",
     icon: 'Risk',
+    description:'Visualização e cadastro dos fatores de risco e periculosidades',
     items: itemsRisks,
-    id:RISK_FACTORS,
+    id:RISK_FACTORS_SLICE,
     onClick: () => {}
   },
   // {
