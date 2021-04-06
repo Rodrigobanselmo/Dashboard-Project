@@ -3,8 +3,8 @@ import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import styled, {keyframes} from "styled-components";
-import {Icons} from '../../Icons/iconsDashboard'
-
+import { Icons } from '../../Icons/iconsDashboard'
+import { lighten } from '@material-ui/core/styles';
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -20,7 +20,8 @@ height:30px;
 padding:17px 10px;
 border-radius: 8px;
 font-size:15px;
-color: ${({theme})=> theme.palette.primary.main };
+color: ${({theme})=>theme.palette.type!== 'dark'? theme.palette.primary.contrastText: theme.palette.primary.main };
+background-color: ${({theme})=> theme.palette.type!== 'dark'? lighten(theme.palette.primary.main,0.1):'transparent' };
 border-color: ${({theme})=> theme.palette.background.line };
 border-width: 1px;
 border-style: solid;
@@ -43,7 +44,8 @@ cursor:pointer;
 
 &:hover {
     & p {
-        color: ${({theme})=> theme.palette.text.primary };
+      color: ${({theme})=>theme.palette.type!== 'dark'? theme.palette.primary.contrastText: theme.palette.text.primary };
+      font-weight: ${({theme})=>theme.palette.type!== 'dark'? 'bold':'normal'}
     }
     border-color: ${({theme})=> theme.palette.primary.main  };
     width:${props=>`${props.width}px`};

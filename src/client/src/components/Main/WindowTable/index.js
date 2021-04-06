@@ -5,8 +5,8 @@ import memoize from "memoize-one";
 import { FixedSizeList as List,areEqual } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import { makeStyles } from "@material-ui/styles";
-import { darken } from "@material-ui/core/styles";
+import { makeStyles,withStyles,createStyles } from "@material-ui/styles";
+import { darken,lighten } from "@material-ui/core/styles";
 
 import Container from "@material-ui/core/Container";
 import Table from "@material-ui/core/Table";
@@ -19,6 +19,24 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import {RowCell} from './comp'
 import styled from "styled-components";
+
+const StyledTableSortLabel = withStyles((theme) =>
+createStyles({
+    root: {
+      color: theme.palette.table.textHeader,
+      "&:hover": {
+        color: darken(theme.palette.table.textHeader,0.2),
+      },
+      '&$active': {
+        color: lighten(theme.palette.table.textHeader,0.2),
+      },
+    },
+    active: {},
+    icon: {
+      color: 'inherit !important'
+    },
+  })
+)(TableSortLabel);
 
 const Check = styled.div`
   background-color: ${({theme})=>theme.palette.table.checkboxBack};
@@ -196,7 +214,7 @@ const TableColumns = memo(({ classes, columns, order, orderBy, onRequestSort,row
             sortDirection={orderBy === column.id ? order : false}
           >
             <div style={{position:'absolute',width:'85%'}}>
-            <TableSortLabel
+            <StyledTableSortLabel
               active={orderBy === column.id}
               direction={orderBy === column.id ? order : 'asc'}
               onClick={createSortHandler(column.id)}
@@ -217,7 +235,7 @@ const TableColumns = memo(({ classes, columns, order, orderBy, onRequestSort,row
               }}>
               {column.label}
               </p>
-            </TableSortLabel>
+            </StyledTableSortLabel>
             </div>
           </TableCell>
         );

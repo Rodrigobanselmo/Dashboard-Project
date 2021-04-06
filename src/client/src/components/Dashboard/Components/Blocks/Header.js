@@ -10,13 +10,15 @@ const GroupIcon = styled(Icons)`
 
 const TitleTag = styled.div`
   height: 70px;
-  background-color: ${({theme})=>theme.palette.background.contrast};
+  background-color: ${({theme})=>theme.palette.type !=='dark' ? theme.palette.background.paper :theme.palette.background.contrast};
   width: 70px;
   margin-right: 18px;
   border-radius: 8px;
   display:flex;
   align-items:center;
   justify-content:center;
+  -webkit-box-shadow: 3px 3px 11px 1px rgba(0,0,0,0.23);
+  box-shadow: 3px 3px 11px 1px rgba(0,0,0,0.23);
 `;
 
 const Title = styled.h1`

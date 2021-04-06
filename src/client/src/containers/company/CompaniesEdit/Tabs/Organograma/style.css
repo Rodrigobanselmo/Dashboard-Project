@@ -17,21 +17,24 @@ svg.custom .node {
 
 svg.custom path.link {
 	fill: none;
-	stroke: #d9560b;
+	stroke: #F27329;
 	stroke-width: 1px;
 }
 /* stroke: #F27329; */
 
+
+
+
+
 svg.customLight .node circle {
-	fill: #F4F4F4;
-	stroke: #d9560b;
-	stroke-width: 1.5px;
+	fill: #fff;
+	stroke: #fc7a2c;
+	stroke-width: 1.9px;
 }
 
 svg.customLight .node text {
-	font-size: 16px;
-	fill: #1b1c21;
-	stroke: #1b1c21;
+	fill: #424346;
+	stroke: #424346;
 	stroke-width: 0.7px;
 }
 
@@ -41,6 +44,6 @@ svg.customLight .node {
 
 svg.customLight path.link {
 	fill: none;
-	stroke: #d9560b;
-	stroke-width: 1px;
+	stroke: #fc7a2c;
+	stroke-width: 1.5px;
 }

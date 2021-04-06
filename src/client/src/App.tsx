@@ -5,7 +5,7 @@ import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { GlobalStyle } from './styles/global';
 import { GlobalStyleLight } from './styles/globalLight';
-import themeColor from './styles/theme';
+import themeColor from './styles/theme.js';
 import { Home } from './pages';
 import { RouteComponent, home, auth } from './routes';
 import { AuthProvider } from './context/AuthContext.js';

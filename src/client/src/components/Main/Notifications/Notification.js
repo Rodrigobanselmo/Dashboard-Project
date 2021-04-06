@@ -35,7 +35,7 @@ const SlideRight = keyframes`
         margin-left: 0;
         margin-bottom: 0;
     }
- 
+
     20% {
         margin-left: -10%;
     }
@@ -77,19 +77,19 @@ export const DivBar = styled.div`
 export const DivItem = styled.div`
 
     position: relative;
-    -webkit-box-shadow: 1px 1px 9px 1px #5E5E5E; 
-    box-shadow: 1px 1px 9px 1px #5E5E5E;
+    -webkit-box-shadow: 1px 1px 9px 1px ${props=>props.theme.palette.notification.shadow};
+    box-shadow: 1px 1px 9px 1px ${props=>props.theme.palette.notification.shadow};
     border-radius: 10px;
-    background-color: #000;
+    background-color: ${props=>props.theme.palette.notification.back};
     overflow: hidden;
     margin-bottom: 20px;
     animation: ${SlideLeft} 0.4s;
     animation-fill-mode: forwards;
     width: 300px;
     transition: all 0.6s ease;
-    color:#fff;
+    color:${props=>props.theme.palette.notification.text};;
 
-    
+
     & p {
       font-size: 13px;
       padding: 15px 0px;
@@ -114,9 +114,9 @@ export const DivItemModal = styled.div`
     animation-fill-mode: forwards;
     transition: all 0.6s ease;
     color:#fff;
-    -webkit-box-shadow: 1px 1px 9px 1px #000; 
+    -webkit-box-shadow: 1px 1px 9px 1px #00000066;
     border-radius: 30px;
-    box-shadow: 1px 1px 9px 1px #000;
+    box-shadow: 1px 1px 9px 1px #00000066;
     animation: ${SlideTop} 0.4s;
     width:auto;
     max-width: 700px;
@@ -137,7 +137,7 @@ export const DivItemModal = styled.div`
         background: #f7600d;
     `}
 
-    
+
     & p {
       font-size: 14px;
       padding: 8px 0px;

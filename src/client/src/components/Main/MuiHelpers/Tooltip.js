@@ -49,16 +49,16 @@ export function BootstrapTooltip(props) {
       color: theme.palette.text.primary,
       padding:'10px 12px',
       border: "1px solid #56565655",
-      WebkitBoxShadow: '2px 2px 15px 3px rgba(0,0,0,0.48)',
-      boxShadow: '2px 2px 15px 3px rgba(0,0,0,0.48)',
+      WebkitBoxShadow: '2px 2px 15px 3px rgba(0,0,0,0.28)',
+      boxShadow: '2px 2px 15px 3px rgba(0,0,0,0.28)',
       ...props.styletooltip
     },
   }));
 
     const classesSign = useStylesSign();
     const classes = useStylesDashboard();
-    
+
     var classesType = props.sign ? classesSign : classes
-  
+
     return <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: {enter:500, exit: 50} }} arrow classes={{tooltip: classesType.tooltip,arrow: classesType.arrow}} {...props} />;
   }

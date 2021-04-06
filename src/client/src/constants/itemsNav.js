@@ -30,6 +30,7 @@ export const navList = [
     text: "Notificações",
     icon: 'Notifications',
     id:Math.random(),
+    onClick:()=>{},
     visible:'all',
   },
 ];

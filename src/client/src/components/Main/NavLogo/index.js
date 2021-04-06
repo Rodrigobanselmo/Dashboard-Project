@@ -1,6 +1,7 @@
 import React from 'react';
-import { NavLogoSC } from './Logo';
+import { NavLogoSC,NavLogoSCDiv } from './Logo';
 import styled from "styled-components";
+import { useSelector,useDispatch } from 'react-redux'
 
 const Images = styled.img`
   height:30px;
@@ -9,10 +10,18 @@ const Images = styled.img`
 
 export const NavLogo = (props) => {
 
+  const theme = useSelector(state => state.theme)
+  const dispatch = useDispatch()
+  console.log(theme)
   return (
-            <NavLogoSC {...props}>
-              <Images src="/images/logoRealiza.png" alt="logo" />
-              {/* Simple<span>SST</span> */}
-            </NavLogoSC>
+            <NavLogoSCDiv {...props} onClick={()=>dispatch({type: 'THEME_COMPANY'})} >
+              {theme.company === 'REALIZA' ?
+                <Images src="/images/logoRealiza.png" alt="logo" />
+              :
+                <>
+                  Simple<span>SST</span>
+                </>
+              }
+            </NavLogoSCDiv>
   );
 }

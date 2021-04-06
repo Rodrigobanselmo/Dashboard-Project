@@ -7,8 +7,8 @@ export const ContainerButtons = styled.div`
   background: ${({theme})=>lighten(theme.palette.background.paper,0.058)};
   border-radius: 8px;
   position: fixed;
-  -webkit-box-shadow: 3px 3px 11px 1px rgba(0,0,0,0.43);
-  box-shadow: 3px 3px 11px 1px rgba(0,0,0,0.43);
+  -webkit-box-shadow: 3px 3px 11px 1px rgba(0,0,0,0.23);
+  box-shadow: 3px 3px 11px 1px rgba(0,0,0,0.23);
   border: 1px solid ${({theme})=>theme.palette.background.line};
   transition: all 0.1s ease;
   &:before {

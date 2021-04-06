@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     const TabStyled = withStyles((theme) => ({
         root: {
           textTransform: 'none',
-          color: theme.palette.text.contrastWhite,
+          color: theme.palette.text.tabsText,
           fontSize:15,
           marginRight: theme.spacing(4),
           '&:hover': {
@@ -74,12 +74,12 @@ const useStyles = makeStyles((theme) => ({
             opacity: 1,
           },
           '&$selected': {
-            color: theme.palette.text.secondaryLighter,
+            color: theme.palette.type !=='dark'?theme.palette.primary.main: theme.palette.text.secondaryLighter,
             fontWeight: theme.typography.fontWeightMedium,
           },
-          '&:focus': {
-            color: theme.palette.text.secondaryLighter,
-          },
+          // '&:focus': {
+          //   color: theme.palette.text.secondaryLighter,
+          // },
         },
         selected: {},
     }))((props) => <Tab {...props} />);

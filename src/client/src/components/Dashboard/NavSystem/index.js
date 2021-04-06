@@ -139,8 +139,8 @@ export default function NavBar({open,setOpen}) {
           <DarkModeSwitchMui checked={theme =='dark'} onChange={handleDarkModeChange} />
             {navList.map((item, index) => (
               <div key={index}>
-              {item.visible === 'all' || (currentUser?.access && item.visible.includes(currentUser.access)) ?
-                <ReactLink to={item.to} style={{margin:'0px 5px'}}>
+              { item.visible === 'all' || (currentUser?.access && item.visible.includes(currentUser.access)) ?
+                <ReactLink onClick={item?.onClick ?()=>notification.modal({title: 'Notifição',text:'Notifição padrão do sistema',open:true,onClick:()=>console.log('notification confirm')}):()=>notification.success({message:'Em construção'})} to={item.to} style={{margin:'0px 5px'}}>
                   <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={item.text} styletooltip={{transform: 'translateY(10px)'}}>
                     <IconButton aria-label={item.text}>
                       <Badge badgeContent={0} color="secondary">
