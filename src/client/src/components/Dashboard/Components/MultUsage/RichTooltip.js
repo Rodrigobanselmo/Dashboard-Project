@@ -4,36 +4,23 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
-
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  scrollContainer: {
-    height: 400,
-    overflow: 'auto',
-    marginBottom: theme.spacing(3),
-  },
-  scroll: {
-    position: 'relative',
-    width: '230%',
-    backgroundColor: theme.palette.background.paperModal,
-    height: '230%',
-  },
-  legend: {
-    marginTop: theme.spacing(2),
-    maxWidth: 300,
-  },
   paper: {
     padding:0,
     marginTop:10,
     marginBottom:10,
-    maxWidth: 400,
-    backgroundColor:'#1b1c21',
+    backgroundColor:theme.palette.background.paper,
   },
-  select: {
-    width: 200,
+  paperDark: {
+    backgroundColor:theme.palette.background.paperModal,
+  },
+  paperGrey: {
+    backgroundColor:theme.palette.background.contrast,
   },
   popper: {
     zIndex: 1500,
@@ -45,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
       height: '1em',
       '&::before': {
         borderWidth: '0 1em 1em 1em',
-        borderColor: `transparent transparent ${theme.palette.background.paperModal} transparent`,
+        borderColor: `transparent transparent ${theme.palette.background.paper} transparent`,
       },
     },
     '&[x-placement*="top"] $arrow': {
@@ -56,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
       height: '1em',
       '&::before': {
         borderWidth: '1em 1em 0 1em',
-        borderColor: `${theme.palette.background.paperModal} transparent transparent transparent`,
+        borderColor: `${theme.palette.background.paper} transparent transparent transparent`,
       },
     },
     '&[x-placement*="right"] $arrow': {
@@ -66,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
       width: '1em',
       '&::before': {
         borderWidth: '1em 1em 1em 0',
-        borderColor: `transparent ${theme.palette.background.paperModal} transparent transparent`,
+        borderColor: `transparent ${theme.palette.background.paper} transparent transparent`,
       },
     },
     '&[x-placement*="left"] $arrow': {
@@ -76,7 +63,51 @@ const useStyles = makeStyles((theme) => ({
       width: '1em',
       '&::before': {
         borderWidth: '1em 0 1em 1em',
+        borderColor: `transparent transparent transparent ${theme.palette.background.paper}`,
+      },
+    },
+  },
+  popperDark: {
+    '&[x-placement*="bottom"] $arrow': {
+      '&::before': {
+        borderColor: `transparent transparent ${theme.palette.background.paperModal} transparent`,
+      },
+    },
+    '&[x-placement*="top"] $arrow': {
+      '&::before': {
+        borderColor: `${theme.palette.background.paperModal} transparent transparent transparent`,
+      },
+    },
+    '&[x-placement*="right"] $arrow': {
+      '&::before': {
+        borderColor: `transparent ${theme.palette.background.paperModal} transparent transparent`,
+      },
+    },
+    '&[x-placement*="left"] $arrow': {
+      '&::before': {
         borderColor: `transparent transparent transparent ${theme.palette.background.paperModal}`,
+      },
+    },
+  },
+  popperGrey: {
+    '&[x-placement*="bottom"] $arrow': {
+      '&::before': {
+        borderColor: `transparent transparent ${theme.palette.background.contrast} transparent`,
+      },
+    },
+    '&[x-placement*="top"] $arrow': {
+      '&::before': {
+        borderColor: `${theme.palette.background.contrast} transparent transparent transparent`,
+      },
+    },
+    '&[x-placement*="right"] $arrow': {
+      '&::before': {
+        borderColor: `transparent ${theme.palette.background.contrast} transparent transparent`,
+      },
+    },
+    '&[x-placement*="left"] $arrow': {
+      '&::before': {
+        borderColor: `transparent transparent transparent ${theme.palette.background.contrast}`,
       },
     },
   },
@@ -97,7 +128,6 @@ const useStyles = makeStyles((theme) => ({
   },
   popoverRoot: {
     backgroundColor: theme.palette.background.paper,
-    maxWidth: 1000,
   },
   content: {
     overflow: 'auto',
@@ -113,7 +143,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-  const RichTooltip = ({open,setOpen,anchorRef,children, arrow=true,placement='bottom-end',width=250,translateY=0}) => {
+  const RichTooltip = ({open,setOpen,anchorRef,children, arrow=true,placement='bottom-end',width=250,translateY=0,background='dark'}) => {
     const classes = useStyles();
     const [arrowRef, setArrowRef] = React.useState(null);
     const onClose = () => {
@@ -122,12 +152,14 @@ const useStyles = makeStyles((theme) => ({
 
     const id = open ? 'scroll-playground' : null;
 
-
     return (
         <Popper
         id={id}
         open={open}
-        className={classes.popper}
+        className={clsx(classes.popper,{
+          [classes.popperDark]: background=='dark',
+          [classes.popperGrey]: background=='grey',
+        })}
         anchorEl={anchorRef.current}
         placement={placement}
         disablePortal={false}
@@ -145,7 +177,10 @@ const useStyles = makeStyles((theme) => ({
         },
         }}
       >
-            <Paper style={{transform: `translateY(${translateY}px)`,}} elevation={15} className={classes.paper}>
+            <Paper style={{transform: `translateY(${translateY}px)`,}} elevation={15} className={clsx(classes.paper,{
+              [classes.paperDark]: background=='dark',
+              [classes.paperGrey]: background=='grey',
+            })}>
                 <ClickAwayListener onClickAway={onClose}>
                     <div>
                   {arrow ? (

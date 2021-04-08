@@ -20,11 +20,11 @@ const createData = (qty = 3) => {
   return data;
 };
 
-export function onGetAllCompanies(companyId,setDataRows,setLoadContent,notification) {
+export function onGetAllCompanies(companyId,setDataRows,setLoadContent,notification,setLoaderDash) {
     function checkSuccess(response) {
         setLoadContent(false)
         setDataRows([...response])
-
+        setLoaderDash(false)
       }
 
       function checkError(error) {
@@ -32,6 +32,7 @@ export function onGetAllCompanies(companyId,setDataRows,setLoadContent,notificat
         setTimeout(() => {
           notification.error({message:error,modal:true})
         }, 600);
+        setLoaderDash(false)
       }
 
       GetAllCompanies(companyId,checkSuccess,checkError)

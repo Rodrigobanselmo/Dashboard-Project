@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Sidebar from '../Sidebar'
 import NavSystem from '../NavSystem'
-import {LoaderDashboard} from '../../../components/Main/Loader'
+import {LoaderDashboard} from '../../../components/Main/Loader/index'
 import {useAuth} from '../../../context/AuthContext'
 import useTimeOut from '../../../hooks/useTimeOut'
 

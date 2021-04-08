@@ -6,11 +6,11 @@ import {Icons} from '../../Icons/iconsDashboard'
 const Icon = styled(Icons)`
   font-size: 30px;
   border-radius:4px;
-  color: ${({theme})=>theme.palette.text.primary};
+  color: ${({theme})=>theme.palette.text.secondary};
   cursor: pointer;
 
   &:hover {
-    color:${({theme})=>theme.palette.text.secondary};
+    color:${({theme})=>theme.palette.text.primary};
   }
 
   &:active {
@@ -18,10 +18,10 @@ const Icon = styled(Icons)`
   }
 `;
 
-export default function IconButtonMui({icon='Close', ...restProps }) {
+export default function IconButtonMui({icon='Close',iconColor, ...restProps }) {
     return (
         <IconButton {...restProps}>
-            <Icon type={icon} />
+            <Icon  type={icon} />
         </IconButton>
     );
 }

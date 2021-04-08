@@ -40,6 +40,7 @@ import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import AllOut from '@material-ui/icons/AllOut';
+import FilterList from '@material-ui/icons/FilterList';
 
 import Facebook from '@material-ui/icons/Facebook';
 import YouTube from '@material-ui/icons/YouTube';
@@ -156,6 +157,8 @@ export const Icons = ({ type, ...props }) => {
       return <AllOut {...props} />;
     case 'Risk':
       return <OfflineBoltTwoToneIcon {...props} />;
+    case 'FilterList':
+      return <FilterList {...props} />;
 
     case 'Errors':
       return <Error {...props} />;

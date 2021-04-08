@@ -13,7 +13,7 @@ const dark = {
     },
     background: {
       paper: '#1a1a1e',
-      paperModal: '#1b1c21',
+      paperModal: '#1b1c21', // aqu uso no Rchtooltp
       default: '#0C0C0D',
       contrast: '#26262A',
       iconsPaper: '#A8A8B3',

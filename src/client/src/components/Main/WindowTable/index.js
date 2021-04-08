@@ -7,6 +7,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 
 import { makeStyles,withStyles,createStyles } from "@material-ui/styles";
 import { darken,lighten } from "@material-ui/core/styles";
+import {BootstrapTooltip} from '../MuiHelpers/Tooltip'
 
 import Container from "@material-ui/core/Container";
 import Table from "@material-ui/core/Table";
@@ -190,7 +191,8 @@ const TableColumns = memo(({ classes, columns, order, orderBy, onRequestSort,row
         </TableCell>
       }
       {columns.map((column, colIndex) => {
-        return (
+
+        if (column) return (
           <TableCell
             key={colIndex}
             component="div"
@@ -228,23 +230,36 @@ const TableColumns = memo(({ classes, columns, order, orderBy, onRequestSort,row
                 transform: column.align === 'center' ? `translateX(${13}px)`:`translateX(0px)`,
               }}
             >
-              <p style={{
-                textAlign:column.align  ? column.align : "left",
-                //backgroundColor:colIndex ==3?'green':'transparent',
-                display: 'inline',height:'fit-content',
-              }}>
-              {column.label}
-              </p>
+              {column.tooltip?
+                <BootstrapTooltip placement="bottom-start"  title={column.tooltip} styletooltip={{transform: 'translateY(0px)'}}>
+                  <p style={{
+                    textAlign:column.align  ? column.align : "left",
+                    //backgroundColor:colIndex ==3?'green':'transparent',
+                    display: 'inline',height:'fit-content',
+                  }}>
+                  {column.label}
+                  </p>
+                </BootstrapTooltip>
+              :
+                <p style={{
+                  textAlign:column.align  ? column.align : "left",
+                  //backgroundColor:colIndex ==3?'green':'transparent',
+                  display: 'inline',height:'fit-content',
+                }}>
+                  {column.label}
+                </p>
+            }
             </StyledTableSortLabel>
             </div>
           </TableCell>
         );
+        else null
       })}
     </TableRow>
   );
 },areEqual);
 
-const Row = memo(({ index, style, data: { columns, items, classes, setSelected, selected, handleCellClick, rowSize } }) => {
+const Row = memo(({ index, style, data: { columns, items, classes, setSelected, selected, handleCellClick, rowSize,onCorrectData } }) => {
 
   const item = items[index];
 
@@ -289,9 +304,10 @@ const Row = memo(({ index, style, data: { columns, items, classes, setSelected, 
         </TableCell>
       }
       {columns.map((column, colIndex) => {
-        return (
-          <RowCell colIndex={colIndex} onClick={(e)=>handleCellClick(e,item?.CNPJ ?? item?.cnpj ?? item?.id,item)} key={item?.id ? item.id + colIndex: item.CNPJ + colIndex} column={column} classes={classes} item={item} rowSize={rowSize}/>
+        if (column) return (
+          <RowCell onCorrectData={onCorrectData} colIndex={colIndex} onClick={(e)=>handleCellClick(e,item?.CNPJ ?? item?.cnpj ?? item?.id,item)} key={item?.id ? item.id + colIndex: item.CNPJ + colIndex} column={column} classes={classes} item={item} rowSize={rowSize}/>
         );
+        else null
       })}
     </TableRow>
   );
@@ -299,17 +315,18 @@ const Row = memo(({ index, style, data: { columns, items, classes, setSelected, 
 
 const itemKey = (index, data) => data.items[index]?.id ?? data.items[index]?.cnpj ?? data.items[index]?.CNPJ; //To fix
 
-const createItemData = memoize((classes, columns, data, setSelected, selected, handleCellClick, rowSize ) => ({
+const createItemData = memoize((classes, columns, data, setSelected, selected, handleCellClick, rowSize, onCorrectData ) => ({
   columns,
   classes,
   items: data,
   setSelected,
   selected,
   handleCellClick,
-  rowSize
+  rowSize,
+  onCorrectData
 }));
 
-const ReactWindowTable = ({ data, columns, initialOrder='creation',setSelected,selected,handleCellClick,rowSize }) => {
+const ReactWindowTable = ({ data, columns, initialOrder='creation',setSelected,selected,handleCellClick,rowSize,onCorrectData }) => {
     const classes = useTableStyles();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState(initialOrder);
@@ -333,7 +350,7 @@ const ReactWindowTable = ({ data, columns, initialOrder='creation',setSelected,s
 
     console.log('ReactWindowTable')
     const dataRowsOrdered = stableSort(data, getComparator(order, orderBy))
-    const itemData = createItemData(classes, columns, dataRowsOrdered,setSelected,selected,handleCellClick,rowSize );
+    const itemData = createItemData(classes, columns, dataRowsOrdered,setSelected,selected,handleCellClick,rowSize,onCorrectData );
     const TableMinWidth = () => {
       var minWithTable = 0
       columns.map((column)=>{
@@ -389,14 +406,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const App = ({rowsCells,headCells,setSelected,selected,handleCellClick,initialOrder,rowSize=55}) => {
+const App = ({rowsCells,headCells,setSelected,selected,handleCellClick,initialOrder,rowSize=55,onCorrectData}) => {
   const classes = useStyles();
 
   return (
 
     <div className={classes.root}>
         <div style={{height:rowsCells.length > 7?440: rowsCells.length*rowSize+77,}} className={classes.paper}>
-          <ReactWindowTable data={rowsCells} rowSize={rowSize} columns={headCells} setSelected={setSelected} selected={selected} handleCellClick={handleCellClick} initialOrder={initialOrder} />
+          <ReactWindowTable onCorrectData={onCorrectData} data={rowsCells} rowSize={rowSize} columns={headCells} setSelected={setSelected} selected={selected} handleCellClick={handleCellClick} initialOrder={initialOrder} />
         </div>
     </div>
   );

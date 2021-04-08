@@ -12,6 +12,7 @@ import useWaitAction from '../../../hooks/useWaitAction'
 import {BootstrapTooltip} from '../../Main/MuiHelpers/Tooltip'
 import { useHistory } from "react-router-dom"
 import {ThemeContext} from "styled-components";
+import {useLoaderDashboard} from '../../../context/LoadDashContext'
 
 function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
 
@@ -23,6 +24,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
   const [allOpen, setAllOpen] = useState([])
   const [search, setSearch] = useState('')
   const [filteredArray, setFilteredArray] = useState(lists)
+  const { loaderDash, setLoaderDash } = useLoaderDashboard();
 
   const [collapse, setCollapse] = useState(true)
   const [nav, setNav] = useState(null)
@@ -52,8 +54,11 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
         else setAllOpen(allOpen=>[...allOpen,item.id])
       }
       else {
-        history.push(item.random ? `${item.to}${Math.floor(Math.random()*1000)}` : item.to)
-        dispatch({ type: 'SET_ROUTE', payload:{subList:1,subSubList:1,list:item.id} })
+        if (activeRoute.list!==item.id) {
+          history.push(item.random ? `${item.to}${Math.floor(Math.random()*1000)}` : item.to)
+          dispatch({ type: 'SET_ROUTE', payload:{subList:1,subSubList:1,list:item.id} })
+          setLoaderDash(true)
+        }
       }
     } else {
       if (noHandle) {
@@ -70,8 +75,11 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
         if (item.items) {
         }
         else {
-          history.push(item.random ? `${item.to}${Math.floor(Math.random()*1000)}` : item.to)
-          dispatch({ type: 'SET_ROUTE', payload:{subList:1,subSubList:1,list:item.id} })
+          if (activeRoute.list!==item.id) {
+            history.push(item.random ? `${item.to}${Math.floor(Math.random()*1000)}` : item.to)
+            dispatch({ type: 'SET_ROUTE', payload:{subList:1,subSubList:1,list:item.id} })
+            setLoaderDash(true)
+          }
         }
       }
     }
@@ -84,24 +92,33 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
         else setAllOpen(allOpen=>[...allOpen,subItem.id])
       }
       else {
-        history.push(subItem.random ? `${subItem.to}${Math.floor(Math.random()*1000)}` : subItem.to)
-        dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:1} })
-        setSubNav(null)
+        if (activeRoute.subList!==subItem.id) {
+          history.push(subItem.random ? `${subItem.to}${Math.floor(Math.random()*1000)}` : subItem.to)
+          dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:1} })
+          setSubNav(null)
+          setLoaderDash(true)
+        }
       }
     } else {
       setSubNav(subNav===subItem.id ? null:subItem.id)
       if (subItem.items) {}
       else {
-        history.push(subItem.random ? `${subItem.to}${Math.floor(Math.random()*1000)}` : subItem.to)
-        dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:1} })
-        setSubNav(null)
+        if (activeRoute.subList!==subItem.id) {
+          history.push(subItem.random ? `${subItem.to}${Math.floor(Math.random()*1000)}` : subItem.to)
+          dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:1} })
+          setSubNav(null)
+          setLoaderDash(true)
+        }
       }
     }
   }
 
   function onClickSubSubList(item,subItem,subSubItem) {
-    history.push(subSubItem.random ? `${subSubItem.to}${Math.floor(Math.random()*1000)}` : subSubItem.to)
-    dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:subSubItem.id} })
+    if (activeRoute.subSubList!==subSubItem.id) {
+      history.push(subSubItem.random ? `${subSubItem.to}${Math.floor(Math.random()*1000)}` : subSubItem.to)
+      dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:subSubItem.id} })
+      setLoaderDash(true)
+    }
   }
 
   function onMouseEnterDrawer() {
@@ -297,7 +314,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                         })}/>
                   </div>
                   </BootstrapTooltip>
-                  <Collapse in={((value===item.id && collapse!=='same' && collapse!=='true' ) || (nav===item.id && collapse && collapse!=='same'))|| Boolean(allOpen.find((i)=>i==item.id)) }>
+                  <Collapse unmountOnExit={true}  in={((value===item.id && collapse!=='same' && collapse!=='true' ) || (nav===item.id && collapse && collapse!=='same'))|| Boolean(allOpen.find((i)=>i==item.id)) }>
                     {((value===item.id || nav===item.id || (search && search.length>=1)) && item?.items) && item.items.map((subItem) => (
                       <div key={subItem.id} className={clsx({
                         [classes.subListOpenContainer]: subItem?.items && subItem.items.length > 0 && (value===subItem.id || subNav===subItem.id || allOpen.find((i)=>i==subItem.id)),
@@ -333,7 +350,7 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
                         </div>
                         </BootstrapTooltip>
 
-                        <Collapse in={subNav===subItem.id || Boolean(allOpen.find((i)=>i==subItem.id))}>
+                        <Collapse unmountOnExit={true} in={subNav===subItem.id || Boolean(allOpen.find((i)=>i==subItem.id))}>
                           {subItem?.items && subItem.items.map((subSubItem) => (
                             <div onClick={()=>onClickSubSubList(item,subItem,subSubItem)} key={subSubItem.id}
                             className={clsx(classes.list,classes.subSubList, {

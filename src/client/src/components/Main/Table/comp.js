@@ -17,14 +17,38 @@ import {
   GroupIcon,
   TextNameEmail,
   EmailSpan,
-  ButtonContainer
+  ButtonContainer,
+  ButtonContainerFilter,
 } from './styles';
 import Tabs from '../MuiHelpers/Tabs'
 import {BootstrapTooltip} from '../MuiHelpers/Tooltip'
 import Checkbox from '@material-ui/core/Checkbox';
 import useTimeOut from '../../../hooks/useTimeOut';
 import {NormalizeData} from '../../../helpers/DataHandler';
+import IconButton from '../MuiHelpers/IconButton';
+import RichTooltip from '../../Dashboard/Components/MultUsage/RichTooltip'
+import {ThemeContext} from "styled-components";
+import styled from "styled-components";
 
+const TooltipItem = styled.div`
+  padding:5px;
+  margin-bottom:7px;
+  border-radius: 4px;
+  border: 1px ${({theme})=>theme.palette.background.line} solid;
+`;
+
+
+const TitleTooltip = styled.p`
+  margin-bottom:10px;
+  font-size: 17px;
+  //text-align: center;
+`;
+
+
+const TextTooltip = styled.p`
+  color: ${({theme})=> theme.palette.text.secondary };;
+  font-size: 15px;
+`;
 
 export default function TableTabs({children, tabsLabel, ...restProps }) {
   return (
@@ -145,7 +169,7 @@ export function LoadingContent() {
   );
 }
 
-export function AddUserButton({onClick, width=165,text='Nova Empresa',icon='Add',...restProps}) {
+export function AddUserButton({onClick,width=165,text='Nova Empresa',icon='Add',...restProps}) {
 
   return (
     <ButtonContainer onClick={onClick} width={width} className={'rowCenter'}  {...restProps}>
@@ -155,13 +179,66 @@ export function AddUserButton({onClick, width=165,text='Nova Empresa',icon='Add'
   )
 }
 
-export function FilterButton({onClick, width=165,text='Nova Empresa',icon='Add',...restProps}) {
+export function FilterListButton({title="Filtro Avançado",dataArray=[],onClick,setFilterButton,filterButton,...restProps}) {
+  const anchorRef = React.useRef(null);
+  const [openFilter,setOpenFilter] = React.useState(false)
+  const theme = React.useContext(ThemeContext)
+
+  function onClose(item) {
+    onClick(item)
+    setOpenFilter(false)
+  }
+
+  function onClickFilterButton() {
+    if (filterButton.column === 'group') setFilterButton({column:'',filter:''})
+    else setOpenFilter(true)
+  }
 
   return (
-    <ButtonContainer onClick={onClick} width={width} className={'rowCenter'}  {...restProps}>
-      <Icons style={{fontSize:24,marginRight:5}} type={icon}/>
-      <p  className={'noBreakText'}>{text}</p>
-    </ButtonContainer>
+    <div ref={anchorRef} style={{marginBottom:-30,marginTop:-30}}>
+      <IconButton onClick={()=>onClickFilterButton()} style={{margin:0}} aria-label="filter" icon={'FilterList'} {...restProps}/>
+      <RichTooltip width={300} background={theme.palette.type === 'dark' ? 'grey' : 'light'} placement={'right-start'} anchorRef={anchorRef}  open={openFilter} setOpen={setOpenFilter} translateY={3}>
+        <div style={{padding:'10px 10px'}}>
+            <TitleTooltip>{title}</TitleTooltip>
+          <div style={{maxHeight:300,paddingRight:3,overflowY:'scroll'}}>
+            {dataArray.length > 0 ? dataArray.map((item, index) => (
+                <TooltipItem onClick={()=>onClose(item)} key={item} >
+                    <TextTooltip>{item}</TextTooltip>
+                </TooltipItem>
+              ))
+            :
+              <TooltipItem style={{borderStyle:'dashed'}}>
+                <TextTooltip>Nenhum filtro encontrado</TextTooltip>
+              </TooltipItem>
+            }
+          </div>
+        </div>
+      </RichTooltip>
+    </div>
+  )
+}
+// boxItem: {
+//   cursor:'pointer',
+//   display:'flex',
+//   alignItems:'center',
+//   padding:'12px 20px',
+//   '&:hover': {
+//       backgroundColor: theme.palette.background.hoverPaper
+//     },
+// },
+// icons: {
+//   color:theme.palette.primary.main,
+//   fontSize:'25px',
+//   marginRight:20
+// },
+
+export function FilterButton({onClick, width=78,widthTotal=195,text='Anexo 1',info='(Poeira Mineral)',...restProps}) {
+
+  return (
+    <ButtonContainerFilter onClick={onClick} width={width} widthTotal={widthTotal?widthTotal:width} className={'rowCenter'}  {...restProps}>
+      <p  className={'first'}>{text}</p>
+      <p  className={'noBreakText second'}>{info}</p>
+    </ButtonContainerFilter>
   )
 }
 

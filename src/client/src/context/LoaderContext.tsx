@@ -6,7 +6,7 @@ import React, {
   SetStateAction,
   Dispatch,
 } from 'react';
-import { LoaderSimple } from '../components/Main/Loader';
+import { LoaderSimple } from '../components/Main/Loader/index.js';
 
 interface IProps {
   load: boolean;

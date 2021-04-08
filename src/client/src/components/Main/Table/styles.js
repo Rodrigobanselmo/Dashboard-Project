@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import styled, {keyframes} from "styled-components";
+import styled, {keyframes,css} from "styled-components";
 import { Icons } from '../../Icons/iconsDashboard'
 import { lighten } from '@material-ui/core/styles';
 const fadeIn = keyframes`
@@ -22,6 +22,7 @@ border-radius: 8px;
 font-size:15px;
 color: ${({theme})=>theme.palette.type!== 'dark'? theme.palette.primary.contrastText: theme.palette.primary.main };
 background-color: ${({theme})=> theme.palette.type!== 'dark'? lighten(theme.palette.primary.main,0.1):'transparent' };
+/* background-color: ${({theme})=> theme.palette.type!== 'dark'? lighten(theme.palette.status.success,0.1):'transparent' }; */
 border-color: ${({theme})=> theme.palette.background.line };
 border-width: 1px;
 border-style: solid;
@@ -47,9 +48,58 @@ cursor:pointer;
       color: ${({theme})=>theme.palette.type!== 'dark'? theme.palette.primary.contrastText: theme.palette.text.primary };
       font-weight: ${({theme})=>theme.palette.type!== 'dark'? 'bold':'normal'}
     }
-    border-color: ${({theme})=> theme.palette.primary.main  };
+    border-color: ${({theme})=> theme.palette.type!== 'dark'? theme.palette.background.line:theme.palette.primary.main };
     width:${props=>`${props.width}px`};
   }
+
+`;
+
+export const ButtonContainerFilter = styled.div`
+  height:30px;
+  padding:17px 10px;
+  border-radius: 8px;
+  font-size:15px;
+  color: ${({theme})=> theme.palette.text.secondary };
+  /* color: ${({theme})=>theme.palette.type!== 'dark'? theme.palette.primary.contrastText: theme.palette.primary.main }; */
+  /* background-color: ${({theme})=> theme.palette.type!== 'dark'? lighten(theme.palette.primary.main,0.1):'transparent' }; */
+  border-color: ${({theme})=> theme.palette.background.line };
+  border-width: 1px;
+  border-style: solid;
+  width:${props=>`${props.width}px`};
+  transition: width 0.5s ease;
+  margin-right:10px;
+  animation: ${fadeIn} 0.3s ease-in;
+  &:active {opacity: 0.8;}
+  transition: all 0.5s ease;
+
+  cursor:pointer;
+
+  .first {
+    color: ${({theme,selected})=> selected?theme.palette.primary.main :theme.palette.text.secondary };
+    display:inline-block;
+    transition: all 0.5s ease;
+    white-space: nowrap;
+  }
+  .second {
+    transition: none;
+    color: transparent;
+    transition: all 0.5s ease;
+    flex:1;
+    padding-left:5px;
+  }
+
+
+  &:hover {
+    & p {
+      color: ${({theme,selected})=> selected?theme.palette.primary.main :theme.palette.text.primary };
+    }
+    transition: all 0.5s ease;
+    width:${props=>`${props.widthTotal}px`};
+  }
+
+  ${props => props.selected && css`
+    border-color: ${({theme})=> theme.palette.primary.main };
+  `}
 
 `;
 
@@ -57,7 +107,7 @@ export const FilterComponents = styled.div`
     display:flex;
     flex-direction:row;
     align-items:center;
-    padding:20px 33px 20px 15px;
+    padding:20px 0px 20px 0px;
     margin-top:10px;
 `;
 

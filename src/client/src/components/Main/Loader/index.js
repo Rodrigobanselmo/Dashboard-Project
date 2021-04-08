@@ -1,8 +1,8 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { LoadFullScreen, LoadDashboard } from './Loader';
-import LottieAnimation from '../../../lib/lottie';
-import { useLoaderDashboard } from '../../../context/LoadDashContext';
+import { LoadFullScreen, LoadDashboard } from './Loader.js';
+import LottieAnimation from '../../../lib/lottie.tsx';
+import { useLoaderDashboard } from '../../../context/LoadDashContext.tsx';
 
 const SlideUp = keyframes`
     0% {
@@ -23,11 +23,8 @@ const Image = styled.img`
   animation-iteration-count: infinite;
 `;
 
-interface LoadProps {
-  load: boolean;
-}
 
-export const LoaderSimple: React.FC<LoadProps> = ({ load = false }) => {
+export const LoaderSimple = ({ load = false }) => {
   return (
     <>
       {load && (
@@ -44,14 +41,7 @@ export const LoaderSimple: React.FC<LoadProps> = ({ load = false }) => {
   );
 };
 
-interface LoaderDashboardProps {
-  open: boolean;
-}
-
-export const LoaderDashboard: React.FC<LoaderDashboardProps> = ({
-  children,
-  open = true,
-}) => {
+export const LoaderDashboard = ({ children, open = true }) => {
   const { loaderDash } = useLoaderDashboard();
   return (
     <>

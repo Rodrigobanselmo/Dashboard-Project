@@ -28,7 +28,7 @@ const light = {
       default: '#e0e0e0',
       contrast: '#A8A8B355',
       iconsPaper: '#e6e6e6',
-      inactive: '#ebecef88',
+      inactive: '#a3a3a9',
       line: '#A8A8B355',
       hoverPaper: '#c0c2c250',
       hoverPaperLighter: 'rgba(0, 0, 0, 0.1)',

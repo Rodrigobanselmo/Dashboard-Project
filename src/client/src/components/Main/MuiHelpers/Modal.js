@@ -11,6 +11,19 @@ import {Icons} from '../../Icons/iconsDashboard'
 import Carrousel from '../Carrousel/CarrouselFirst'
 import {useNotification} from '../../../context/NotificationContext'
 
+const FullModalContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${props=>props.transparent?'#000000bb':props.theme.palette.background.paper};
+  position:relative;
+  z-index:1111110;
+  width:100%;
+  height:100%;
+  overflow-y:scroll;
+`;
+
+
 const Title = styled.p`
   position: absolute;
   top: 15px;
@@ -44,15 +57,17 @@ const IconCloseFull = styled.div`
 const Icon = styled(Icons)`
   font-size: 30px;
   border-radius:4px;
-  color: ${({theme})=>theme.palette.text.primary};
+  color: ${props=>props.transparent?'#eee':props.theme.palette.text.primary};
   cursor: pointer;
 
   &:hover {
-    color:${({theme})=>theme.palette.text.secondary};
+    /* color:${({theme})=>theme.palette.text.secondary}; */
+  color: ${props=>props.transparent?'#fff':props.theme.palette.text.secondary};
   }
 
   &:active {
-    color:${({theme})=>theme.palette.text.third};
+    /* color:${({theme})=>theme.palette.text.third}; */
+  color: ${props=>props.transparent?'#eff':props.theme.palette.text.third};
   }
 `;
 
@@ -132,7 +147,7 @@ export function ModalMui({children,open,onClose,title}) {
   );
 }
 
-export function ModalFullScreen({children,open,onClose,infoModal=false,onGoBack=false,arrow=false}) {
+export function ModalFullScreen({children,open,transparent,onClose,infoModal=false,onGoBack=false,arrow=false}) {
 
     const classes = useStyles();
     const notification = useNotification();
@@ -163,21 +178,22 @@ export function ModalFullScreen({children,open,onClose,infoModal=false,onGoBack=
           }}
         >
           <Fade in={open}>
-            <div className={classes.fullScreen}>
+
+            <FullModalContainer transparent={transparent} >
               <IconCloseFull >
                   <IconButton onClick={onCloseModal} aria-label="close">
-                      <Icon type={'Close'} />
+                      <Icon transparent={transparent} type={'Close'} />
                   </IconButton>
               </IconCloseFull>
               {onGoBack && arrow?
                 <IconGoBackFull >
                     <IconButton onClick={onGoBack} aria-label="goBack">
-                        <Icon type={'ArrowBack'} />
+                        <Icon transparent={transparent}  type={'ArrowBack'} />
                     </IconButton>
                 </IconGoBackFull>
               : null}
               {children}
-            </div>
+            </FullModalContainer>
           </Fade>
         </Modal>
     );

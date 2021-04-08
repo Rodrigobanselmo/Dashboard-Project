@@ -5,6 +5,7 @@ import Header from '../../../components/Dashboard/Components/Blocks/Header'
 import {useNotification} from '../../../context/NotificationContext'
 import {useAuth} from '../../../context/AuthContext'
 import { useLocation } from 'react-router-dom';
+import {useLoaderDashboard} from '../../../context/LoadDashContext'
 
 function Team() {
 
@@ -15,6 +16,7 @@ function Team() {
   const {currentUser} = useAuth()
   const notification = useNotification()
   const query = new URLSearchParams(useLocation().search)
+  const { setLoaderDash } = useLoaderDashboard();
 
   useEffect(() => {
     if (query.get('m') !== queryOld && query.get('m')) setOpen(true); setQueryOld(query.get('m'))
@@ -24,7 +26,7 @@ function Team() {
         <>
             <Header icons={'Admin'} title={'Gerenciamento de Usuários'} video={true}/>
             <div style={{width:'100%',backgroundColor:'#1a1a1e',borderRadius:'15px'}}>
-                <TableMembers currentUser={currentUser} notification={notification} setUsersRows={setUsersRows} usersRows={usersRows} setOpen={setOpen}/>
+                <TableMembers setLoaderDash={setLoaderDash} currentUser={currentUser} notification={notification} setUsersRows={setUsersRows} usersRows={usersRows} setOpen={setOpen}/>
             </div>
             <Modal setUsersRows={setUsersRows} open={open} setOpen={setOpen}/>
         </>

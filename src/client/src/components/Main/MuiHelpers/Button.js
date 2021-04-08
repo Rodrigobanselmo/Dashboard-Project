@@ -1,5 +1,6 @@
 import Button from '@material-ui/core/Button';
 import styled, {css} from "styled-components";
+import { lighten,darken } from "@material-ui/core/styles";
 
 //<CancelButton onClick={onClose} style={{  marginRight:'15px'}} variant="outlined" >
 //<ContinueButton onClick={onAction} >
@@ -30,25 +31,25 @@ export const ContinueButton = styled(Button)`
     padding: 8px 10px;
     border-radius: 7px;
     min-width: ${(props)=> props.minwidth ? props.minwidth : '90px'};
-    color:${({theme})=>theme.palette.text.primary};
+    color:${({theme})=>theme.palette.type !== 'dark'?theme.palette.primary.contrastText :theme.palette.text.primary};
     font-weight:bold;
     text-transform: none;
     border: none;
-    background-color: ${(props)=> props.primary ? props.theme.palette.primary.main : props.theme.palette.background.attention};
+    background-color: ${(props)=> props.primary ? (props.theme.palette.type !== 'dark'? lighten(props.theme.palette.primary.main,0.1) : props.theme.palette.primary.main) : props.theme.palette.background.attention};
     transition: all 1s ease;
     opacity:1;
 /*     width:fit-content; */
 
     &:hover {
-      background-color: ${(props)=> props.primary ? props.theme.palette.primary.dark : props.theme.palette.background.attentionHover};
+      background-color: ${(props)=> props.primary ? (props.theme.palette.type !== 'dark'? props.theme.palette.primary.main : darken(props.theme.palette.primary.main,0.1)) : props.theme.palette.background.attentionHover};
       transition: all 0.5s ease;
     }
 
     ${props => props.disable === 'true' && css`
       border: 1px ${({theme})=>theme.palette.background.line} solid;
-      background:${({theme})=> theme.palette.background.inactive };
+      background: ${({theme})=>theme.palette.type !== 'dark'?theme.palette.background.inactive :theme.palette.background.inactive};
       opacity:1;
-      color:${({theme})=>theme.palette.text.primary};
+      color:${({theme})=>theme.palette.type !== 'dark'?theme.palette.primary.contrastText :theme.palette.text.primary};
       pointer-events: none;
       &:hover {
         background-color: ${({theme})=>theme.palette.background.inactive};
@@ -62,7 +63,8 @@ export const ContinueButton = styled(Button)`
       border: 1px ${({theme})=>theme.palette.background.line} solid;
       background-color: transparent;
       ${props => props.disable === 'true' && css`
-        color:${({theme})=>theme.palette.text.secondary};
+        color:${({theme})=>theme.palette.type !== 'dark'?theme.palette.text.third :theme.palette.text.secondary};
+        font-weight:${({theme})=>theme.palette.type !== 'dark'?'normal' :'bold'};
       }
     `};
     `};

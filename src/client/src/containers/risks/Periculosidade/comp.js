@@ -5,7 +5,7 @@ import {
   ButtonContainer
 } from './styles';
 import NewTabs, {TabPanel} from '../../../components/Main/MuiHelpers/NewTabs'
-import {FilterComponent,LoadingContent,AddUserButton} from '../../../components/Main/Table/comp'
+import {FilterComponent,LoadingContent,AddUserButton,FilterButton} from '../../../components/Main/Table/comp'
 import {COMPANY} from '../../../routes/routesNames.ts'
 import {onGetAllCompanies} from './func'
 import {Link} from "react-router-dom";
@@ -13,7 +13,7 @@ import {keepOnlyNumbers} from '../../../helpers/StringHandle';
 import {useHistory} from "react-router-dom";
 import TableComponent from './table';
 
-export default function Container({children}) {
+export function Container({children}) {
     return (
       <ContainerDiv >
         {children}
@@ -22,11 +22,10 @@ export default function Container({children}) {
 }
 
 
-Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,setDataRows,tabsLabel,setOpen,currentUser,notification,setLoad,setLoaderDash}) {
+export function TableContainer({tabValue,setTabValue,setSelected,selected,dataRows,setDataRows,tabsLabel,setOpen,currentUser,notification,setLoad,setLoaderDash}) {
 
   const [loadContent, setLoadContent] = React.useState(true)
   const [search, setSearch] = React.useState('')
-  const [tabValue, setTabValue] = React.useState(0);
   const history = useHistory();
 
   React.useEffect(() => {
@@ -34,8 +33,8 @@ Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,se
   }, [])
 
   function handleCellClick(e,rowId) {
-    history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
-    setLoaderDash(true)
+    //history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
+    //setLoaderDash(true)
   }
 
   return (
@@ -50,6 +49,12 @@ Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,se
         >
           <AddUserButton onClick={()=>setOpen(true)}/>
           <div style={{flex:1}}/>
+          <FilterButton text='Anexo 1' info={'(Exposivos)'} widthTotal={165} onClick={()=>setOpen(true)}/>
+          <FilterButton text='Anexo 2' info={'(Inflamáveis)'} widthTotal={175} onClick={()=>setOpen(true)}/>
+          <FilterButton text='Anexo 3' info={'(Vigilante)'} widthTotal={160} onClick={()=>setOpen(true)}/>
+          <FilterButton text='Anexo 4' info={'(Eletricidade)'} widthTotal={180} onClick={()=>setOpen(true)}/>
+          <FilterButton text='Anexo 5' info={'(Motoboy)'} widthTotal={162} onClick={()=>setOpen(true)}/>
+          <FilterButton text='Portaria n. 51/2003' info={'(Rad. Ionizantes)'} width={160} widthTotal={290} onClick={()=>setOpen(true)}/>
           {selected.length == 1 &&
           <Link style={{textDecoration: 'none', }} to={`${COMPANY}/${keepOnlyNumbers(selected[0])}/0`}>
             <AddUserButton text={'Editar'} icon={'Edit'} width={100} />
@@ -58,6 +63,9 @@ Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,se
           {/* <Container.AddUserButton text={'Desativar'} icon={'Archive'} width={140} onClick={()=>setOpen(true)}/> */}
           {/* <Container.AddUserButton text={'Ativar'} icon={'Unarchive'} width={120} onClick={()=>setOpen(true)}/> */}
         </FilterComponent>
+        <div style={{margin:0,display:'flex',flexDirection:'row',marginTop:-5,marginBottom:15}}>
+
+        </div>
       { loadContent ?
           <LoadingContent />
         :

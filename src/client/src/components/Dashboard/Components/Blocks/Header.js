@@ -1,10 +1,20 @@
 import React from 'react'
 import styled from "styled-components";
 import {Icons} from '../../../Icons/iconsDashboard'
+import {ModalFullScreen} from '../../../Main/MuiHelpers/Modal'
 
 const GroupIcon = styled(Icons)`
   font-size:50px;
+  //color:${({theme})=>theme.palette.primary.main};
   color:${({theme})=>theme.palette.text.primary};
+`;
+
+const GroupIconVideo = styled(Icons)`
+  font-size:50px;
+  color:${({theme})=>theme.palette.text.primary};
+  font-size:26px;
+  margin-bottom:-3px;
+  cursor: pointer;
 `;
 
 
@@ -38,8 +48,10 @@ const Header = styled.div`
   align-items:center;
 `;
 
-const HeaderComponent = React.memo(({icons, title,path, video=false}) => {
+const HeaderComponent = React.memo(({icons, title,path, video=false,subTitle}) => {
     console.log('header')
+    const [open, setOpen] = React.useState(false) //dados dos email inseridos nos inputs
+
     return (
         <Header >
             <TitleTag >
@@ -48,10 +60,30 @@ const HeaderComponent = React.memo(({icons, title,path, video=false}) => {
             <div >
               <div style={{marginRight:10, flexDirection:'row'}}>
                 <Title >{title}</Title>
-                {video && <GroupIcon style={{fontSize:26,marginBottom:-3} } type={'Video'}/>}
+                {video &&
+                <div onClick={()=>setOpen(true)} style={{display:'inline',}}>
+                  <GroupIconVideo type={'Video'}/>
+                </div>
+                }
               </div>
-            <p>Dashboard / <span style={{color:'grey'}}>{path ?? title}</span> </p>
+            <p>Dashboard
+              {subTitle && Array.isArray(subTitle) ?
+                subTitle.map((item,index)=>(
+                  <span key={index} style={{color:'grey'}}>&nbsp;/&nbsp;{item}</span>
+                ))
+              :
+              <span style={{color:'grey'}}>&nbsp;/&nbsp;{path ?? title}</span>
+              }
+            </p>
             </div>
+            <ModalFullScreen transparent open={open} onClose={()=>setOpen(false)} >
+              <iframe type="text/html"
+                width={`${window.innerWidth*0.8}`}
+                height={`${window.innerWidth*0.8*360/640}`}
+                src="http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
+                frameborder="0"
+              />
+            </ModalFullScreen>
         </Header>
 
     )

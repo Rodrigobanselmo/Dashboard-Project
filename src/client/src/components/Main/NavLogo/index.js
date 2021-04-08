@@ -8,11 +8,10 @@ const Images = styled.img`
   resize:cover;
 `;
 
-export const NavLogo = (props) => {
+export const NavLogo = React.memo((props) => {
 
   const theme = useSelector(state => state.theme)
   const dispatch = useDispatch()
-  console.log(theme)
   return (
             <NavLogoSCDiv {...props} onClick={()=>dispatch({type: 'THEME_COMPANY'})} >
               {theme.company === 'REALIZA' ?
@@ -24,4 +23,4 @@ export const NavLogo = (props) => {
               }
             </NavLogoSCDiv>
   );
-}
+})

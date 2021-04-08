@@ -2,38 +2,44 @@ import {GetAllCompanies} from '../../../services/firestoreCompany'
 
 const createRow = () => ({
   desc: `${Math.random()*1000000000000000}`,
-  type:`${Math.random()*1000000000000000}`,
+  type:`aci`,
   padrao: 'Sim',
-  status: 'Ativo',
+/*   ins: `Anexo 11/Limite 85 dB`,
+  acgh: `Anexo 1/Limite 85 dB`, */
+  group:`${Math.floor(Math.random()*10)}`,
+  padrao: 'Sim',
   id: `${Math.random()*1000000000000000}`,
 });
 const Row1 = ({
   desc: `Ruído Continui/intermitente`,
   ins: `Anexo 1/Limite 85 dB`,
-  per: `wfiubfwuh ifhu ifehihufewui e fhuwi ehefuwh uifew huf ehfueiwfiuehw fweihuihewu fufhew efw`,
-  // inss: `${Math.random()*1000000000000000}`,
   type:'fis',
+  grau: `Grau Médio`,
   padrao: 'Sim',
   status: 'Ativo',
   id: `${Math.random()*1000000000000000}`,
 });
 const Row2 = ({
   desc: `Radiações Ionizantes`,
+  ins: `Anexo 2/Qualitativa`,
+  noc: `Anexo 2/Qualitativa`,
+  per: `Anexo 2/Qualitativa`,
+  grau: `Grau Médio`,
+  tempoAE: `25 anos`,
   type:'fis',
-  per: `wfiubfwuhifhuifehihufewui efhuwiehefuwhuifew hufiehfueiwfiuehw fweihuihewufufhew efw`,
   padrao: 'Sim',
   status: 'Ativo',
   id: `${Math.random()*1000000000000000}`,
 });
 const Row3 = ({
   desc: `wfi ubf wuh ifhu ifehihuf ewui e fhuwi ehefuwh uifew huf ehfueiwfiu ehw fweihuihe wu fufhew efw`,
-  type:'fis',
+  type:'qui',
   padrao: 'Sim',
   status: 'Ativo',
   id: `${Math.random()*1000000000000000}`,
 });
 
-const createData = (qty = 10) => {
+const createData = (qty = 30) => {
   let data = [];
 
   for (let i = 0; i < qty; i++) {
@@ -43,11 +49,11 @@ const createData = (qty = 10) => {
   return data;
 };
 
-export function onGetAllCompanies(companyId,setDataRows,setLoadContent,notification) {
+export function onGetAllRisksAndGroups(companyId,setDataRows,setLoadContent,notification,setLoaderDash) {
     function checkSuccess(response) {
         setLoadContent(false)
         setDataRows([Row1,Row2,Row3,...createData()])
-
+        setLoaderDash(false)
       }
 
       function checkError(error) {
@@ -55,8 +61,11 @@ export function onGetAllCompanies(companyId,setDataRows,setLoadContent,notificat
         setTimeout(() => {
           notification.error({message:error,modal:true})
         }, 600);
+        setLoaderDash(false)
       }
 
      // GetAllCompanies(companyId,checkSuccess,checkError)
-     checkSuccess()
+     setTimeout(() => {
+      checkSuccess()
+    }, 600);
 }

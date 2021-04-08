@@ -10,18 +10,18 @@ export const LoadFullScreen = styled.div`
   width: 100vw;
   height: 100vh;
 `;
-interface LoadProps {
+/* interface LoadProps {
   open: boolean;
-}
+} */
 export const LoadDashboard = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0c0c0d;
+  background-color: ${({ theme }) => theme.palette.background.default};
   z-index: 1001;
   position: fixed;
   width: 100%;
   height: 100%;
-  margin-left: ${(props: LoadProps) => (props.open ? '120px' : '40px')};
+  margin-left: ${(props/* : LoadProps */) => (props.open ? '120px' : '40px')};
   transition: margin-left 0.2s linear;
 `;

@@ -6,7 +6,7 @@ import {useAuth} from '../../../../context/AuthContext'
 import {onGetAllUsersCompany} from './func'
 import {useNotification} from '../../../../context/NotificationContext'
 import {filterObject} from '../../../../helpers/ObjectArray'
-export default function EnhancedTable({currentUser,notification,setOpen,usersRows,setUsersRows}) {
+export default function EnhancedTable({currentUser,notification,setOpen,usersRows,setUsersRows,setLoaderDash}) {
 
     const tabsLabel = ['Sua Empresa'/* , 'Contratantes', 'Laboratório' */]
 
@@ -20,7 +20,7 @@ export default function EnhancedTable({currentUser,notification,setOpen,usersRow
     }
 
     React.useEffect(() => {
-        onGetAllUsersCompany(currentUser.company.id,setUsersRows,setLoadContent,notification)
+        onGetAllUsersCompany(currentUser.company.id,setUsersRows,setLoadContent,notification,setLoaderDash)
     }, [])
 
     function TableContainer() {

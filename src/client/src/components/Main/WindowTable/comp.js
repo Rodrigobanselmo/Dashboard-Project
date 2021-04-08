@@ -18,13 +18,15 @@ const StatusComponent = styled.div`
     `}
 `;
 
-function NormalCell({column, classes, item, rowSize, onClick, colIndex}) {
+function NormalCell({column, classes, item, rowSize, onClick, onCorrectData,colIndex}) {
+
+  let ItemToShow = onCorrectData?onCorrectData(column.id,item[column.id],item):item[column.id]
 
   var SplitItem = [];
   if (column.type=='double') {
-    SplitItem = item[column.id] && typeof item[column.id] === 'string' ? item[column.id].split('/') : '- - -'.split('/') ;
+    SplitItem = ItemToShow && typeof ItemToShow === 'string' ? ItemToShow.split('/') : ['- - -'];
   } else {
-    SplitItem = [item[column.id] ? item[column.id] : '- - -']
+    SplitItem = [ItemToShow ? ItemToShow : '- - -']
   }
   return (
     <TableCell
@@ -47,10 +49,10 @@ function NormalCell({column, classes, item, rowSize, onClick, colIndex}) {
       onClick={onClick}
     >
       <div style={{position:'absolute',width:'85%'}}>
-      {(item[column.id] ? item[column.id].length : 0) > Math.floor(26/200*column.minWidth) ?
-        <BootstrapTooltip placement="bottom-start"  title={item[column.id]} styletooltip={{transform: 'translateY(0px)'}}>
+      {(ItemToShow ? ItemToShow.length : 0) > Math.floor(26/200*column.minWidth) ?
+        <BootstrapTooltip placement="bottom-start"  title={ItemToShow} styletooltip={{transform: 'translateY(0px)'}}>
           <p style={{height:'fit-content',textAlign:column.align  ? column.align : "left"}} className={'noBreakText'} >
-          {item[column.id]}
+          {ItemToShow}
           </p>
         </BootstrapTooltip>
         :
@@ -71,11 +73,12 @@ function NormalCell({column, classes, item, rowSize, onClick, colIndex}) {
 
 function Paragraph({column, classes, item, rowSize, onClick, colIndex}) {
 
+  let ItemToShow = item[column.id]
   var SplitItem = [];
   if (column.type=='double') {
-    SplitItem = item[column.id] && typeof item[column.id] === 'string' ? item[column.id].split('/') : '- - -'.split('/') ;
+    SplitItem = ItemToShow && typeof ItemToShow === 'string' ? ItemToShow.split('/') : '- - -'.split('/') ;
   } else {
-    SplitItem = [item[column.id]]
+    SplitItem = [ItemToShow]
   }
   return (
     <TableCell
@@ -98,15 +101,15 @@ function Paragraph({column, classes, item, rowSize, onClick, colIndex}) {
       onClick={onClick}
     >
       <div style={{position:'absolute',width:'85%'}}>
-      {(item[column.id] ? item[column.id].length : 0) > Math.floor(26/200*column.minWidth) ?
-        <BootstrapTooltip placement="bottom-start"  title={item[column.id]} styletooltip={{transform: 'translateY(0px)'}}>
+      {(ItemToShow ? ItemToShow.length : 0) > Math.floor(26/200*column.minWidth) ?
+        <BootstrapTooltip placement="bottom-start"  title={ItemToShow} styletooltip={{transform: 'translateY(0px)'}}>
           <p style={{height:'fit-content',textAlign:column.align  ? column.align : "left",textOverflow: 'ellipsis',WebkitBoxOrient: 'vertical',WebkitLineClamp:2, display: '-webkit-box',overflow:'hidden'}} >
-          {item[column.id]}
+          {ItemToShow}
           </p>
         </BootstrapTooltip>
         :
         <p style={{height:'fit-content',textAlign:column.align  ? column.align : "left",textOverflow: 'ellipsis',WebkitLineClamp:2, display: '-webkit-box',overflow:'hidden'}} >
-          {item[column.id] ? item[column.id] : '- - -'}
+          {ItemToShow ? ItemToShow : '- - -'}
         </p>
       }
       </div>
@@ -116,6 +119,7 @@ function Paragraph({column, classes, item, rowSize, onClick, colIndex}) {
 
 function StatusCell({column, classes, item, rowSize, onClick,colIndex}) {
 
+  let ItemToShow = item[column.id]
   return (
     <TableCell
       component="div"
@@ -136,16 +140,16 @@ function StatusCell({column, classes, item, rowSize, onClick,colIndex}) {
       }}
       onClick={onClick}
     >
-      <BootstrapTooltip placement="bottom"  title={item[column.id] ? (item[column.id] === 'Sim' ? 'Dado padrão do sistema, previamente cadastrado pela SimpleSST conforme legislação e/ou norma técnica.' : item[column.id]):'Não identificado'} styletooltip={{transform: 'translate(0px,-22px)'}}>
+      <BootstrapTooltip placement="bottom"  title={ItemToShow ? (ItemToShow === 'Sim' ? 'Dado padrão do sistema, previamente cadastrado pela SimpleSST conforme legislação e/ou norma técnica.' : ItemToShow):'Não identificado'} styletooltip={{transform: 'translate(0px,-22px)'}}>
         <div style={{padding:30,paddingLeft:30}}>
-          <StatusComponent status={item[column.id] ? item[column.id] : 'none'} />
+          <StatusComponent status={ItemToShow ? ItemToShow : 'none'} />
         </div>
       </BootstrapTooltip>
     </TableCell>
   )
 }
 
-export function RowCell({column, classes, item, rowSize, onClick,colIndex}) {
+export function RowCell({column, classes, item, rowSize, onClick,colIndex,onCorrectData}) {
 
   if (column.type === 'start/end') {
     var dateStart = item?.creation  && item.creation  && item.creation !== 0 ? NormalizeData(new Date(item.creation),'normal') : 'Indisponível';
@@ -157,12 +161,12 @@ export function RowCell({column, classes, item, rowSize, onClick,colIndex}) {
         <StatusCell colIndex={colIndex} onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
       :
         column.type === 'start/end' ?
-        <NormalCell colIndex={colIndex} onClick={onClick} column={column} classes={classes} item={{creation:`${dateStart} - ${dateEnd}`}} rowSize={rowSize}/>
+        <NormalCell onCorrectData={onCorrectData} colIndex={colIndex} onClick={onClick} column={column} classes={classes} item={{creation:`${dateStart} - ${dateEnd}`}} rowSize={rowSize}/>
       :
         column.type === 'paragraph' ?
         <Paragraph colIndex={colIndex} onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
       :
-        <NormalCell colIndex={colIndex} onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
+        <NormalCell onCorrectData={onCorrectData} colIndex={colIndex} onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
       }
     </>
   )
