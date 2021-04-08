@@ -101,7 +101,7 @@ export function GetAllCompanies(companyId,checkSuccess,checkError) {
   });
 }
 
-export function GetCompanie(companyId,cnpj,checkSuccess,checkError) {
+export function GetCompany(companyId,cnpj,checkSuccess,checkError) {
 
   var dataRef = db.collection("company").doc(companyId).collection('companies').doc(keepOnlyNumbers(cnpj))
 

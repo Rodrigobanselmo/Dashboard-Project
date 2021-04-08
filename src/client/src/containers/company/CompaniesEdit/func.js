@@ -1,9 +1,10 @@
-import {GetCompanie} from '../../../services/firestoreCompany'
+import {GetCompany} from '../../../services/firestoreCompany'
 
-export function onGetCompanie({companyId,cnpj,setData,setLoadContent,notification}) {
+export function onGetCompany({companyId,cnpj,setData,setLoadContent,notification,setLoaderDash}) {
     function checkSuccess(response) {
         setLoadContent(false)
         setData({...response})
+        setLoaderDash(false)
         console.log('data',{...response});
       }
 
@@ -14,5 +15,5 @@ export function onGetCompanie({companyId,cnpj,setData,setLoadContent,notificatio
         }, 600);
       }
 
-      GetCompanie(companyId,cnpj,checkSuccess,checkError)
+      GetCompany(companyId,cnpj,checkSuccess,checkError)
 }

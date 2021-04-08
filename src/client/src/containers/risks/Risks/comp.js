@@ -68,7 +68,7 @@ export function TableContainer({risk,tabValue,setTabValue,setSelected,selected,d
     return groups
   }
 
-  const memoizedGroups = React.useMemo(() => onGetGroups(), [dataRows])
+  const memoizedGroups = React.useMemo(() => onGetGroups(), [dataRows,routeInfo,tabValue])
 
   return (
     <NewTabs tabValue={tabValue} setTabValue={setTabValue} tabsLabel={tabsLabel} >

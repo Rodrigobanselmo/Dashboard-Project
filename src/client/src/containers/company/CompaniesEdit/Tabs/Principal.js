@@ -60,7 +60,7 @@ export function Principal({data,setData}) {
         labelWidth={36}
         selected={1}
         value={1}
-        setData={(selected)=>null}
+        setData={(selected)=>setData({...data,type:selected})}
         data={[data?.type.toUpperCase(),...selectorType.filter(i=>i.toUpperCase() !== data?.type.toUpperCase())]}
         variant="outlined"
       />

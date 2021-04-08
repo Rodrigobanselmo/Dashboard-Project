@@ -1,7 +1,7 @@
 import React from 'react';
 import TABLE from './tableVirtualized';
 import {useLoaderDashboard} from '../context/LoadDashContext'
-
+import CheckList from './CheckList';
 
 const App = () => {
 
@@ -12,7 +12,7 @@ const App = () => {
 
   return (
     <div style={{}}>
-      <TABLE/>
+      <CheckList/>
     </div>
   );
 };

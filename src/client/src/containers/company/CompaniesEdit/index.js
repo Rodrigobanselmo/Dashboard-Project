@@ -12,11 +12,8 @@ import {useLoaderDashboard} from '../../../context/LoadDashContext'
 
 function Companies() {
 
-  const [open, setOpen] = useState(false)
   const [data, setData] = useState({})
-  const [dataRows, setDataRows] = useState([])
-  const [selected, setSelected] = React.useState([]);
-
+  console.log(data)
   const {setLoad} = useLoaderScreen();
   const { setLoaderDash } = useLoaderDashboard();
   const {currentUser} = useAuth()
@@ -25,13 +22,6 @@ function Companies() {
   let { cnpj,tabId } = useParams();
 
   const tabsLabel = ['Principal', 'Organograma','Empregados', 'Informações Adicionais']
-
-    useEffect(() => {
-      setTimeout(() => {
-        setLoaderDash(false)
-      }, 500);
-      return clearTimeout()
-    }, [])
 
     console.log('tabId',tabId);
     return (
@@ -46,6 +36,7 @@ function Companies() {
                 cnpj={cnpj}
                 setData={setData}
                 tabId={tabId}
+                setLoaderDash={setLoaderDash}
               />
             </Container>
             <div style={{height:200,width:1}}/>

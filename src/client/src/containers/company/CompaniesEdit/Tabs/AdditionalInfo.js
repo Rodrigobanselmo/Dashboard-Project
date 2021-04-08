@@ -42,7 +42,7 @@ export function AdditionalInfo({data,setData}) {
 
   return (
     <>
-      { data?.atv1 &&
+      { data?.address &&
       <FormContainer
         style={{marginTop:20,position:'relative'}}
         noValidate
@@ -112,8 +112,7 @@ export function AdditionalInfo({data,setData}) {
             labelWidth={25}
             label={'UF'}
             selected={estados.findIndex(i=>i===data?.address?.uf)+1}
- /*            setData={(selected)=>setdata?(data=>({...data,uf:selected}))} */
-            setData={(selected)=>null}
+            setData={(selected)=>setData({...data,address:{...data.address,uf:selected}})}
             data={estados}
             variant="outlined"
             />

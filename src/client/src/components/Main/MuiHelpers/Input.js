@@ -229,6 +229,7 @@ export function InputUnform({onChange,name,validation=false,option=false,marginT
         <InputLabelEnd margin={'dense'} htmlFor={id} >{label}{option && <span style={{fontSize:10,verticalAlign:'middle',marginLeft:8}}>{option===true?'(OPCIONAL)':`(${option})`}</span>}</InputLabelEnd>
         <OutlinedInputEnd
           id={id}
+          autoComplete='off'
           name={name}
           defaultValue={defaultValue}
           inpRef={fieldRef}

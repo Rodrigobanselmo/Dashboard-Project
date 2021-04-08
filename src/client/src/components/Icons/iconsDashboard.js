@@ -50,6 +50,7 @@ import Instagram from '@material-ui/icons/Instagram';
 
 import OfflineBoltTwoToneIcon from '@material-ui/icons/OfflineBoltTwoTone';
 // import { SvgIconProps } from '@material-ui/core/SvgIcon';
+import { ReactComponent as Logo } from './info.svg';
 
 import LottieAnimation from '../../lib/lottie';
 // import { AiOutlineClose } from 'react-icons/ai';
@@ -89,7 +90,7 @@ export const Icons = ({ type, ...props }) => {
     case 'Error':
       return <ErrorOutlineRoundedIcon {...props} />;
     case 'Info':
-      return <InfoOutlined {...props} />;
+      return (<Logo style={{marginTop:3,opacity:0.7,cursor:'pointer'}} height="20px" width="20px"  />);
 
     case 'Administrative':
       return <FileCopyIcon {...props} />;
