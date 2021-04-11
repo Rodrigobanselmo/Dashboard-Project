@@ -18,10 +18,10 @@ const Icon = styled(Icons)`
   }
 `;
 
-export default function IconButtonMui({icon='Close',iconColor, ...restProps }) {
+export default function IconButtonMui({icon='Close',iconProps, ...restProps }) {
     return (
         <IconButton {...restProps}>
-            <Icon  type={icon} />
+            <Icon  type={icon} {...iconProps}/>
         </IconButton>
     );
 }

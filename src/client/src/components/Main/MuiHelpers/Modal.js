@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
     padding:'60px 23px 20px 20px',
     marginLeft:30,
     marginRight:30,
-    borderRadius:20,
+    borderRadius:10,
   },
   fullScreen: {
     position:'relative',

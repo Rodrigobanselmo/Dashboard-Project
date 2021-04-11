@@ -54,7 +54,7 @@ const light = {
       contrastWhite: '#1b1c21',
       strong: '#0C0C0D',
       primary: '#24262d',
-      secondary: '#3f3f45',
+      secondary: '#4f505a',
       secondaryLighter: '#252528',
       third: '#97969b',
       hover: '#fff',

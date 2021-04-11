@@ -17,12 +17,12 @@ function Companies() {
   const {currentUser} = useAuth()
   const notification = useNotification()
 
-  const tabsLabel = ['Todas', 'Contratantes', 'Laboratório']
+  const tabsLabel = ['Checklist']
 
     return (
         <>
             <Header icons={'Business'} title={'Gerenciar suas Empresas'} video={true}/>
-            <Container style={{width:'100%',backgroundColor:'#1a1a1e',borderRadius:'15px'}}>
+            <Container >
             <MainComponent
                 setRowsCells={setRowsCells}
                 rowsCells={rowsCells}

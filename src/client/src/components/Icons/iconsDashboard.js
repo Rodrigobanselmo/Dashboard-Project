@@ -41,6 +41,10 @@ import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import AllOut from '@material-ui/icons/AllOut';
 import FilterList from '@material-ui/icons/FilterList';
+import AssignmentTurnedInRoundedIcon from '@material-ui/icons/AssignmentTurnedInRounded';
+import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
+import MoreVertRoundedIcon from '@material-ui/icons/MoreVertRounded';
+import CameraAltOutlinedIcon from '@material-ui/icons/CameraAltOutlined';
 
 import Facebook from '@material-ui/icons/Facebook';
 import YouTube from '@material-ui/icons/YouTube';
@@ -91,6 +95,8 @@ export const Icons = ({ type, ...props }) => {
       return <ErrorOutlineRoundedIcon {...props} />;
     case 'Info':
       return (<Logo style={{marginTop:3,opacity:0.7,cursor:'pointer'}} height="20px" width="20px"  />);
+    case 'InfoShade':
+      return (<Logo style={{marginTop:3,opacity:0.4,cursor:'pointer'}} height="20px" width="20px"  />);
 
     case 'Administrative':
       return <FileCopyIcon {...props} />;
@@ -160,6 +166,14 @@ export const Icons = ({ type, ...props }) => {
       return <OfflineBoltTwoToneIcon {...props} />;
     case 'FilterList':
       return <FilterList {...props} />;
+    case 'Checklist':
+      return <AssignmentTurnedInRoundedIcon {...props} />;
+    case 'dotsHorizontal':
+      return <MoreHorizRoundedIcon {...props} />;
+    case 'dotsVertical':
+      return <MoreVertRoundedIcon {...props} />;
+    case 'Camera':
+      return <CameraAltOutlinedIcon {...props} />;
 
     case 'Errors':
       return <Error {...props} />;

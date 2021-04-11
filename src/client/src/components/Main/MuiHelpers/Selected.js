@@ -1,9 +1,9 @@
 
 import React, { useState,useContext } from "react";
-import { lighten } from '@material-ui/core/styles';
 import {Icons} from '../../Icons/iconsDashboard';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import styled, {ThemeContext} from "styled-components";
+import styled, {ThemeContext,css} from "styled-components";
+import { lighten,darken,fade } from "@material-ui/core/styles";
 import { isNumber } from "lodash";
 
 const LabelText = styled.p`
@@ -19,20 +19,25 @@ const LabelText = styled.p`
 const DropDownContainer = styled.div`
   width: 100%;
   position:relative;
-  margin-top:5px;
   text-align: left;
   color: ${({theme})=>theme.palette.text.secondary};
+
 `;
 
 const DropDownHeader = styled.div`
-  margin-bottom: 10px;
+  cursor: pointer;
   padding: 9px 15px;
   font-size: 16px;
   border: ${({theme,open})=>!open ? '1px':'2px'} solid ${({theme,open})=>!open ? theme.palette.text.third:theme.palette.primary.main};
   color: ${({selected,theme})=>selected ? theme.palette.text.primary : theme.palette.text.secondary};
   border-radius:6px;
 
-
+  ${props => props.type == 'box' && css`
+    border:none;
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.22);
+    background-color:${({theme})=>theme.palette.type !== 'dark' ? fade(theme.palette.background.default,0.3) : theme.palette.background.contrast};
+    color: ${({selected,theme})=>selected ? theme.palette.type !== 'dark' ? fade(theme.palette.text.secondary,0.8): theme.palette.text.secondary : theme.palette.text.third};
+  `}
 `;
 
 const DropDownListContainer = styled.div`
@@ -40,6 +45,7 @@ const DropDownListContainer = styled.div`
   z-index: 100;
   width: 100%;
   text-align: center;
+  transform:translateY(10px);
 `;
 
 const DropDownList = styled.ul`
@@ -51,6 +57,15 @@ const DropDownList = styled.ul`
   color: ${({theme})=>theme.palette.text.primary};
   font-size: 16px;
   font-weight: 500;
+
+    ${props => props.type == 'box' && css`
+    font-size:0.92rem;
+    font-weight: normal;
+    border:none;
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.22);
+    background-color:${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.background.default,0.76) : darken(theme.palette.background.contrast,0.1)};
+    color: ${({theme})=> theme.palette.type !== 'dark' ? fade(theme.palette.text.secondary,0.8): theme.palette.text.secondary};
+  `}
 /*   &:first-child {
     padding-top: 0.8em;
   } */
@@ -67,10 +82,18 @@ const ListItem = styled.li`
   &:hover {
     background-color: ${({theme})=>lighten(theme.palette.background.paper,0.03)};
   }
+
+  ${props => props.type == 'box' && css`
+    border-radius:0px;
+    cursor: pointer;
+    &:hover {
+      background-color:${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.background.default,0.5) : darken(theme.palette.background.contrast,0.2)};
+    }
+  `}
 `;
 
 
-export function Menu({options=[],onSelect,placeholder='Selecione',defaultValue,defaultValueIndex}) {
+export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={},label='Tipo',onSelect,placeholder='Selecione',defaultValue,defaultValueIndex,...props}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(options.length == 1 ? options[0] : defaultValueIndex ? options[defaultValueIndex] : defaultValue);
 
@@ -87,17 +110,17 @@ export function Menu({options=[],onSelect,placeholder='Selecione',defaultValue,d
 
   return (
     <ClickAwayListener onClickAway={()=>setIsOpen(false)}>
-      <DropDownContainer>
-        <LabelText >Tipo</LabelText>
-        <DropDownHeader open={isOpen} selected={options.findIndex(i=>i=selectedOption) != -1} onClick={toggling}>
+      <DropDownContainer type={type} {...props}>
+        {label && <LabelText >{label}</LabelText>}
+        <DropDownHeader type={type} style={headerStyle} open={isOpen} selected={options.findIndex(i=>i=selectedOption) != -1} onClick={toggling}>
           {selectedOption || placeholder}
         {options.length >= 2 && <Icons style={{fontSize:30,position: 'absolute',top:6,right:5,}}  type={`ArrowDrop`}/>}
         </DropDownHeader>
         {options.length >= 2 && isOpen && (
           <DropDownListContainer>
-            <DropDownList>
+            <DropDownList type={type} style={listStyle}>
               {options.map(option => (
-                <ListItem onClick={onOptionClicked(option)} key={Math.random()}>
+                <ListItem type={type} style={itemStyle} onClick={onOptionClicked(option)} key={Math.random()}>
                   {option}
                 </ListItem>
               ))}
