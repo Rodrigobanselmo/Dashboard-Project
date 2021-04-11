@@ -7,7 +7,7 @@ import {
 import NewTabs, {TabPanel} from '../../components/Main/MuiHelpers/NewTabs'
 import {FilterComponent,LoadingContent,AddUserButton} from '../../components/Main/Table/comp'
 import {COMPANY} from '../../routes/routesNames.ts'
-import {onGetChecklist,onCreateChecklist,onSaveChecklistData} from './func'
+import {onGetChecklist,onCreateChecklist,onSaveChecklistData,onGetRisks} from './func'
 import store from './store'
 import { Header } from './components/Header'
 import { FirstColumn } from './components/FirstColumn'
@@ -15,6 +15,8 @@ import { Column } from './components/Columns'
 import {Link} from "react-router-dom";
 import {useHistory} from "react-router-dom";
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { useSelector,useDispatch } from 'react-redux'
+
 //import { useResizeDetector } from 'react-resize-detector';
 //////import {useLoaderDash} from '../../context/LoadDashContext'
 
@@ -34,9 +36,11 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
   const [position, setPosition] = useState([]);
   const [openModalEdit,setOpenModalEdit] = React.useState(false) //modal para editar/duplicar/deletar
   const [save, setSave] = useState(false) //para dizer se pode ou nao salvar
+  const [searchRisk, setSearchRisk] = useState('') //para dizer se pode ou nao salvar
 
   const history = useHistory();
-
+  const risk = useSelector(state => state.risk)
+  const dispatch = useDispatch()
   //const { width, ref } = useResizeDetector();
   /////const {setLoadDash} = React.useCallback(()=>useLoaderDash(),[]);
 
@@ -63,8 +67,8 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
     })
     let groupIndex = dataChecklist.data.findIndex(i=>i.id==id)
     if (dataChecklist.data[groupIndex]?.questions.findIndex(i=>i?.mother) != -1) {
-      let mother = dataChecklist.data[groupIndex].questions[dataChecklist.data[groupIndex].questions.findIndex(i=>i?.mother)]
-      dataQuestionsGroups.push({title:mother.text,id:mother.id,mother:true})
+      let motherQuestion = dataChecklist.data[groupIndex].questions[dataChecklist.data[groupIndex].questions.findIndex(i=>i?.mother)]
+      dataQuestionsGroups.push({title:motherQuestion.text,...motherQuestion})
     }
     setData([data[0],dataQuestionsGroups])
   }
@@ -74,7 +78,6 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
     setPosition([position[0],position[1],{id,title:id}]);
     setData([data[0],data[1]])
   }
-
 
   function onChecklistquestionMotherCardHandle(id,title,index) {
     //if (position && position[index] && position[index].id == id) return;
@@ -130,7 +133,7 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
     setPosition([...position.slice(0,index+1),{id:uid,title:'Pergunta...'}]);
 
     //data
-    let addData = {type:'standard',action:{yes:[],no:[],na:[]},photo:true||false,text:'',id:uid,mother:true}
+    let addData = {type:'standard',action:{q_1:{text:'SIM',data:[]},q_2:{text:'NÃO',data:[]},q_3:{text:'N.A.',data:[]}},photo:false,text:'',id:uid,mother:true}
 
     //update data of columns
     let addShortData = {title:'',id:uid,mother:true}
@@ -152,27 +155,96 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
 
     //let uid = Math.floor((1 + Math.random()) * 0x100000000000).toString(16).substring(1);
 
+    //data from Data
+    let copyData = [...data]
+    const questionIndex = copyData[index-1].findIndex(i=>i.id===dados.id)
+
+    //data from DataChecklist
+    let copyDataChecklist = {...dataChecklist}
+    const categoryIndex = copyDataChecklist.data.findIndex(i=>i.id == position[1].id)
+    const questionIndexDatabase = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==dados.id)
+    const question = dataChecklist.data[categoryIndex].questions[questionIndexDatabase]
+
     if (action == 'text') { //update text from question
 
       //update data of columns
-      let copyData = [...data]
       copyData[index] = {...copyData[index],text:dados.text,title:dados.text}
-      const questionIndex = copyData[index-1].findIndex(i=>i.id===dados.id)
       copyData[index-1][questionIndex] = {...copyData[index-1][questionIndex],title:dados.text}
       setData([...copyData])
 
       //update checklist data from database
-      let copyDataChecklist = {...dataChecklist}
-      const categoryIndex = copyDataChecklist.data.findIndex(i=>i.id == position[1].id)
-      const questionIndexDatabase = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==dados.id)
-      const question = dataChecklist.data[categoryIndex].questions[questionIndexDatabase]
       copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase] = {...question,text:dados.text}
       setDataChecklist(copyDataChecklist)
       setSave(true)
+      return
     }
+
+    if (action == 'photo') { //update text from question
+
+      //update data of columns
+      copyData[index] = {...copyData[index],photo:!copyData[index].photo}
+      setData([...copyData])
+
+      //update checklist data from database
+      copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase] = {...question,photo:!question.photo}
+      setDataChecklist(copyDataChecklist)
+      setSave(true)
+      return
+    }
+
+    if (action == 'type') { //update text from question
+
+      setPosition([...position.slice(0,index+1)]);
+
+      //update data of columns
+      copyData[index] = {...copyData[index],type:dados.type}
+      setData([...copyData])
+
+      //update checklist data from database
+      copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase] = {...question,type:dados.type}
+      setDataChecklist(copyDataChecklist)
+      setSave(true)
+      console.log(copyDataChecklist)
+      return
+    }
+
+    if (action == 'risk') { //update text from question
+
+      setPosition([...position.slice(0,index+1),{id:dados.id,title:dados.title}]);
+      if (risk.length == 0) onGetRisks({currentUser,notification,dispatch})
+      //update data of columns
+      setData([...copyData.slice(0,index+1),{...dados.question,type:'risk'}])
+      return
+
+    }
+
+    if (action == 'searchRisk') { //update text from question
+
+      //setPosition([...position.slice(0,index+1),{id:dados.id,title:dados.title}]);
+      setSearchRisk(dados.search)
+
+      //update data of columns
+      //setData([...copyData.slice(0,index+1),{...dados.question,type:'risk'}])
+      return
+
+    }
+
+
   }
 
   //Save On Database
+  function onSearchRisk(action,index,dados) {
+    if (action == 'search') { //update text from question
+
+      //setPosition([...position.slice(0,index+1),{id:dados.id,title:dados.title}]);
+      setSearchRisk(dados.search)
+
+      //update data of columns
+      //setData([...copyData.slice(0,index+1),{...dados.question,type:'risk'}])
+      return
+    }
+  }
+
   function onSaveChecklist(setLoading) {
     onSaveChecklistData({dataChecklist,setSave,setLoading,currentUser,notification})
   }
@@ -228,7 +300,7 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
     // <DragDropContext onDragEnd={onDragEnd}>
       <div style={{height: 600,display:'flex',flexDirection:'column',width:'100%',minWidth:800}}>
         <Header position={position} save={save} setSave={setSave} onSaveChecklist={onSaveChecklist}/>
-        <div style={{display:'flex',height: 550,flexDirection:'row',width:'100%'}}>
+        <div style={{display:'flex',height: 550,flexDirection:'row',width:'100%',transition:'transform 0.4s ease',transform:`translateX(-${25*(position.length-3)}%)`}}>
           <FirstColumn
             position={position}
             setPosition={setPosition}
@@ -256,7 +328,9 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
                 onCreateQuestionMother={onCreateQuestionMother}
                 onChecklistquestionMotherCardHandle={onChecklistquestionMotherCardHandle}
                 onChangeQuestion={onChangeQuestion}
-                type={item?.action ? 'question' : null}
+                type={item?.action ? 'question' : {...item}}
+                searchRisk={searchRisk}
+                onSearchRisk={onSearchRisk}s
               />
             )
           })}

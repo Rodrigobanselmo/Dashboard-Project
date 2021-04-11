@@ -99,7 +99,6 @@ export const ContainerHeader = styled.div`
   width: 100%;
   height: 50px;
   padding: 0 12px;
-  overflow-x:auto;
  //background-color: red;
 `;
 

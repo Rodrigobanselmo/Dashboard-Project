@@ -103,8 +103,8 @@ export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={
     onSelect(selectedOption)
   }, [selectedOption])
 
-  const onOptionClicked = value => () => {
-    setSelectedOption(value);
+  const onOptionClicked = (value,index) => () => {
+    setSelectedOption(value,index);
     setIsOpen(false);
   };
 
@@ -119,8 +119,8 @@ export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={
         {options.length >= 2 && isOpen && (
           <DropDownListContainer>
             <DropDownList type={type} style={listStyle}>
-              {options.map(option => (
-                <ListItem type={type} style={itemStyle} onClick={onOptionClicked(option)} key={Math.random()}>
+              {options.map((option,index) => (
+                <ListItem type={type} style={itemStyle} onClick={onOptionClicked(option,index)} key={Math.random()}>
                   {option}
                 </ListItem>
               ))}

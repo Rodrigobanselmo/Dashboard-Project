@@ -15,6 +15,7 @@ import {Card} from './Card';
 import {ThirdColumn} from './ThirdColumn';
 import {SecondColumn} from './SecondColumn';
 import {QuestionColumn} from './QuestionColumn';
+import {RiskFactors} from './RiskFactors';
 import {ColumnContainer} from '../styles';
 
 //////import {useLoaderDash} from '../../../context/LoadDashContext'
@@ -33,7 +34,9 @@ export function Column({
   onCreateQuestionMother,
   onChecklistquestionMotherCardHandle,
   onChangeQuestion,
-  type
+  type,
+  searchRisk,
+  onSearchRisk
 }) {
 
   return (
@@ -68,6 +71,16 @@ export function Column({
             data={data}
             index={index}
             onChangeQuestion={onChangeQuestion}
+          />
+        : type?.type == 'risk' ?
+          <RiskFactors
+            position={position}
+            setPosition={setPosition}
+            data={data}
+            index={index}
+            onChangeQuestion={onChangeQuestion}
+            searchRisk={searchRisk}
+            onSearchRisk={onSearchRisk}
           />
         : null
       }

@@ -31,6 +31,7 @@ export function Header({position=[],onSaveChecklist,save, setSave}) {
   return (
     <ContainerHeader >
       <IconButton style={{height:40,width:40,marginRight:-4}} iconProps={{style:{fontSize:25,color:theme.palette.text.secondary}}} onClick={()=>{}} aria-label="Checklist" icon={'Checklist'}/>
+      <div style={{display:'flex',flex:1,overflowX:'auto',marginRight:20}}>
       {position.map((item,index)=>{
         return (
           <div style={{display:'flex',flexDirection:'row',alignItems:'center'}} key={index}>
@@ -41,7 +42,7 @@ export function Header({position=[],onSaveChecklist,save, setSave}) {
           </div>
         )
       })}
-      <div style={{display:'flex',flex:1}}/>
+      </div>
       <div style={{position: 'relative',marginRight:10,transform:'scale(0.9)'}}>
         <ContinueButton disable={`${loading || !save}`} style={{width:100,padding:2.5,opacity:loading?0.6:1}} onClick={onSave} primary={!save?'outlined':'true'} size={'medium'}>
           Salvar

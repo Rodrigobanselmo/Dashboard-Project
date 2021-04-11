@@ -48,16 +48,16 @@ inputInput: {
     width: '100%',
 },
 }));
-  
-function Search({icons:Icons,onInputSearch,search,onCleanSearch}) {
+
+function Search({icons:Icons,onInputSearch,search,onCleanSearch,inputProps,...props}) {
     const classes = useStyles();
     return (
-        <div className={classes.search}>
+        <div className={classes.search} {...props}>
             <div className={clsx(classes.searchIcon,{
             [classes.closeIcon]: search && search.length>=1,
             })}>
-            <Icons style={search && search.length>=1?{fontSize:20}:{fontSize:22}} 
-                type={search && search.length>=1?'HighlightOff':'Search'} 
+            <Icons style={search && search.length>=1?{fontSize:20}:{fontSize:22}}
+                type={search && search.length>=1?'HighlightOff':'Search'}
                 onClick={onCleanSearch}
                 className={clsx(classes.SearchColored
             )}/>
@@ -71,6 +71,7 @@ function Search({icons:Icons,onInputSearch,search,onCleanSearch}) {
                 input: classes.inputInput,
             }}
             inputProps={{ 'aria-label': 'search' }}
+            {...inputProps}
             />
         </div>
     )
