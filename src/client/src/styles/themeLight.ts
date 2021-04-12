@@ -98,6 +98,13 @@ const light = {
       shadow: '#00000088',
       text: '#353539',
     },
+    risk: {
+      fis: '#1ca846',
+      bio: '#933d15',
+      qui: '#fa0215',
+      erg: '#9c9507',
+      aci: '#3d62ba',
+    },
   },
 };
 

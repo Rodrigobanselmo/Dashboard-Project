@@ -55,6 +55,11 @@ import Instagram from '@material-ui/icons/Instagram';
 import OfflineBoltTwoToneIcon from '@material-ui/icons/OfflineBoltTwoTone';
 // import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import { ReactComponent as Logo } from './info.svg';
+import { ReactComponent as Fis } from './risk/fis.svg';
+import { ReactComponent as Qui } from './risk/qui.svg';
+import { ReactComponent as Bio } from './risk/bio.svg';
+import { ReactComponent as Aci } from './risk/aci.svg';
+import { ReactComponent as Erg } from './risk/erg.svg';
 
 import LottieAnimation from '../../lib/lottie';
 // import { AiOutlineClose } from 'react-icons/ai';
@@ -97,6 +102,18 @@ export const Icons = ({ type, ...props }) => {
       return (<Logo style={{marginTop:3,opacity:0.7,cursor:'pointer'}} height="20px" width="20px"  />);
     case 'InfoShade':
       return (<Logo style={{marginTop:3,opacity:0.4,cursor:'pointer'}} height="20px" width="20px"  />);
+
+    case 'Fis':
+      return (<Fis  height="20px" width="20px"  {...props}/>);
+    case 'Qui':
+      return (<Qui  height="20px" width="20px" {...props} />);
+    case 'Bio':
+      return (<Bio  height="20px" width="20px"  {...props}/>);
+    case 'Erg':
+      return (<Erg  height="20px" width="20px"  {...props}/>);
+    case 'Aci':
+      return (<Aci  height="20px" width="20px" {...props} />);
+
 
     case 'Administrative':
       return <FileCopyIcon {...props} />;

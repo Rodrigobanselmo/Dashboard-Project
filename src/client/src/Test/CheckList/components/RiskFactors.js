@@ -54,11 +54,27 @@ export function RiskFactors({
     onSearchRisk('search',index,dados)
   }
 
+  function onFocus() {
+    const dados = {}
+    onSearchRisk('focus',index,dados)
+    console.log(2)
+  }
+
+  function onBlur() {
+    const dados = {search:''}
+    //onSearchRisk('search',index,dados)
+    console.log(1)
+  }
 
   return (
     <>
       <p className={'noBreakText'} style={{marginBottom:15,maxWidth:150}}>{`${data?.text ? data.text : ''} - Fatores de Risco`}</p>
-      <InputSearch icons={Icons} onInputSearch={onInputSearch} search={searchRisk} onCleanSearch={onCleanSearch}/>
+      <InputSearch onBlur={onBlur} onFocus={onFocus} style={{margin:'0 10px'}} icons={Icons} onInputSearch={onInputSearch} search={searchRisk} onCleanSearch={onCleanSearch}/>
+      <div style={{overflowY:'auto',height:'87%',paddingLeft:10}}>
+        <EmptyField hover={'move'} style={{marginLeft:0,marginTop:20,padding:'20px 20px',height:'92%'}} onClick={()=>{}}>
+          <p style={{textAlign:'center'}}>Arraste aqui os fatores de risco que deseja adicionar</p>
+        </EmptyField>
+      </div>
    </>
   );
 }

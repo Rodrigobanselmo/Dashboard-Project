@@ -16,6 +16,7 @@ import {Link} from "react-router-dom";
 import {useHistory} from "react-router-dom";
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { useSelector,useDispatch } from 'react-redux'
+import useTimeOut from '../../hooks/useTimeOut';
 
 //import { useResizeDetector } from 'react-resize-detector';
 //////import {useLoaderDash} from '../../context/LoadDashContext'
@@ -37,15 +38,18 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
   const [openModalEdit,setOpenModalEdit] = React.useState(false) //modal para editar/duplicar/deletar
   const [save, setSave] = useState(false) //para dizer se pode ou nao salvar
   const [searchRisk, setSearchRisk] = useState('') //para dizer se pode ou nao salvar
+  const [loading, setLoading] = useState(false) //para dizer se pode ou nao salvar
 
   const history = useHistory();
   const risk = useSelector(state => state.risk)
   const dispatch = useDispatch()
+  const [onTimeOut,onClearTime] = useTimeOut()
   //const { width, ref } = useResizeDetector();
   /////const {setLoadDash} = React.useCallback(()=>useLoaderDash(),[]);
 
   React.useEffect(() => {
     //onGetAllCompanies(currentUser.company.id,setRowsCells,setLoadContent,notification)
+    return onClearTime()
   }, [])
 
   //Card Handler
@@ -203,8 +207,7 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
       //update checklist data from database
       copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase] = {...question,type:dados.type}
       setDataChecklist(copyDataChecklist)
-      setSave(true)
-      console.log(copyDataChecklist)
+      //setSave(true)
       return
     }
 
@@ -218,29 +221,29 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
 
     }
 
-    if (action == 'searchRisk') { //update text from question
-
-      //setPosition([...position.slice(0,index+1),{id:dados.id,title:dados.title}]);
-      setSearchRisk(dados.search)
-
-      //update data of columns
-      //setData([...copyData.slice(0,index+1),{...dados.question,type:'risk'}])
-      return
-
-    }
-
 
   }
 
   //Save On Database
   function onSearchRisk(action,index,dados) {
-    if (action == 'search') { //update text from question
+    let copyData = [...data]
 
-      //setPosition([...position.slice(0,index+1),{id:dados.id,title:dados.title}]);
+    if (action == 'search') {
+      setLoading('risk')
       setSearchRisk(dados.search)
+      onClearTime()
+      onTimeOut(()=>{
+        setLoading(false)
+        if (risk.length == 0) onGetRisks({currentUser,notification,dispatch})
+      },600)
+      return
+    }
+    if (action == 'focus') {
+
+      setPosition([...position.slice(0,index+1),{id:'search',title:'Pesquisa Fatores de Risco'}]);
 
       //update data of columns
-      //setData([...copyData.slice(0,index+1),{...dados.question,type:'risk'}])
+      setData([...copyData.slice(0,index+1),{category:'none',type:'riskData'}])
       return
     }
   }
@@ -297,7 +300,7 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
   };
 
   return (
-    // <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd}>
       <div style={{height: 600,display:'flex',flexDirection:'column',width:'100%',minWidth:800}}>
         <Header position={position} save={save} setSave={setSave} onSaveChecklist={onSaveChecklist}/>
         <div style={{display:'flex',height: 550,flexDirection:'row',width:'100%',transition:'transform 0.4s ease',transform:`translateX(-${25*(position.length-3)}%)`}}>
@@ -330,7 +333,8 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
                 onChangeQuestion={onChangeQuestion}
                 type={item?.action ? 'question' : {...item}}
                 searchRisk={searchRisk}
-                onSearchRisk={onSearchRisk}s
+                onSearchRisk={onSearchRisk}
+                loading={loading}
               />
             )
           })}
@@ -345,7 +349,7 @@ export function MainComponent({currentUser,notification,setLoad,setSelected,sele
           }
         </div>
       </div>
-    // </DragDropContext>
+    </DragDropContext>
   );
 }
 

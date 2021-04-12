@@ -16,6 +16,7 @@ import {ThirdColumn} from './ThirdColumn';
 import {SecondColumn} from './SecondColumn';
 import {QuestionColumn} from './QuestionColumn';
 import {RiskFactors} from './RiskFactors';
+import {RisksData} from './RisksData';
 import {ColumnContainer} from '../styles';
 
 //////import {useLoaderDash} from '../../../context/LoadDashContext'
@@ -36,7 +37,8 @@ export function Column({
   onChangeQuestion,
   type,
   searchRisk,
-  onSearchRisk
+  onSearchRisk,
+  loading
 }) {
 
   return (
@@ -81,6 +83,17 @@ export function Column({
             onChangeQuestion={onChangeQuestion}
             searchRisk={searchRisk}
             onSearchRisk={onSearchRisk}
+          />
+        : type?.type == 'riskData' ?
+          <RisksData
+            position={position}
+            setPosition={setPosition}
+            data={data}
+            index={index}
+            onChangeQuestion={onChangeQuestion}
+            searchRisk={searchRisk}
+            onSearchRisk={onSearchRisk}
+            loading={loading}
           />
         : null
       }

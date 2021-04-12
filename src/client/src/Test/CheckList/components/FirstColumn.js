@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect, useRef} from 'react';
+import {createPortal} from 'react-dom';
 import {Icons} from '../../../components/Icons/iconsDashboard';
 import {
   ContainerDiv,
@@ -15,7 +16,6 @@ import {ColumnContainer,AddCircle,InputTitle,ErrorMessage} from '../styles';
 import {ModalButtons} from '../../../components/Main/MuiHelpers/ModalButtons'
 import { lighten,darken, } from "@material-ui/core/styles";
 import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
-
 
 export function FirstColumn({openModalEdit,setOpenModalEdit,data=[],setData,position=[],setPosition,onChecklistHandle,onCreateNewChecklist }) {
 
@@ -93,7 +93,7 @@ export function FirstColumn({openModalEdit,setOpenModalEdit,data=[],setData,posi
       <ColumnContainer >
         <p style={{marginBottom:15,display:'flex',flexGrow:1}}>Checklist</p>
           <Droppable droppableId={'first'}>
-            {(provided) => (
+            {(provided,snapshot) => (
               <div ref={provided.innerRef} {...provided.droppableProps} style={{overflowY:'auto',height:'94%',paddingLeft:10}}>
                 {data.map((item,index)=>{
                   return (

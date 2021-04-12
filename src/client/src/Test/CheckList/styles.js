@@ -79,6 +79,47 @@ export const CardChecklistContainer = styled.div`
   `}
 `;
 
+export const CardContainerRisk = styled(CardChecklistContainer)`
+  padding-top:16px;
+  height:auto;
+  position:relative;
+  :before {
+    top:6px;
+    width: 60px;
+    border-radius:20px;
+    background:  ${({theme})=>theme.palette.primary.main};
+    position:absolute;
+    height: 5px;
+    content:"";
+  }
+
+  ${props => props.type == 'qui' && css`
+    :before {
+      background:  ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.risk.qui,0.07):darken(theme.palette.risk.qui,0.2)};
+    }
+  `}
+  ${props => props.type == 'fis' && css`
+    :before {
+      background:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.risk.fis,0.07):darken(theme.palette.risk.fis,0.2)};
+    }
+  `}
+  ${props => props.type == 'bio' && css`
+    :before {
+      background:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.risk.bio,0.2):darken(theme.palette.risk.bio,0.1)};
+    }
+  `}
+  ${props => props.type == 'aci' && css`
+    :before {
+      background:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.risk.aci,0.3):darken(theme.palette.risk.aci,0.1)};
+    }
+  `}
+  ${props => props.type == 'erg' && css`
+    :before {
+      background:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.risk.erg,0.5):darken(theme.palette.risk.erg,0.1)};
+    }
+  `}
+`;
+
 export const IconsArrow = styled(Icons)`
   color: ${({theme})=>theme.palette.text.secondary};
 `;
@@ -160,6 +201,20 @@ export const EmptyField = styled.div`
     padding:0;
   }
 
+  ${props => props.hover =='none' && css`
+    cursor: default;
+    &:hover {
+      background-color: transparent;
+      border: 2px dashed ${({theme})=> theme.palette.background.line };
+    }
+  `}
+  ${props => props.hover == 'add' && css`
+    cursor: copy;
+  `}
+  ${props => props.hover == 'move' && css`
+    cursor: move;
+  `}
+
 `;
 
 
@@ -185,3 +240,34 @@ export const ErrorMessage = styled.p`
   color: ${({theme})=>theme.palette.type!=="dark"?theme.palette.background.attention:lighten(theme.palette.background.attention,0.1)};
 `;
 
+export const RiskFilter = styled.div`
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  margin: 0px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-box-shadow: 2px 2px 3px 1px ${({theme})=>theme.palette.type!=="dark"?'rgba(0,0,0,0.10)':'rgba(0,0,0,0.33)'};
+  box-shadow: 2px 2px 3px 1px ${({theme})=>theme.palette.type!=="dark"?'rgba(0,0,0,0.10)':'rgba(0,0,0,0.33)'};
+
+  ${props => props.type == 'qui' && css`
+      background-color:  ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.risk.qui,0.07):darken(theme.palette.risk.qui,0.3)};
+  `}
+  ${props => props.type == 'fis' && css`
+      background-color:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.risk.fis,0.07):darken(theme.palette.risk.fis,0.1)};
+  `}
+  ${props => props.type == 'bio' && css`
+      background-color:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.risk.bio,0.2):darken(theme.palette.risk.bio,0.1)};
+  `}
+  ${props => props.type == 'aci' && css`
+      background-color:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.risk.aci,0.2):darken(theme.palette.risk.aci,0.1)};
+  `}
+  ${props => props.type == 'erg' && css`
+      background-color:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.risk.erg,0.35):darken(theme.palette.risk.erg,0.1)};
+  `}
+  ${props => props.disable && css`
+      background-color:  transparent;
+      border: 1px solid ${({theme})=>theme.palette.type!=="dark"?theme.palette.background.line:lighten(theme.palette.background.contrast,0.12)};;
+  `}
+`;

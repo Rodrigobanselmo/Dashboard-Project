@@ -20,6 +20,7 @@ import { Paper } from '@material-ui/core';
 import {InputCard} from './InputCard';
 import {Menu} from '../../../components/Main/MuiHelpers/Selected'
 import {ContinueButton} from '../../../components/Main/MuiHelpers/Button'
+import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
 
 const IconCircle = styled.div`
   height: 40px;
@@ -136,83 +137,81 @@ export function QuestionColumn({
 
 
   return (
-    <>
-      <p className={'noBreakText'} style={{marginBottom:15,maxWidth:150}}>{data?.text ? data.text : 'Pergunta'}</p>
-      <div style={{overflowY:'auto',height:'94%',paddingLeft:10}}>
-        <InputCard onBlurTextEditSave={onBlurTextEditSave} initialValue={data?.text}/>
-        <div style={{paddingLeft:10,marginBottom:17,marginTop:15,}}>
-          <div style={{flexDirection:'row',display:'flex',alignItems:'center'}}>
-            <BootstrapTooltip placement="bottom" enterDelay={400} TransitionProps={{ timeout: {enter:500, exit: 50} }} title={'Indicar para quem estiver realizando o checklist para tirar uma foto da situação apresentada.'} styletooltip={{transform: 'translateY(0px)'}}>
-              <IconCircle onClick={()=>onSuggestPhoto()} selected={data?.photo}>
-                <Icons type="Camera"/>
-              </IconCircle >
-            </BootstrapTooltip>
-            <Menu
-              options={selectOptions}
-              onSelect={onChangeQuestionType}
-              placeholder={"Selecione"}
-              defaultValue={data.type == 'standard' ? 'Padrão':data.type == 'mult' ? 'Multiplos' : 'Personalizado'}
-              label={false}
-              style={{width:'auto',flex:1,marginRight:10}}
-              type={'box'}
-            />
-          </div>
-          <div style={{marginBottom:'15px',display:'flex',flexDirection:'row',justifyContent:'space-between',width:'100%',paddingRight:10,overflowX:'auto',marginTop:'15px'}}>
-            {options.map((item,index)=>{
-              if (data.type == 'standard')
-              return (
-                <Choose key={item} onClick={()=>setActive(index)} text={item} active={active==index}/>
-              )
-              if (data.type == 'mult')
-              return (
-                <Choose key={index} onClick={()=>setActive(index)} text={index} active={active==index}/>
-              )
-            })}
-          </div>
+        <>
+          <p className={'noBreakText'} style={{marginBottom:15,maxWidth:150}}>{data?.text ? data.text : 'Pergunta'}</p>
+          <div style={{overflowY:'auto',height:'94%',paddingLeft:10}}>
+            <InputCard onBlurTextEditSave={onBlurTextEditSave} initialValue={data?.text}/>
+            <div style={{paddingLeft:10,marginBottom:17,marginTop:15,}}>
+              <div style={{flexDirection:'row',display:'flex',alignItems:'center'}}>
+                <BootstrapTooltip placement="bottom" enterDelay={400} TransitionProps={{ timeout: {enter:500, exit: 50} }} title={'Indicar para quem estiver realizando o checklist para tirar uma foto da situação apresentada.'} styletooltip={{transform: 'translateY(0px)'}}>
+                  <IconCircle onClick={()=>onSuggestPhoto()} selected={data?.photo}>
+                    <Icons type="Camera"/>
+                  </IconCircle >
+                </BootstrapTooltip>
+                <Menu
+                  options={selectOptions}
+                  onSelect={onChangeQuestionType}
+                  placeholder={"Selecione"}
+                  defaultValue={data.type == 'standard' ? 'Padrão':data.type == 'mult' ? 'Multiplos' : 'Personalizado'}
+                  label={false}
+                  style={{width:'auto',flex:1,marginRight:10}}
+                  type={'box'}
+                />
+              </div>
+              <div style={{marginBottom:'15px',display:'flex',flexDirection:'row',justifyContent:'space-between',width:'100%',paddingRight:10,overflowX:'auto',marginTop:'15px'}}>
+                {options.map((item,index)=>{
+                  if (data.type == 'standard')
+                  return (
+                    <Choose key={item} onClick={()=>setActive(index)} text={item} active={active==index}/>
+                  )
+                  if (data.type == 'mult')
+                  return (
+                    <Choose key={index} onClick={()=>setActive(index)} text={index} active={active==index}/>
+                  )
+                })}
+              </div>
 
-          <Card
-            style={{marginBottom:'12px'}}
-            button
-            title={'Adicionar Fator de Risco'}
-            position={position && position[index+1] && position[index+1]?.id == `${data.id}-q_${active+1}`}
-            onClick={onAddRiskFactor}
-            //item={data[data.findIndex(i=>i.mother)]}
-          />
-          <Card
-            style={{marginBottom:'18px'}}
-            button
-            title={'Pular Perguntas e Grupos'}
-            //position={position && position[2] && position[2]?.id == data[data.findIndex(i=>i.mother)].id}
-            //onClick={()=>onChecklistquestionMotherCardHandle(data[data.findIndex(i=>i.mother)].id,data[data.findIndex(i=>i.mother)].title,index)}
-            //item={data[data.findIndex(i=>i.mother)]}
-          />
-
-          <p className={'noBreakText'} style={{marginTop:15,marginBottom:15,maxWidth:150}}>{'Sub-Pergunta'}</p>
-          {false ?
-            <div style={{marginBottom:17}}>
               <Card
-                fixedHeight
-                title={''}
+                style={{marginBottom:'12px'}}
+                button
+                title={'Adicionar Fator de Risco'}
+                position={position && position[index+1] && position[index+1]?.id == `${data.id}-q_${active+1}`}
+                onClick={onAddRiskFactor}
+                //item={data[data.findIndex(i=>i.mother)]}
+              />
+              <Card
+                style={{marginBottom:'18px'}}
+                button
+                title={'Pular Perguntas e Grupos'}
                 //position={position && position[2] && position[2]?.id == data[data.findIndex(i=>i.mother)].id}
                 //onClick={()=>onChecklistquestionMotherCardHandle(data[data.findIndex(i=>i.mother)].id,data[data.findIndex(i=>i.mother)].title,index)}
                 //item={data[data.findIndex(i=>i.mother)]}
               />
-            </div >
-          :
-            <EmptyField style={{marginLeft:0}} onClick={()=>{}}>
-              <p>Adicionar Sub Pergunta</p>
-              <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={'Pergunta posterior caso responda conforme o item selecionado a cima.'} styletooltip={{transform: 'translateY(10px)'}}>
-                <div style={{top:10,position:'absolute',right:10,}}>
-                  <Icons type="InfoShade"/>
+
+              <p className={'noBreakText'} style={{marginTop:15,marginBottom:15,maxWidth:150}}>{'Sub-Pergunta'}</p>
+              {false ?
+                <div style={{marginBottom:17}}>
+                  <Card
+                    fixedHeight
+                    title={''}
+                    //position={position && position[2] && position[2]?.id == data[data.findIndex(i=>i.mother)].id}
+                    //onClick={()=>onChecklistquestionMotherCardHandle(data[data.findIndex(i=>i.mother)].id,data[data.findIndex(i=>i.mother)].title,index)}
+                    //item={data[data.findIndex(i=>i.mother)]}
+                  />
                 </div >
-              </BootstrapTooltip>
-            </EmptyField>
-          }
-        </div >
-      </div>
-   </>
+              :
+                <EmptyField style={{marginLeft:0}} onClick={()=>{}}>
+                  <p>Adicionar Sub Pergunta</p>
+                  <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={'Pergunta posterior caso responda conforme o item selecionado a cima.'} styletooltip={{transform: 'translateY(10px)'}}>
+                    <div style={{top:10,position:'absolute',right:10,}}>
+                      <Icons type="InfoShade"/>
+                    </div >
+                  </BootstrapTooltip>
+                </EmptyField>
+              }
+            </div >
+          </div>
+
+        </>
   );
 }
-
-
-

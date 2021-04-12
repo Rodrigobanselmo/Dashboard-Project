@@ -85,6 +85,13 @@ const dark = {
       shadow: '#5E5E5E',
       text: '#fff',
     },
+    risk: {
+      fis: '#1ca846',
+      bio: '#933d15',
+      qim: '#fa0014',
+      erg: '#9c9507',
+      aci: '#3d62ba',
+    },
   },
 };
 
