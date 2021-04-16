@@ -71,14 +71,9 @@ export function onGetChecklist({currentUser,id: checklistId,setDataChecklist,set
           setLoad(false)
         }, 600);
         const checklist = checklistId !=1?Check2:response
-        console.log(checklistId);
-        const categories = []
-        checklist?.data && checklist.data.map((item)=>{
-          categories.push({group:item.group,id:item.id})
-        })
 
         setDataChecklist(checklist)
-        setData([[...categories]])
+        setData([[{title:checklist.title,id:checklist.id}]])
       }
 
       function checkError(error) {
@@ -93,12 +88,12 @@ export function onGetChecklist({currentUser,id: checklistId,setDataChecklist,set
       checkSuccess(Check)
 }
 
-export function onCreateChecklist({setAllChecklists,title,currentUser,setLoad,notification}) {
+export function onCreateChecklist({id,setAllChecklists,onSuccess,title,currentUser,setLoad,notification}) {
     function checkSuccess(response) {
         setTimeout(() => {
           setLoad(false)
         }, 600);
-
+        onSuccess()
         setAllChecklists(data=>[...data,{id:response.id,title}])
       }
 
@@ -111,7 +106,7 @@ export function onCreateChecklist({setAllChecklists,title,currentUser,setLoad,no
 
       //GetAllCompanies(currentUser.company.id,checkSuccess,checkError)
       setLoad(true)
-      checkSuccess({id:`${Math.random()}`})
+      checkSuccess({id})
 }
 
 export function onSaveChecklistData({dataChecklist,setSave,setLoading,currentUser,notification}) {

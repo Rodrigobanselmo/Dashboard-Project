@@ -29,16 +29,20 @@ import {Label} from './label';
 
 export function RiskSuggestions({
   position,
-  setPosition,
   data,
   index,
-  onSuggestions,
-  searchRiskData
+  dataChecklist,
 }) {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
   const theme = React.useContext(ThemeContext)
   const riskData = useSelector(state => state.riskData)
+
+  const categoryIndex = dataChecklist.data.findIndex(i=>i.id == position[1].id)
+  const questionIndex = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==data.questionId)
+  const questionActionTypeIndex = dataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data.findIndex(i=>i.risk==data.riskId)
+  const questionActionTypeRisk = dataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data[questionActionTypeIndex]
+
 
   const positionType =  position[index]?.id
 
@@ -67,8 +71,8 @@ export function RiskSuggestions({
             //draggingOverWithSameRisk={snapshot.draggingOverWith&& data.data.findIndex(i=>i.risk==snapshot.draggingOverWith.split('/')[1]) != -1 ? 'exist':'different'}
             style={{paddingLeft: '10px'}}
           >
-            {positionType in data && Array.isArray(data[positionType]) && data[positionType].length > 0 ?
-              data[positionType].map((item,indexItem)=>{
+            {positionType in questionActionTypeRisk && Array.isArray(questionActionTypeRisk[positionType]) && questionActionTypeRisk[positionType].length > 0 ?
+              questionActionTypeRisk[positionType].map((item,indexItem)=>{
                 const recIndex = suggestion().findIndex(i=>i.id==item)
                 const recData = suggestion()[recIndex]
                 return (
@@ -101,7 +105,7 @@ export function RiskSuggestions({
       <Label style={{marginBottom:10,marginTop:20}} text={`${columnTitle()} Opcinal`} infoText={`As ${columnTitle()} irão ser sugeridas de forma opcinal.`}/>
       <Droppable droppableId={`${positionType}Sug/${data.id}/${index}`}>
       {(provided,snapshot) => (
-        <div ref={provided.innerRef} {...provided.droppableProps} style={{overflowY:'auto',minHeight:'220px',maxHeight:positionType in data && Array.isArray(data[positionType]) && data[positionType].length < 3?'56%':'42%'}}>
+        <div ref={provided.innerRef} {...provided.droppableProps} style={{overflowY:'auto',minHeight:'220px',maxHeight:positionType in questionActionTypeRisk && Array.isArray(questionActionTypeRisk[positionType]) && questionActionTypeRisk[positionType].length < 3?'56%':'42%'}}>
           <AddedRiskContainer
             isDraggingOver={snapshot.isDraggingOver}
             draggingOverWith={snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[0] == positionType ? 'ok':'not'}
@@ -109,8 +113,8 @@ export function RiskSuggestions({
             //draggingOverWithSameRisk={snapshot.draggingOverWith&& data.data.findIndex(i=>i.risk==snapshot.draggingOverWith.split('/')[1]) != -1 ? 'exist':'different'}
             style={{paddingLeft: '10px'}}
           >
-            {`${positionType}Sug` in data && Array.isArray(data[positionType]) && data[`${positionType}Sug`].length > 0 ?
-              data[`${positionType}Sug`].map((item,indexItem)=>{
+            {`${positionType}Sug` in questionActionTypeRisk && Array.isArray(questionActionTypeRisk[positionType]) && questionActionTypeRisk[`${positionType}Sug`].length > 0 ?
+              questionActionTypeRisk[`${positionType}Sug`].map((item,indexItem)=>{
                 const recIndex = suggestion().findIndex(i=>i.id==item)
                 const recData = suggestion()[recIndex]
                 return (

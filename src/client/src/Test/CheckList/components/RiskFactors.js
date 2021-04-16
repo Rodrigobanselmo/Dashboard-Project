@@ -28,12 +28,11 @@ import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
 
 export function RiskFactors({
   position,
-  setPosition,
   data,
   index,
   searchRisk,
   onSearchRisk,
-  dataChecklistGroup
+  dataChecklist,
 }) {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
@@ -41,8 +40,9 @@ export function RiskFactors({
   const risk = useSelector(state => state.risk)
   const inputRef = useRef(null)
 
-  const questionId = dataChecklistGroup.questions.findIndex(i=>i.id == position[index-1].id)
-  const _data = dataChecklistGroup.questions[questionId].action[data.id]
+  const categoryIndex = dataChecklist.data.findIndex(i=>i.id==position[1].id)
+  const questionIndex = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==data.questionId)
+  const _data = dataChecklist.data[categoryIndex].questions[questionIndex].action[data.action]
 
   function onInputSearch(e) {
     const dados = {search:e.target.value}
@@ -57,28 +57,21 @@ export function RiskFactors({
   function onFocus() {
     const dados = {}
     onSearchRisk('focus',index,dados)
-    console.log(2)
-  }
-
-  function onBlur() {
-    const dados = {search:''}
-    //onSearchRisk('search',index,dados)
-    console.log('data',data)
-    //console.log('data',`${data.type}-${data.id}-${index}`) //risk-q_1-5
   }
 
   function onClickRisk(riskData) {
-    const dados = {riskId:riskData.id,riskName:riskData.name,riskType:riskData.type,answerId:data.id}
+    const dados = {riskId:riskData.id,riskName:riskData.name,riskType:riskData.type,questionId:data.questionId,answerId:data.action}
     inputRef.current.blur()
     onSearchRisk('edit',index,dados)
   }
 
+  //console.log('_data.data',_data)
 
   return (
     <>
-      <p className={'noBreakText'} style={{marginBottom:15,maxWidth:150}}>{`${data?.text ? data.text : ''} - Fatores de Risco`}</p>
-      <InputSearch inputRef={inputRef} onBlur={onBlur} onFocus={onFocus} style={{margin:'0 10px',marginBottom: '20px'}} icons={Icons} onInputSearch={onInputSearch} search={searchRisk} onCleanSearch={onCleanSearch}/>
-      <Droppable droppableId={`${data.type}/${data.id}/${index}`}>
+      <p className={'noBreakText'} style={{marginBottom:15,maxWidth:150}}>{`${_data?.text ? _data.text : ''} - Fatores de Risco`}</p>
+      <InputSearch inputRef={inputRef} onFocus={onFocus} style={{margin:'0 10px',marginBottom: '20px'}} icons={Icons} onInputSearch={onInputSearch} search={searchRisk} onCleanSearch={onCleanSearch}/>
+      <Droppable droppableId={`${data.type}/${_data.id}/${index}`}>
       {(provided,snapshot) => (
         <div ref={provided.innerRef} {...provided.droppableProps} style={{overflowY:'auto',height:'87%'}}>
           <AddedRiskContainer
@@ -88,25 +81,26 @@ export function RiskFactors({
             draggingOverWithSameRisk={snapshot.draggingOverWith&& _data?.data && _data.data.findIndex(i=>i.risk==snapshot.draggingOverWith.split('/')[1]) != -1 ? 'exist':'different'}
             style={{paddingLeft: '10px',minHeight:'350px'}}
           >
-{/*             {console.log(snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[1])}
-            {console.log(data.data)} */}
             {_data?.data && _data.data.length > 0 ?
-              _data.data.map((item,indexItem)=>{
+                _data.data.map((item,indexItem)=>{
                 const riskIndex = risk.findIndex(i=>i.id==item.risk)
-                const riskData = risk[riskIndex]
-                return (
-                  <RiskDrop
-                    title={riskData.name}
-                    type={riskData.type}
-                    key={riskData?.id ?? indexItem}
-                    item={riskData}
-                    index={indexItem}
-                    indexColumn={index}
-                    position={position && position[index+1] && position[index+1].id == riskData.id}
-                    mandatory={item?.man}
-                    onClick={()=>onClickRisk(riskData)}
-                  />
-                )
+                if (riskIndex != -1) {
+                  const riskData = risk[riskIndex]
+                  return (
+                    <RiskDrop
+                      title={riskData.name}
+                      type={riskData.type}
+                      key={riskData?.id ?? indexItem}
+                      item={riskData}
+                      index={indexItem}
+                      indexColumn={index}
+                      position={position && position[index+1] && position[index+1].id == riskData.id}
+                      mandatory={item?.man}
+                      onClick={()=>onClickRisk(riskData)}
+                    />
+                  )
+                }
+                return null
               })
             :
               <EmptyField

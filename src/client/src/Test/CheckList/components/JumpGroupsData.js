@@ -31,21 +31,35 @@ import {Label} from './label';
 
 export function JumpGroupsData({
   position,
-  setPosition,
   data,
   index,
-  dataChecklistGroup,
   onJumpGroupsHandle,
-  dataAll
+  dataAll,
+  setDataAll,
+  dataChecklist,
+  setPosition
 }) {
 
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
   const [onTimeOut,onClearTime] = useTimeOut()
 
+  const dataLast = dataAll[parseInt(index)-1]
+  const categoryIndex = dataChecklist.data.findIndex(i=>i.id==position[1].id)
+  const category = dataChecklist.data[categoryIndex]
+  const questionIndex = category.questions.findIndex(i=>i.id==dataLast.questionId)
+  const _data = category.questions[questionIndex].action[dataLast.action]
+
   React.useEffect(() => {
     return onClearTime()
   }, [])
+
+  React.useEffect(() => {
+    if (position[index+1] && position[index+1]?.id && filterGroup().findIndex(i=>i==position[index+1].id) == -1) {
+      setDataAll([...dataAll.slice(0,index+1)])
+      setPosition([...position.slice(0,index+1)])
+    }
+  }, [dataChecklist])
 
   function onInputSearch(e) {
     setLoading(true)
@@ -65,16 +79,16 @@ export function JumpGroupsData({
     let filtered = [];
 
     if (search.length > 0) {
-      filtered = [...dataChecklistGroup.questions].filter(i=>!i.mother && i.id !== data.questionId && i.text.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes(normalized)).slice(0,20)
-      if (dataAll[index-1]?.jump && dataAll[index-1].jump?.q) filtered = filtered.filter(i=>!dataAll[index-1].jump.q.includes(i.id))
-      //if (dataAll[index-1]?.jump && dataAll[index-1].jump?.g) filtered = filtered.filter(!dataAll[index-1].jump.g.includes(i.id))
+      filtered = [...category.questions].filter(i=>!i.mother && i.id !== data.questionId && i.text.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes(normalized)).slice(0,20)
+      if (_data?.jump && _data.jump?.q) filtered = filtered.filter(i=>!_data.jump.q.includes(i.id))
+      //if (_data?.jump && _data.jump?.g) filtered = filtered.filter(!_data.jump.g.includes(i.id))
     }
     return filtered.sort(AscendentText)
   }
 
   function filterGroup() {
-    let filtered = [...dataChecklistGroup.groups]
-    if (dataAll[index-1]?.jump && dataAll[index-1].jump?.g) filtered = filtered.filter(i=>!dataAll[index-1].jump.g.includes(i))
+    let filtered = [...category.groups]
+    if (_data?.jump && _data.jump?.g) filtered = filtered.filter(i=>!_data.jump.g.includes(i))
     return filtered
     // return filtered.sort(Ascendent)
   }
@@ -90,8 +104,7 @@ export function JumpGroupsData({
           {...provided.droppableProps}
           style={{overflowY:'auto',height:'94%'}}
           isDraggingOver={snapshot.isDraggingOver}
-          draggingOverWith={snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[0] == 'jump' ? 'delete':'not'}
-          draggingOverWithSameColumn={snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[2] == index ? 'same':'different'}
+          draggingOverWith={snapshot.draggingOverWith && ['jumpGroup','jumpQuestion'].includes(snapshot.draggingOverWith.split('/')[0]) ? 'delete':'not'}
           >
           <div style={{paddingLeft:10}}>
             {search.length == 0 ?

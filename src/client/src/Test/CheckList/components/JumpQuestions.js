@@ -38,29 +38,32 @@ const Divider = styled.div`
 
 export function JumpQuestions({
   position,
-  setPosition,
   data,
   index,
-  dataChecklistGroup
+  dataChecklist,
 }) {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
   const theme = React.useContext(ThemeContext)
 
-  const jumpQuestion =  data?.jump && data.jump?.q ? data.jump.q : []
-  const jumpGroup =  data?.jump && data.jump?.g ? data.jump.g : []
-  const positionType =  position[index]?.id
+  const categoryIndex = dataChecklist.data.findIndex(i=>i.id==position[1].id)
+  const category = dataChecklist.data[categoryIndex]
+  const questionIndex = category.questions.findIndex(i=>i.id==data.questionId)
+  const _data = dataChecklist.data[categoryIndex].questions[questionIndex].action[data.action]
+
+  const jumpQuestion =  _data?.jump && _data.jump?.q ? _data.jump.q : []
+  const jumpGroup =  _data?.jump && _data.jump?.g ? _data.jump.g : []
 
 //[...suggestion().filter(i=>data.rec.includes(i.id))]
   return (
     <>
-      <Label style={{marginBottom:10}} text={`${data.q} - Pular Grupos e Perguntas`} infoText={`Todas as perguntas relacionadas ao grupo selecionado serão automaticamente dadas como finalizadas, não precisando ser respondidas pelo condutor do checklist`}/>
-      <Droppable isDropDisabled={data?.disable} droppableId={`jump/${data.id.split('-')[1]}/${index}`}>
+      <Label style={{marginBottom:10}} text={`${_data?.text ? _data.text : ''} - Pular Grupos e Perguntas`} infoText={`Todas as perguntas relacionadas ao grupo selecionado serão automaticamente dadas como finalizadas, não precisando ser respondidas pelo condutor do checklist`}/>
+      <Droppable isDropDisabled={data?.disable} droppableId={`jump/${data.action}/${index}`}>
       {(provided,snapshot) => (
         <div ref={provided.innerRef} {...provided.droppableProps} style={{overflowY:'auto',minHeight:'94%'}}>
           <AddedRiskContainer
             isDraggingOver={snapshot.isDraggingOver}
-            draggingOverWith={snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[0] == positionType ? 'ok':'not'}
+            draggingOverWith={['jumpGroup','jumpQuestion'].includes(snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[0]) ? 'ok':'not'}
             draggingOverWithSameColumn={snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[2] == index ? 'same':'different'}
             //draggingOverWithSameRisk={snapshot.draggingOverWith&& data.data.findIndex(i=>i.risk==snapshot.draggingOverWith.split('/')[1]) != -1 ? 'exist':'different'}
             style={{paddingLeft: '10px'}}
@@ -69,12 +72,12 @@ export function JumpQuestions({
               <>
                 <>
                   {Array.isArray(jumpGroup) && jumpGroup.length >0 && jumpGroup.map((item,indexItem)=>{
-                    const groupsIndex = dataChecklistGroup.groups.findIndex(i=>i==item)
-                    const groups = dataChecklistGroup.groups[groupsIndex]
+                    const groupsIndex = category.groups.findIndex(i=>i==item)
+                    const groups = category.groups[groupsIndex]
                     return (
                         <CardDrop
                           title={groups}
-                          key={groups?.id ?? indexItem}
+                          key={`${groups}/${indexItem}`}
                           item={groups}
                           index={indexItem}
                           draggableId={`jumpGroup/${groups}/${index}`}
@@ -89,8 +92,8 @@ export function JumpQuestions({
                 }
                 <>
                   {Array.isArray(jumpQuestion) && jumpQuestion.length >0 && jumpQuestion.map((item,indexItem)=>{
-                    const questionIndex = dataChecklistGroup.questions.findIndex(i=>i.id==item)
-                    const question = dataChecklistGroup.questions[questionIndex]
+                    const questionIndex = category.questions.findIndex(i=>i.id==item)
+                    const question = category.questions[questionIndex]
                     return (
                         <CardDrop
                           title={question.text}
@@ -107,7 +110,7 @@ export function JumpQuestions({
             :
               <EmptyField
                 isDraggingOver={snapshot.isDraggingOver}
-                draggingOverWith={snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[0] == positionType ? 'ok':'not'}
+                draggingOverWith={['jumpGroup','jumpQuestion'].includes(snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[0]) ? 'ok':'not'}
                 hover={'move'}
                 style={{marginLeft:0,padding:'20px 20px',height:'400px'}}
                 onClick={()=>{}}

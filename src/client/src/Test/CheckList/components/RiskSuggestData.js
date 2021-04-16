@@ -26,14 +26,15 @@ import { useSelector } from 'react-redux'
 import {CardDrop} from './CardDrop';
 import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
 import useTimeOut from '../../../hooks/useTimeOut';
-import { Ascendent } from '../../../helpers/Sort';
+import { AscendentText } from '../../../helpers/Sort';
 
 export function RiskSuggestData({
   position,
-  setPosition,
   data,
   index,
-  dataAll
+  setDataAll,
+  dataAll,
+  dataChecklist,
 }) {
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
@@ -41,6 +42,12 @@ export function RiskSuggestData({
   const theme = React.useContext(ThemeContext)
   const riskData = useSelector(state => state.riskData)
   const [onTimeOut,onClearTime] = useTimeOut()
+
+  const categoryIndex = dataChecklist.data.findIndex(i=>i.id == position[1].id)
+  const questionIndex = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==data.questionId)
+  const questionActionTypeIndex = dataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data.findIndex(i=>i.risk==data.riskId)
+  const questionActionTypeRisk = dataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data[questionActionTypeIndex]
+
 
   const positionType =  position[index]?.id
 
@@ -71,7 +78,7 @@ export function RiskSuggestData({
     } else {
       filtered = [...suggestion().filter(i=>i?.risk&&i.risk.includes(data.riskId)),...suggestion().filter(i=>i?.category&&i.category.includes(data.riskType))]
     }
-    return filtered.sort(Ascendent).filter(i=>!(dataKey() in dataAll[parseInt(index)-1] && dataAll[parseInt(index)-1][dataKey()].includes(i.id))).filter(i=>!(`${dataKey()}Sug` in dataAll[parseInt(index)-1] && dataAll[parseInt(index)-1][`${dataKey()}Sug`].includes(i.id)))
+    return filtered.sort(AscendentText).filter(i=>!(dataKey() in questionActionTypeRisk && questionActionTypeRisk[dataKey()].includes(i.id))).filter(i=>!(`${dataKey()}Sug` in questionActionTypeRisk && questionActionTypeRisk[`${dataKey()}Sug`].includes(i.id)))
   }
 
   function onInputSearch(e) {

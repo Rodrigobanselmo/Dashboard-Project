@@ -25,23 +25,39 @@ import { useSelector } from 'react-redux'
 import {RiskDrop} from './RiskDrop';
 import {Label} from './label';
 import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
+import clone from 'clone';
 
 export function RisksEdit({
   position,
   setPosition,
   data,
   index,
-  onEditRisk,
+  setDataAll,
+  dataAll,
+  dataChecklist,
+  setDataChecklist,
+  setSave
 }) {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
   const theme = React.useContext(ThemeContext)
   const risk = useSelector(state => state.risk)
+  console.log(data)
 
+  const categoryIndex = dataChecklist.data.findIndex(i=>i.id == position[1].id)
+  const questionIndex = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==data.questionId)
+  const questionActionTypeIndex = dataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data.findIndex(i=>i.risk==data.riskId)
+  const questionActionTypeRisk = dataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data[questionActionTypeIndex]
+
+  console.log(questionActionTypeRisk)
 
   function onMandatory() {
-    const dados = {...data}
-    onEditRisk('mandatory',index,dados)
+    let copyDataChecklist = {...dataChecklist}
+    copyDataChecklist = clone(copyDataChecklist)
+    copyDataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data[questionActionTypeIndex] = {...questionActionTypeRisk,man:!questionActionTypeRisk.man}
+    setDataChecklist({...copyDataChecklist})
+    setSave(true)
+    //onEditRisk('mandatory',index,dados)
     //{type: "riskEdit", id: "123", name: "8d39bbf2", riskType: "qui", answerId: "q_1"}
   }
 
@@ -51,37 +67,73 @@ export function RisksEdit({
     if (value=='Ocasional') exp = 'o'
     if (value=='Habitual/Intermitente') exp = 'hi'
 
-    const dados = {...data,exp}
-    onEditRisk('exp',index,dados)
+    let copyDataChecklist = {...dataChecklist}
+    copyDataChecklist = clone(copyDataChecklist)
+    copyDataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data[questionActionTypeIndex] = {...questionActionTypeRisk,exp}
+    setDataChecklist({...copyDataChecklist})
+    setSave(true)
+    //onEditRisk('exp',index,dados)
     //{type: "riskEdit", id: "123", name: "8d39bbf2", riskType: "qui", answerId: "q_1"}
   }
 
   function onProbability(value) {
     let prob = value
-    if (prob==data.prob) prob = 'none'
+    if (prob==questionActionTypeRisk.prob) prob = 'none'
+    let copyDataChecklist = {...dataChecklist}
+    copyDataChecklist = clone(copyDataChecklist)
 
-    const dados = {...data,prob}
-    onEditRisk('prob',index,dados)
+    if (prob == 'none') {
+      delete questionActionTypeRisk['prob']
+      copyDataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data[questionActionTypeIndex] = {...questionActionTypeRisk}
+    }
+    else copyDataChecklist.data[categoryIndex].questions[questionIndex].action[data.answerId].data[questionActionTypeIndex] = {...questionActionTypeRisk,prob}
+    setDataChecklist({...copyDataChecklist})
+    setSave(true)
+
+    //onEditRisk('prob',index,dados)
   }
 
   function onRec() {
-    const dados = {answerId:data.answerId,riskId:data.id,riskType:data.riskType}
-    onEditRisk('rec',index,dados)
+    const dados = {answerId:data.answerId,riskId:data.riskId,riskType:data.riskType,questionId:data.questionId}
+
+    setPosition([...position.slice(0,index+1),{id:'rec',title:'Recomendações'},{id:'searchRec',title:'Pesquisar Recomendações'}]);
+    //update data of columns
+    setDataAll([
+      ...dataAll.slice(0,index+1),
+      {...dados,type:'riskSuggestion'},
+      {...dados,disabled:false,type:'riskSuggestionData'}
+    ])
+
+    //onEditRisk('rec',index,dados)
   }
+
   function onMed() {
-    const dados = {answerId:data.answerId,riskId:data.id,riskType:data.riskType}
-    onEditRisk('med',index,dados)
+    const dados = {answerId:data.answerId,riskId:data.riskId,riskType:data.riskType,questionId:data.questionId}
+    setPosition([...position.slice(0,index+1),{id:'med',title:'Medidas de Controle'},{id:'searchMed',title:'Pesquisar Medidas de Controle'}]);
+    //update data of columns
+    setDataAll([
+      ...dataAll.slice(0,index+1),
+      {...dados,type:'riskSuggestion'},
+      {...dados,disabled:false,type:'riskSuggestionData'}
+    ])
   }
+
   function onFont() {
-    const dados = {answerId:data.answerId,riskId:data.id,riskType:data.riskType}
-    onEditRisk('font',index,dados)
+    const dados = {answerId:data.answerId,riskId:data.riskId,riskType:data.riskType,questionId:data.questionId}
+    setPosition([...position.slice(0,index+1),{id:'font',title:'Fontes Geradoras'},{id:'searchFont',title:'Pesquisar Fontes Geradoras'}]);
+    //update data of columns
+    setDataAll([
+      ...dataAll.slice(0,index+1),
+      {...dados,type:'riskSuggestion'},
+      {...dados,disabled:false,type:'riskSuggestionData'}
+    ])
   }
 
   function getOptions() {
-    if (data.exp == 'hp') return 'Habitual/Permanente'
-    if (data.exp == 'o') return 'Ocasional'
-    if (data.exp == 'hi') return 'Habitual/Intermitente'
-    if (data.exp == 'none') return 'Não sugerir'
+    if (questionActionTypeRisk.exp == 'hp') return 'Habitual/Permanente'
+    if (questionActionTypeRisk.exp == 'o') return 'Ocasional'
+    if (questionActionTypeRisk.exp == 'hi') return 'Habitual/Intermitente'
+    if (questionActionTypeRisk.exp == 'none') return 'Não sugerir'
     return null
   }
 
@@ -90,7 +142,7 @@ export function RisksEdit({
       <Label style={{marginBottom:10}} text={data.name} infoText={'Todos os dados inbutidos a seguir estarão como sugestão na realização do checklist, podendo ser mudados a qualquer momento pelo operante.'}/>
       <div style={{paddingLeft:'10px',marginBottom:15,flexDirection:'row',display:'flex',alignItems:'center'}}>
         <BootstrapTooltip placement="bottom" enterDelay={400} TransitionProps={{ timeout: {enter:500, exit: 50} }} title={'Caso seja selecionado o risco se torna obrigatório e não mais uma sugestão.'} styletooltip={{transform: 'translateY(0px)'}}>
-          <IconCircle onClick={onMandatory} selected={data.man}>
+          <IconCircle onClick={onMandatory} selected={questionActionTypeRisk.man}>
             <Icons type="Mandatory"/>
           </IconCircle >
         </BootstrapTooltip>
@@ -108,20 +160,18 @@ export function RisksEdit({
       <div style={{padding:'0 10px',marginBottom:20,display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
         {[1,2,3,4,5].map((item,index)=>{
           return(
-            <Probabilidade active={item == data.prob} key={item} onClick={()=>onProbability(item)} >
+            <Probabilidade active={item == questionActionTypeRisk.prob} key={item} onClick={()=>onProbability(item)} >
               <p>{index}</p>
             </Probabilidade>
           )
         })}
       </div>
-      {/* <p className={'noBreakText'} style={{marginBottom:10,marginTop:5,maxWidth:150}}>Adicionar</p> */}
       <Card
         style={{marginBottom:'15px',marginLeft:10}}
         button
         title={'Recomendações'}
         position={position && position[index+1] && position[index+1]?.id == `rec`}
         onClick={onRec}
-        //item={data[data.findIndex(i=>i.mother)]}
       />
       <Card
         style={{marginBottom:'15px',marginLeft:10}}
@@ -129,7 +179,6 @@ export function RisksEdit({
         title={'Medidas de Controle'}
         position={position && position[index+1] && position[index+1]?.id == `med`}
         onClick={onMed}
-        //item={data[data.findIndex(i=>i.mother)]}
       />
       <Card
         style={{marginBottom:'15px',marginLeft:10}}
@@ -137,7 +186,6 @@ export function RisksEdit({
         title={'Fontes Geradoras'}
         position={position && position[index+1] && position[index+1]?.id == `font`}
         onClick={onFont}
-        //item={data[data.findIndex(i=>i.mother)]}
       />
    </>
   );

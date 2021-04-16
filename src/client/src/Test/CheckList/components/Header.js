@@ -14,10 +14,20 @@ import IconButton from '../../../components/Main/MuiHelpers/IconButton';
 import {ThemeContext} from "styled-components";
 import {ContinueButton} from '../../../components/Main/MuiHelpers/Button'
 import CircularProgress from '@material-ui/core/CircularProgress';
+import styled from "styled-components";
 
-//////import {useLoaderDash} from '../../../context/LoadDashContext'ˇ
+const HeaderDivText = styled.div`
+  padding: 5px 0px;
+  cursor: pointer;
+  &:hover {
+      opacity: 0.7;
+  }
+  &:active {
+      opacity: 0.5;
+  }
+`;
 
-export function Header({position=[],onSaveChecklist,save, setSave}) {
+export function Header({position=[],setPosition,onSaveChecklist,save,setData, setSave}) {
 
   const [loading, setLoading] = useState(false)
   const theme = React.useContext(ThemeContext)
@@ -27,18 +37,28 @@ export function Header({position=[],onSaveChecklist,save, setSave}) {
     onSaveChecklist(setLoading)
   }
 
+  function onNav(index) {
+    setPosition([...position.slice(0,index+1)])
+    setData(data=>[...data.slice(0,index+1)])
+  }
+
+  function onClear(index) {
+    setPosition([])
+    setData([])
+  }
+
 
   return (
     <ContainerHeader >
-      <IconButton style={{height:40,width:40,marginRight:-4}} iconProps={{style:{fontSize:25,color:theme.palette.text.secondary}}} onClick={()=>{}} aria-label="Checklist" icon={'Checklist'}/>
+      <IconButton style={{height:40,width:40,marginRight:-4}} iconProps={{style:{fontSize:25,color:theme.palette.text.secondary}}} onClick={onClear} aria-label="Checklist" icon={'Checklist'}/>
       <div style={{display:'flex',flex:1,overflowX:'auto',marginRight:20}}>
       {position.map((item,index)=>{
         return (
           <div style={{display:'flex',flexDirection:'row',alignItems:'center'}} key={index}>
             <IconsArrow style={{fontSize:22}} type={`KeyboardArrowRightIcon`}/>
-            <div style={{padding:'5px 0px',cursor:'pointer'}}>
+            <HeaderDivText onClick={()=>onNav(index)}>
               <p className={'noBreakText'} style={{maxWidth:100}}>{item?.title}</p>
-            </div>
+            </HeaderDivText>
           </div>
         )
       })}

@@ -19,13 +19,11 @@ import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
 
 //group:'Limpeza',id:'1',questions:
 export function SecondColumn({
-  openModalEdit,
-  setOpenModalEdit,
-  data=[],
   position,
   setPosition,
-  //onChecklistCategoryCardHandle,
-  //onCreateNewCategory,
+  data,
+  openModalEdit,
+  setOpenModalEdit,
   setDataAll,
   dataAll,
   dataChecklist,
@@ -56,20 +54,22 @@ export function SecondColumn({
     onCloseModalAdd()
   }
 
-  function onChecklistCategoryCardHandle(id,title,index) {
+  function onChecklistCategoryCardHandle(id,title) {
     setPosition([position[0],{id,title}]);
 
-    let dataQuestionsGroups = []
-    dataChecklist.data[index].groups.map(item=>{
-      dataQuestionsGroups.push({title:item,id:item})
-    })
-    let groupIndex = dataChecklist.data.findIndex(i=>i.id==id)
-    if (dataChecklist.data[groupIndex]?.questions.findIndex(i=>i?.mother) != -1) {
-      let motherQuestion = dataChecklist.data[groupIndex].questions[dataChecklist.data[groupIndex].questions.findIndex(i=>i?.mother)]
-      dataQuestionsGroups.push({title:motherQuestion.text,...motherQuestion})
-    }
-    setDataAll([data[0],dataQuestionsGroups])
+    // let dataQuestionsGroups = []
+    // dataChecklist.data[index].groups.map(item=>{
+    //   dataQuestionsGroups.push({title:item,id:item})
+    // })
+    // let groupIndex = dataChecklist.data.findIndex(i=>i.id==id)
+    // if (dataChecklist.data[groupIndex]?.questions.findIndex(i=>i?.mother) != -1) {
+    //   let motherQuestion = dataChecklist.data[groupIndex].questions[dataChecklist.data[groupIndex].questions.findIndex(i=>i?.mother)]
+    //   dataQuestionsGroups.push({title:motherQuestion.text,...motherQuestion})
+    // }
+    setDataAll([dataAll[0],{groupId:id}])
+    //console.log(dataQuestionsGroups)
   }
+
 
 
   return (
@@ -78,7 +78,7 @@ export function SecondColumn({
       <Droppable droppableId={`category/${data.id}/${0}`}>
         {(provided,snapshot) => (
           <div style={{overflowY:'auto',height:'94%',paddingLeft:10}} ref={provided.innerRef} {...provided.droppableProps}>
-            {data.length > 0 ? data.map((item,index)=>{
+            {dataChecklist.data.length > 0 ? dataChecklist.data.map((item,index)=>{
               return (
                 <CardDrop
                   fixedHeight
@@ -106,14 +106,14 @@ export function SecondColumn({
       <AddCircle onClick={()=>setOpen(true)}>
         <Icons style={{fontSize:22}} type={`Add`}/>
       </AddCircle>
-      <ModalButtons open={open} disable={title=='' || (data && data.filter(i=>i.group == title).length > 0)} onClick={onCreateNewCategory} onClose={onCloseModalAdd} title={'Adicionar Categoria'} >
+      <ModalButtons open={open} disable={title=='' || (dataChecklist.data && dataChecklist.data.filter(i=>i.group == title).length > 0)} onClick={onCreateNewCategory} onClose={onCloseModalAdd} title={'Adicionar Categoria'} >
           <InputTitle
             value={title}
             onChange={({target})=>setTitle(target.value)}
             placeholder={'Nome da categoria'}
-            error={data && data.filter(i=>i.group == title).length > 0}
+            error={dataChecklist.data && dataChecklist.data.filter(i=>i.group == title).length > 0}
           />
-          {data && data.filter(i=>i.group == title).length > 0 &&
+          {dataChecklist.data && dataChecklist.data.filter(i=>i.group == title).length > 0 &&
             <ErrorMessage>Nome já existente, por favor cadastre um nome diferente.</ErrorMessage>
           }
       </ModalButtons>
