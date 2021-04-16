@@ -14,27 +14,29 @@ import useDraggableInPortal from '../../../hooks/useDraggableInPortal'
 
 //////import {useLoaderDash} from '../../../context/LoadDashContext'
 
-export function CardDrop({open,setOpen,item,title,position,fixedHeight,index,...props}) {
+export function CardDrop({isDragDisabled,open,setOpen,item,title,position,fixedHeight,index,draggableId,...props}) {
   const anchorRef = React.useRef(null);
   const renderDraggable = useDraggableInPortal();
 
   function onRightClick(event) {
     event && event?.preventDefault && event.preventDefault();
-    setOpen(item.id)
+    if (setOpen) setOpen(item.id)
   }
 
   return (
-        <Draggable draggableId={item.id} index={index}>
-        {renderDraggable((provided) => (
+        <Draggable draggableId={draggableId ?draggableId :item.id} index={index} isDragDisabled={isDragDisabled}>
+        {renderDraggable((provided,snapshot) => (
           <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-            <CardChecklistContainer style={{cursor:'grab'}} onContextMenu={onRightClick} ref={anchorRef} fixedHeight={fixedHeight} position={position} {...props}>
+            <CardChecklistContainer isDragging={snapshot.isDragging} style={{cursor:'grab'}} onContextMenu={onRightClick} ref={anchorRef} fixedHeight={fixedHeight} position={position} {...props}>
               <p >
                 {title}
               </p>
               {position &&
                 <IconsArrowCard style={{fontSize:22}} type={`KeyboardArrowRightIcon`}/>
               }
-              <CardEdit open={open===item.id} setOpen={setOpen} anchorRef={anchorRef}/>
+              { setOpen &&
+                <CardEdit open={open===item.id} setOpen={setOpen} anchorRef={anchorRef}/>
+              }
             </CardChecklistContainer>
           </div>
         ))}

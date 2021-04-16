@@ -14,7 +14,7 @@ import useDraggableInPortal from '../../../hooks/useDraggableInPortal'
 
 //////import {useLoaderDash} from '../../../context/LoadDashContext'
 
-export function RiskDrop({open,setOpen,item,title,position,fixedHeight,index,...props}) {
+export function RiskDrop({open,setOpen,item,title,position,mandatory,fixedHeight,index,indexColumn,...props}) {
   const anchorRef = React.useRef(null);
   const renderDraggable = useDraggableInPortal();
 
@@ -24,10 +24,10 @@ export function RiskDrop({open,setOpen,item,title,position,fixedHeight,index,...
   }
 
   return (
-        <Draggable draggableId={item.id} index={index}>
-        {renderDraggable((provided) => (
+        <Draggable draggableId={`risk/${item.id}/${indexColumn}`} index={index}>
+        {renderDraggable((provided,snapshot) => (
           <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-            <CardContainerRisk style={{cursor:'grab'}} onContextMenu={onRightClick} ref={anchorRef} fixedHeight={fixedHeight} position={position} {...props}>
+            <CardContainerRisk isDragging={snapshot.isDragging} onContextMenu={onRightClick} ref={anchorRef} fixedHeight={fixedHeight} position={position} mandatory={mandatory} {...props}>
               <p >
                 {title}
               </p>

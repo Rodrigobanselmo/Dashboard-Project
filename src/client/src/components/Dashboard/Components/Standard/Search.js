@@ -49,7 +49,7 @@ inputInput: {
 },
 }));
 
-function Search({icons:Icons,onInputSearch,search,onCleanSearch,inputProps,...props}) {
+function Search({icons:Icons,onInputSearch,search,onCleanSearch,inputRef,inputProps,...props}) {
     const classes = useStyles();
     return (
         <div className={classes.search} {...props}>
@@ -72,6 +72,7 @@ function Search({icons:Icons,onInputSearch,search,onCleanSearch,inputProps,...pr
             }}
             inputProps={{ 'aria-label': 'search' }}
             {...inputProps}
+            inputRef={inputRef}
             />
         </div>
     )

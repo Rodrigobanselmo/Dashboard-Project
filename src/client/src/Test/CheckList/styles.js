@@ -1,5 +1,5 @@
 import styled,{css} from "styled-components";
-import { lighten,darken, } from "@material-ui/core/styles";
+import { lighten,darken,fade } from "@material-ui/core/styles";
 import {Icons} from '../../components/Icons/iconsDashboard';
 
 
@@ -76,6 +76,12 @@ export const CardChecklistContainer = styled.div`
     align-items: center;
     min-height:45px;
     background-color: ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.background.paper,0.0):lighten(theme.palette.background.paper,0.03)};
+    padding:7px 7px 7px 7px;
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.22);
+  `}
+
+  ${props => props.isDragging && css`
+    opacity:0.7;
   `}
 `;
 
@@ -83,15 +89,25 @@ export const CardContainerRisk = styled(CardChecklistContainer)`
   padding-top:16px;
   height:auto;
   position:relative;
+  cursor:grab;
+  opacity:1;
   :before {
     top:6px;
-    width: 60px;
+    //right:5px;
+
+    width: 30px;
+    height:3px;
+    /* width: 9px;
+    height: 9px; */
     border-radius:20px;
     background:  ${({theme})=>theme.palette.primary.main};
     position:absolute;
-    height: 5px;
     content:"";
   }
+
+  ${props => props.mandatory && !props.position && css`
+    border: 1px solid ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.primary.main,0.4):theme.palette.primary.main};
+  `}
 
   ${props => props.type == 'qui' && css`
     :before {
@@ -118,16 +134,25 @@ export const CardContainerRisk = styled(CardChecklistContainer)`
       background:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.risk.erg,0.5):darken(theme.palette.risk.erg,0.1)};
     }
   `}
+
+  ${props => props.isDragging && css`
+    opacity:0.7;
+  `}
 `;
 
 export const IconsArrow = styled(Icons)`
   color: ${({theme})=>theme.palette.text.secondary};
 `;
 
+export const IconsBack = styled(Icons)`
+  color: ${({theme})=>theme.palette.text.secondary};
+  transform:rotate(180deg) translateX(-5px);
+  margin-right:-5px;
+`;
+
 export const IconsArrowCard = styled(Icons)`
   color: ${({theme})=>theme.palette.primary.main};
 `;
-
 
 export const ContainerHeader = styled.div`
   display: flex;
@@ -208,6 +233,7 @@ export const EmptyField = styled.div`
       border: 2px dashed ${({theme})=> theme.palette.background.line };
     }
   `}
+
   ${props => props.hover == 'add' && css`
     cursor: copy;
   `}
@@ -215,12 +241,60 @@ export const EmptyField = styled.div`
     cursor: move;
   `}
 
+  ${props => props.draggingOverWith=='ok' && props.isDraggingOver && css`
+    cursor: copy;
+    &:hover {
+      background-color: ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.background.paper,0.020):lighten(theme.palette.background.paper,0.02)};
+      border: 2px dashed ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.background.line,0.185):lighten(theme.palette.background.line,0.7)};
+    }
+  `}
+  ${props => props.draggingOverWith =='not' && props.isDraggingOver && css`
+    cursor: no-drop;
+    &:hover {
+      background-color: ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.background.paper,0.020):lighten(theme.palette.background.paper,0.02)};
+      border: 2px dashed ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.background.line,0.185):lighten(theme.palette.background.line,0.7)};
+    }
+  `}
+
 `;
 
 
+export const AddedRiskContainer = styled.div`
+
+  ${props => props.draggingOverWith=='ok' && props.isDraggingOver && css`
+    cursor: copy;
+  `}
+  ${props => props.draggingOverWith =='not' && props.isDraggingOver && css`
+    cursor: no-drop;
+  `}
+  ${props => props.draggingOverWithSameColumn =='same' && props.isDraggingOver && css`
+    cursor: move;
+  `}
+  ${props => props.draggingOverWithSameRisk =='exist'&& props.draggingOverWithSameColumn !='same' && props.isDraggingOver && css`
+    cursor: no-drop;
+  `}
+`;
+
 export const InputTitle = styled.input`
   width:400px;
-  padding:12px 8px;
+  padding:12px 8px 24px 8px;
+  background-color: ${({theme})=>theme.palette.type !=='dark' ?darken(theme.palette.background.paper,0.01):lighten(theme.palette.background.paper,0.01)};
+  color: ${({theme})=>theme.palette.type!=="dark"?theme.palette.background.secondary:theme.palette.text.primary};
+  box-sizing: border-box;
+  font-size:16px;
+  border: 1px solid ${({theme})=> theme.palette.background.line };
+  /* -webkit-box-shadow: 1px 1px 6px 1px rgba(0,0,0,0.23);
+  box-shadow: 1px 1px 6px 1px rgba(0,0,0,0.23); */
+  border-radius:6px;
+
+  ${props => props.error && css`
+    border: 1px solid ${({theme})=> theme.palette.background.attention };
+  `}
+`;
+export const InputArea = styled.textarea`
+  width:500px;
+  min-height:130px;
+  padding:12px 8px 24px 8px;
   background-color: ${({theme})=>theme.palette.type !=='dark' ?darken(theme.palette.background.paper,0.01):lighten(theme.palette.background.paper,0.01)};
   color: ${({theme})=>theme.palette.type!=="dark"?theme.palette.background.secondary:theme.palette.text.primary};
   box-sizing: border-box;
@@ -240,7 +314,50 @@ export const ErrorMessage = styled.p`
   color: ${({theme})=>theme.palette.type!=="dark"?theme.palette.background.attention:lighten(theme.palette.background.attention,0.1)};
 `;
 
+export const Probabilidade = styled.div`
+  cursor:pointer;
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  margin: 0px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 3px 1px ${({theme})=>theme.palette.type!=="dark"?'rgba(0,0,0,0.10)':'rgba(0,0,0,0.33)'};
+  border: 1px solid ${({theme})=>theme.palette.type!=="dark"?theme.palette.background.line:lighten(theme.palette.background.contrast,0.12)};;
+  background-color:${({theme})=>theme.palette.type !== 'dark' ? fade(theme.palette.background.default,0.3) : theme.palette.background.contrast};
+  box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.22);
+
+  &:hover {
+    background-color: ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.background.paper,0.025):lighten(theme.palette.background.paper,0.03)};
+  }
+  &:active {
+    opacity:0.7;
+  }
+
+  p {
+    margin:0;
+    font-size:1.05rem;
+  }
+
+  ${props => props.active && css`
+      background-color:  ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.primary.main,0.3):theme.palette.primary.main};
+      &:hover {
+        background-color: ${({theme})=>theme.palette.type!=="dark"?lighten(theme.palette.primary.main,0.2):lighten(theme.palette.primary.main,0.05)};
+      }
+      p {
+        color: ${({theme})=>theme.palette.primary.contrastText}
+      }
+  `}
+
+  ${props => props.disable && css`
+      background-color:  transparent;
+      border: 1px solid ${({theme})=>theme.palette.type!=="dark"?theme.palette.background.line:lighten(theme.palette.background.contrast,0.12)};;
+  `}
+`;
+
 export const RiskFilter = styled.div`
+  cursor:pointer;
   height: 40px;
   width: 40px;
   border-radius: 5px;
@@ -269,5 +386,47 @@ export const RiskFilter = styled.div`
   ${props => props.disable && css`
       background-color:  transparent;
       border: 1px solid ${({theme})=>theme.palette.type!=="dark"?theme.palette.background.line:lighten(theme.palette.background.contrast,0.12)};;
+  `}
+`;
+
+export const IconCircle = styled.div`
+  height: 40px;
+  width: 40px;
+  border-radius:20px;
+  display:flex;
+  justify-content:center;
+  align-items: center;
+  color:${({theme})=>theme.palette.type !== 'dark' ? fade(theme.palette.text.secondary,0.4) : theme.palette.text.secondary};
+  background-color:${({theme})=>theme.palette.type !== 'dark' ? fade(theme.palette.background.default,0.3) : lighten(theme.palette.background.contrast,0.03)};
+  -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.22);
+  box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.22);
+  margin-right:10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.background.paper,0.075):darken(theme.palette.background.contrast,0.1)};
+  }
+  &:active {
+    opacity:0.7;
+  }
+
+  ${props => props.selected && css`
+    color:${({theme})=>theme.palette.type !== 'dark' ? theme.palette.primary.contrastText : theme.palette.primary.contrastText};
+    background-color:${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.primary.main,0.3) : theme.palette.primary.main};
+    &:hover {
+      background-color:${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.primary.main,0.15) : darken(theme.palette.primary.main,0.1)};
+    }
+  `}
+
+`;
+
+export const ChooseDivYesNoNA = styled.div`
+  width: 100%;
+  height: 5px;
+  background-color:${({theme})=>theme.palette.type !== 'dark' ? fade(theme.palette.background.inactive,0.4) : theme.palette.background.inactive};
+  border-radius: 10px;
+
+  ${props => props.active && css`
+    background-color:${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.primary.main,0.2) : theme.palette.primary.main};
   `}
 `;

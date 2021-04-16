@@ -14,9 +14,16 @@ import styled from "styled-components";
 import {Card} from './Card';
 import {ThirdColumn} from './ThirdColumn';
 import {SecondColumn} from './SecondColumn';
+import {QuestionsData} from './QuestionsData';
 import {QuestionColumn} from './QuestionColumn';
 import {RiskFactors} from './RiskFactors';
-import {RisksData} from './RisksData';
+import {RiskData} from './RiskData';
+import {RisksEdit} from './RisksEdit';
+import {RiskSuggestions} from './RiskSuggestions';
+import {RiskSuggestData} from './RiskSuggestData';
+import {JumpQuestions} from './JumpQuestions';
+import {JumpQuestionsData} from './JumpQuestionsData';
+import {JumpGroupsData} from './JumpGroupsData';
 import {ColumnContainer} from '../styles';
 
 //////import {useLoaderDash} from '../../../context/LoadDashContext'
@@ -34,11 +41,23 @@ export function Column({
   onCreateNewGroup,
   onCreateQuestionMother,
   onChecklistquestionMotherCardHandle,
+  onChecklistquestionCardHandle,
   onChangeQuestion,
+  onCreateQuestion,
   type,
   searchRisk,
   onSearchRisk,
-  loading
+  loading,
+  onEditRisk,
+  searchRiskData,
+  onSuggestions,
+  dataAll,
+  dataChecklistGroup,
+  onJumpGroupsHandle,
+  setDataAll,
+  dataChecklist,
+  setDataChecklist,
+  setSave
 }) {
 
   return (
@@ -52,6 +71,11 @@ export function Column({
             openModalEdit={openModalEdit}
             setOpenModalEdit={setOpenModalEdit}
             onCreateNewCategory={onCreateNewCategory}
+            setDataAll={setDataAll}
+            dataChecklist={dataChecklist}
+            setDataChecklist={setDataChecklist}
+            dataAll={dataAll}
+            setSave={setSave}
           />
         : index == 1 ?
           <ThirdColumn
@@ -66,6 +90,17 @@ export function Column({
             onCreateQuestionMother={onCreateQuestionMother}
             onChecklistquestionMotherCardHandle={onChecklistquestionMotherCardHandle}
           />
+        : type?.type == 'questionData' ?
+          <QuestionsData
+            position={position}
+            setPosition={setPosition}
+            data={data}
+            index={index}
+            openModalEdit={openModalEdit}
+            setOpenModalEdit={setOpenModalEdit}
+            onCreateQuestion={onCreateQuestion}
+            onChecklistquestionCardHandle={onChecklistquestionCardHandle}
+            />
         : type == 'question' ?
           <QuestionColumn
             position={position}
@@ -80,20 +115,73 @@ export function Column({
             setPosition={setPosition}
             data={data}
             index={index}
-            onChangeQuestion={onChangeQuestion}
             searchRisk={searchRisk}
             onSearchRisk={onSearchRisk}
+            dataChecklistGroup={dataChecklistGroup}
           />
         : type?.type == 'riskData' ?
-          <RisksData
+          <RiskData
             position={position}
             setPosition={setPosition}
             data={data}
             index={index}
-            onChangeQuestion={onChangeQuestion}
             searchRisk={searchRisk}
             onSearchRisk={onSearchRisk}
             loading={loading}
+            dataAll={dataAll}
+          />
+        : type?.type == 'riskEdit' ?
+          <RisksEdit
+            position={position}
+            setPosition={setPosition}
+            data={data}
+            index={index}
+            onEditRisk={onEditRisk}
+          />
+        : type?.type == 'riskSuggestion' ?
+          <RiskSuggestions
+            position={position}
+            setPosition={setPosition}
+            data={data}
+            index={index}
+            searchRiskData={searchRiskData}
+            onSuggestions={onSuggestions}
+          />
+        : type?.type == 'riskSuggestionData' ?
+          <RiskSuggestData
+            position={position}
+            setPosition={setPosition}
+            data={data}
+            index={index}
+            searchRiskData={searchRiskData}
+            dataAll={dataAll}
+          />
+        : type?.type == 'jump' ?
+          <JumpQuestions
+            position={position}
+            setPosition={setPosition}
+            data={data}
+            index={index}
+            dataChecklistGroup={dataChecklistGroup}
+          />
+        : type?.type == 'jumpGroup' ?
+          <JumpGroupsData
+            position={position}
+            setPosition={setPosition}
+            data={data}
+            index={index}
+            dataChecklistGroup={dataChecklistGroup}
+            dataAll={dataAll}
+            onJumpGroupsHandle={onJumpGroupsHandle}
+          />
+        : type?.type == 'jumpQuestion' ?
+          <JumpQuestionsData
+            position={position}
+            setPosition={setPosition}
+            data={data}
+            index={index}
+            dataChecklistGroup={dataChecklistGroup}
+            dataAll={dataAll}
           />
         : null
       }

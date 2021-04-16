@@ -12,7 +12,7 @@ import {Link} from "react-router-dom";
 import {useHistory} from "react-router-dom";
 import styled, {css,ThemeContext} from "styled-components";
 import {Card} from './Card';
-import {NoCard,InputTitle,AddCircle,ErrorMessage,EmptyField} from '../styles';
+import {NoCard,InputTitle,AddCircle,ErrorMessage,EmptyField,IconCircle,ChooseDivYesNoNA} from '../styles';
 import {ModalButtons} from '../../../components/Main/MuiHelpers/ModalButtons'
 import { lighten,darken,fade } from "@material-ui/core/styles";
 import {BootstrapTooltip} from '../../../components/Main/MuiHelpers/Tooltip'
@@ -22,47 +22,7 @@ import {Menu} from '../../../components/Main/MuiHelpers/Selected'
 import {ContinueButton} from '../../../components/Main/MuiHelpers/Button'
 import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
 
-const IconCircle = styled.div`
-  height: 40px;
-  width: 40px;
-  border-radius:20px;
-  display:flex;
-  justify-content:center;
-  align-items: center;
-  color:${({theme})=>theme.palette.type !== 'dark' ? fade(theme.palette.text.secondary,0.4) : theme.palette.text.secondary};
-  background-color:${({theme})=>theme.palette.type !== 'dark' ? fade(theme.palette.background.default,0.3) : lighten(theme.palette.background.contrast,0.03)};
-  -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.22);
-  box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.22);
-  margin-right:10px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${({theme})=>theme.palette.type!=="dark"?darken(theme.palette.background.paper,0.075):darken(theme.palette.background.contrast,0.1)};
-  }
-  &:active {
-    opacity:0.7;
-  }
-
-  ${props => props.selected && css`
-    color:${({theme})=>theme.palette.type !== 'dark' ? theme.palette.primary.contrastText : theme.palette.primary.contrastText};
-    background-color:${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.primary.main,0.3) : theme.palette.primary.main};
-    &:hover {
-      background-color:${({theme})=>theme.palette.type !== 'dark' ? theme.palette.primary.main : darken(theme.palette.primary.main,0.1)};
-    }
-  `}
-
-`;
-
-const ChooseDivYesNoNA = styled.div`
-  width: 100%;
-  height: 5px;
-  background-color:${({theme})=>theme.palette.type !== 'dark' ? fade(theme.palette.background.inactive,0.4) : theme.palette.background.inactive};
-  border-radius: 10px;
-
-  ${props => props.active && css`
-    background-color:${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.primary.main,0.2) : theme.palette.primary.main};
-  `}
-`;
+const selectOptions = ['Padrão','Multiplos','Personalizado']
 
 function Choose({text,active,...props}) {
   return (
@@ -73,6 +33,20 @@ function Choose({text,active,...props}) {
   );
 }
 
+function getOptions(data) {
+  if (data.type == 'standard') {
+    return ['SIM','NÃO','N.A.']
+  } else {
+    const questionsType = [];
+    for (const key in data.action) {
+      if (Object.hasOwnProperty.call(data.action, key)) {
+        const element = data.action[key];
+        questionsType.push(element.text)
+      }
+    }
+    return questionsType;
+  }
+}
 
 export function QuestionColumn({
   position,
@@ -82,35 +56,17 @@ export function QuestionColumn({
   onChangeQuestion,
 }) {
   const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState(getOptions())
+  const [options, setOptions] = useState(getOptions(data))
   const [active, setActive] = useState(0)
   const theme = React.useContext(ThemeContext)
 
-  const selectOptions = ['Padrão','Multiplos','Personalizado']
-  //const selectOptions = ['Padrão','Escolhas Multiplas','Padrão Personalizado']
-
-  function getOptions() {
-    if (data.type == 'standard') {
-      return ['SIM','NÃO','N.A.']
-    } else {
-      const questionsType = [];
-      for (const key in data.action) {
-        if (Object.hasOwnProperty.call(data.action, key)) {
-          const element = data.action[key];
-          questionsType.push(element.text)
-        }
-      }
-      return questionsType;
+  function onBlurTextEditSave(title,setTitle,oldValue, setOldValue) {
+    const dados = {text:title,id:data.id}
+    if (title == '') {
+      setTitle(oldValue)
+      return
     }
-  }
-
-  function onCloseModalAdd() {
-    //setTitle('')
-    //setOpen(false)
-  }
-
-  function onBlurTextEditSave(text) {
-    const dados = {text,id:data.id}
+    setOldValue(title)
     onChangeQuestion('text',index,dados)
   }
 
@@ -125,21 +81,29 @@ export function QuestionColumn({
     onChangeQuestion('type',index,dados)
   }
 
-  function onChangeQuestionAnswer() {
-    const dados = {id:data.id}
-    onChangeQuestion('photo',index,dados)
+  function onChangeAnswerYesNoNA(indexes) {
+    setActive(indexes)
+
+    const dados = {id:`${data.id}-q_${indexes+1}`,q:options[active],action:data.action[`q_${indexes+1}`],title:`${options[indexes]}`}
+    onChangeQuestion('answer',index,dados)
   }
 
   function onAddRiskFactor() {
-    const dados = {id:`${data.id}-q_${active+1}`,question:data.action[`q_${active+1}`],title:`${options[active]} - Fatores de risco`}
+    const action = data.action[`q_${active+1}`]
+    const dados = {id:`${data.id}-q_${active+1}`,action:{text:action.text,id:action.id},title:`${options[active]} - Fatores de risco`}
    onChangeQuestion('risk',index,dados)
+  }
+
+  function onAddJump() {
+    const dados = {id:`${data.id}-q_${active+1}-jump`,jump:data.action[`q_${active+1}`]?.jump?data.action[`q_${active+1}`].jump:[],q:options[active],title:`${options[active]} - Pular Perguntas`,questionId:data.id}
+   onChangeQuestion('jump',index,dados)
   }
 
 
   return (
         <>
           <p className={'noBreakText'} style={{marginBottom:15,maxWidth:150}}>{data?.text ? data.text : 'Pergunta'}</p>
-          <div style={{overflowY:'auto',height:'94%',paddingLeft:10}}>
+          <div style={{overflowY:'auto',height:'94%',paddingLeft:0}}>
             <InputCard onBlurTextEditSave={onBlurTextEditSave} initialValue={data?.text}/>
             <div style={{paddingLeft:10,marginBottom:17,marginTop:15,}}>
               <div style={{flexDirection:'row',display:'flex',alignItems:'center'}}>
@@ -162,11 +126,11 @@ export function QuestionColumn({
                 {options.map((item,index)=>{
                   if (data.type == 'standard')
                   return (
-                    <Choose key={item} onClick={()=>setActive(index)} text={item} active={active==index}/>
+                    <Choose key={item} onClick={()=>onChangeAnswerYesNoNA(index)} text={item} active={active==index}/>
                   )
                   if (data.type == 'mult')
                   return (
-                    <Choose key={index} onClick={()=>setActive(index)} text={index} active={active==index}/>
+                    <Choose key={index} onClick={()=>onChangeAnswerYesNoNA(index)} text={index} active={active==index}/>
                   )
                 })}
               </div>
@@ -183,6 +147,8 @@ export function QuestionColumn({
                 style={{marginBottom:'18px'}}
                 button
                 title={'Pular Perguntas e Grupos'}
+                position={position && position[index+1] && position[index+1]?.id == `${data.id}-q_${active+1}-jump`}
+                onClick={onAddJump}
                 //position={position && position[2] && position[2]?.id == data[data.findIndex(i=>i.mother)].id}
                 //onClick={()=>onChecklistquestionMotherCardHandle(data[data.findIndex(i=>i.mother)].id,data[data.findIndex(i=>i.mother)].title,index)}
                 //item={data[data.findIndex(i=>i.mother)]}

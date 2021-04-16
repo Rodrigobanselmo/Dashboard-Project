@@ -12,7 +12,7 @@ import {Link} from "react-router-dom";
 import {useHistory} from "react-router-dom";
 import styled, {css,ThemeContext} from "styled-components";
 import {Card} from './Card';
-import {NoCard,InputTitle,AddCircle,ErrorMessage,EmptyField,RiskFilter} from '../styles';
+import {NoCard,InputTitle,AddCircle,ErrorMessage,EmptyField,RiskFilter,AddedRiskContainer} from '../styles';
 import {ModalButtons} from '../../../components/Main/MuiHelpers/ModalButtons'
 import { lighten,darken,fade } from "@material-ui/core/styles";
 import {BootstrapTooltip} from '../../../components/Main/MuiHelpers/Tooltip'
@@ -39,24 +39,16 @@ const sort = function (a, b) {
   return 0;
 };
 
-const sortReverse = function (a, b) {
-  if (a.name > b.name) {
-      return -1;
-  }
-  if (b.name > a.name) {
-      return 1;
-  }
-  return 0;
-};
 
-export function RisksData({
+export function RiskData({
   position,
   setPosition,
   data,
   index,
   onChangeQuestion,
   searchRisk,
-  loading
+  loading,
+  dataAll
 }) {
   const [open, setOpen] = useState(false)
   const [filterSelected, setFilterSelected] = useState([])
@@ -75,9 +67,10 @@ export function RisksData({
     let normalized = searchRisk.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "")
     let filtered = [];
 
+    console.log(dataAll[parseInt(index)-1])
     if (searchRisk.length > 0) filtered = [...risk].filter(i=>i.name.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes(normalized)).slice(0,20)
     else if (filterSelected.length > 0) {
-      filtered = [...risk,...[...risk].filter(i=>i.type==='qui').slice(0,10)].filter(i=>i.type!=='qui')
+      filtered = [...risk].filter(i=>i.type!=='qui')
       filtered.push(...[...risk].filter(i=>i.type==='qui').slice(0,10))
     }
 
@@ -91,7 +84,7 @@ export function RisksData({
       })
       filterButtons.push(...filterData)
     }
-    return filterSelected.length == 0 ? filtered.sort(sort) : filterButtons.sort(sort)
+    return filterSelected.length == 0 ? filtered.filter(i=>!dataAll[parseInt(index)-1]?.data||(dataAll[parseInt(index)-1]?.data && dataAll[parseInt(index)-1].data.findIndex(item=>item.risk == i.id) == -1)).sort(sort) : filterButtons.filter(i=>!dataAll[parseInt(index)-1]?.data||(dataAll[parseInt(index)-1]?.data && dataAll[parseInt(index)-1].data.findIndex(item=>item.risk == i.id) == -1)).sort(sort)
   }
 
   return (
@@ -100,7 +93,7 @@ export function RisksData({
     <div style={{padding:'0 10px',marginBottom:15,display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
       {RISK_DATA.map((item,index)=>{
         return(
-          <BootstrapTooltip placement="bottom" enterDelay={500} TransitionProps={{ timeout: {enter:500, exit: 50} }} title={item.text} styletooltip={{transform: 'translateY(2px)'}}>
+          <BootstrapTooltip key={index} placement="bottom" enterDelay={500} TransitionProps={{ timeout: {enter:500, exit: 50} }} title={item.text} styletooltip={{transform: 'translateY(2px)'}}>
             <RiskFilter onClick={()=>onFilterRisk(item)} disable={!filterSelected.includes(item.icon.toLocaleLowerCase())} type={item.icon.toLowerCase()} >
               <Icons style={{filter: theme.palette.type!=="dark"?`invert(${filterSelected.includes(item.icon.toLocaleLowerCase())?100:0}%)`:`invert(${filterSelected.includes(item.icon.toLocaleLowerCase())?100:60}%)`}} height='24px' width='24px' type={item.icon}/>
             </RiskFilter>
@@ -108,22 +101,30 @@ export function RisksData({
         )
       })}
     </div>
-    <Droppable droppableId={'first'}>
+    <Droppable droppableId={'risks'} isDropDisabled={data.disabled}>
     {(provided,snapshot) => (
-      <div ref={provided.innerRef} {...provided.droppableProps} style={{overflowY:'auto',height:'83%'}}>
+      <AddedRiskContainer
+        ref={provided.innerRef}
+        {...provided.droppableProps}
+        style={{overflowY:'auto',height:'83%'}}
+        isDraggingOver={snapshot.isDraggingOver}
+        draggingOverWith={snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[0] == 'risk' ? 'delete':'not'}
+        draggingOverWithSameColumn={snapshot.draggingOverWith&&snapshot.draggingOverWith.split('/')[2] == index ? 'same':'different'}
+        >
         <div style={{paddingLeft:10}}>
           { loading=='risk' ?
               <LinearProgress style={{marginRight:20}}/>
             :
             (searchRisk.length > 0 || filterSelected.length > 0) && filter().length > 0 ?
-            filter().map((item,index)=>{
+            filter().map((item,indexItem)=>{
               return (
                 <RiskDrop
                   title={item.name}
                   type={item.type}
-                  key={item?.id ?? index}
+                  key={item?.id ?? indexItem}
                   item={item}
-                  index={index}
+                  index={indexItem}
+                  indexColumn={index}
                   //position={position && position[0] && position[0].id == item.id}
                   //open={openModalEdit}
                   //setOpen={setOpenModalEdit}
@@ -141,7 +142,7 @@ export function RisksData({
           }
         </div>
         {provided.placeholder}
-      </div>
+      </AddedRiskContainer>
     )}
     </Droppable>
     </>

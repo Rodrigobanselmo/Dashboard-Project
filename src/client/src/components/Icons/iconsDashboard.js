@@ -45,6 +45,7 @@ import AssignmentTurnedInRoundedIcon from '@material-ui/icons/AssignmentTurnedIn
 import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
 import MoreVertRoundedIcon from '@material-ui/icons/MoreVertRounded';
 import CameraAltOutlinedIcon from '@material-ui/icons/CameraAltOutlined';
+import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 
 import Facebook from '@material-ui/icons/Facebook';
 import YouTube from '@material-ui/icons/YouTube';
@@ -99,9 +100,9 @@ export const Icons = ({ type, ...props }) => {
     case 'Error':
       return <ErrorOutlineRoundedIcon {...props} />;
     case 'Info':
-      return (<Logo style={{marginTop:3,opacity:0.7,cursor:'pointer'}} height="20px" width="20px"  />);
+      return (<Logo style={{marginTop:3,opacity:0.7,cursor:'pointer'}} height="20px" width="20px"  {...props}/>);
     case 'InfoShade':
-      return (<Logo style={{marginTop:3,opacity:0.4,cursor:'pointer'}} height="20px" width="20px"  />);
+      return (<Logo style={{marginTop:3,opacity:0.4,cursor:'pointer'}} height="20px" width="20px"  {...props}/>);
 
     case 'Fis':
       return (<Fis  height="20px" width="20px"  {...props}/>);
@@ -191,6 +192,8 @@ export const Icons = ({ type, ...props }) => {
       return <MoreVertRoundedIcon {...props} />;
     case 'Camera':
       return <CameraAltOutlinedIcon {...props} />;
+    case 'Mandatory':
+      return <PriorityHighIcon {...props} />;
 
     case 'Errors':
       return <Error {...props} />;

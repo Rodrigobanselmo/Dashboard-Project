@@ -11,12 +11,13 @@ import {onGetAllCompanies} from '../func'
 import {Link} from "react-router-dom";
 import {useHistory} from "react-router-dom";
 import styled from "styled-components";
+import {CardDrop} from './CardDrop';
 import {Card} from './Card';
 import {NoCard,InputTitle,AddCircle,ErrorMessage,EmptyField} from '../styles';
 import {ModalButtons} from '../../../components/Main/MuiHelpers/ModalButtons'
 import { lighten,darken, } from "@material-ui/core/styles";
 import {BootstrapTooltip} from '../../../components/Main/MuiHelpers/Tooltip'
-
+import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
 
 //group:'Limpeza',id:'1',questions:
 export function ThirdColumn({
@@ -46,7 +47,7 @@ export function ThirdColumn({
 
   return (
     <>
-      <p style={{marginBottom:15}}>Pergunta</p>
+      <p style={{marginBottom:15}}>Pergunta Geral</p>
       {data.findIndex(i=>i?.mother) != -1 ?
         <div style={{paddingLeft:10,marginBottom:17}}>
           <Card
@@ -72,28 +73,35 @@ export function ThirdColumn({
         </EmptyField>
       }
       <p style={{marginBottom:15}}>Grupos</p>
-      <div style={{overflowY:'auto',height:'74%',paddingLeft:10}}>
-        {data.length > 0 ? data.map((item,index)=>{
-          if (item?.mother) return null
-          return (
-            <Card
-              fixedHeight
-              title={item.title}
-              key={item?.id ?? index}
-              position={position && position[2] && position[2]?.id == item.id}
-              onClick={()=>onChecklistGroupCardHandle(item.id)}
-              item={item}
-              open={openModalEdit}
-              setOpen={setOpenModalEdit}
-            />
-            )
-        })
-        :
-        <NoCard >
-          <p>Nenhum grupo cadastrado</p>
-        </NoCard>
-        }
-      </div>
+      <Droppable droppableId={`group/${data.id}/${1}`}>
+        {(provided,snapshot) => (
+          <div style={{overflowY:'auto',height:'74%',paddingLeft:10}} ref={provided.innerRef} {...provided.droppableProps}>
+            {data.length > 0 ? data.map((item,index)=>{
+              if (item?.mother) return null
+              return (
+                <CardDrop
+                  fixedHeight
+                  title={item.title}
+                  key={item?.id ?? index}
+                  position={position && position[2] && position[2]?.id == item.id}
+                  onClick={()=>onChecklistGroupCardHandle(item.id)}
+                  item={item}
+                  draggableId={`group/${item.id}/${index}`}
+                  open={openModalEdit}
+                  setOpen={setOpenModalEdit}
+                  index={index}
+                />
+                )
+            })
+            :
+            <NoCard >
+              <p>Nenhum grupo cadastrado</p>
+            </NoCard>
+            }
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
       <AddCircle onClick={()=>setOpen(true)}>
         <Icons style={{fontSize:22}} type={`Add`}/>
       </AddCircle>

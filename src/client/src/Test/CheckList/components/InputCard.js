@@ -16,9 +16,10 @@ const useStyle = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
 }));
-export function InputCard({initialValue='',onBlurTextEditSave,...props}) {
+export function InputCard({initialValue='',onBlurTextEditSave,inputProps,...props}) {
   const classes = useStyle();
   const [title, setTitle] = useState(initialValue);
+  const [oldValue, setOldValue] = useState(initialValue);
 
   const handleOnChange = (e) => {
     setTitle(e.target.value);
@@ -30,13 +31,14 @@ export function InputCard({initialValue='',onBlurTextEditSave,...props}) {
         <InputBase
           onChange={handleOnChange}
           multiline
-          onBlur={() => onBlurTextEditSave(title)}
+          onBlur={() => onBlurTextEditSave(title,setTitle,oldValue, setOldValue)}
           fullWidth
           inputProps={{
             className: classes.input,
           }}
           value={title}
           placeholder={'Insira sua pergunta...'}
+          {...inputProps}
         />
       </div>
     </div>

@@ -11,12 +11,14 @@ export default (state = initialState, action) => {
         if (action.payload.subSubList) route.subSubList = action.payload.subSubList
 
         return { ...state,...route};
-    } else {
+    } else if(action.type === 'ROUTE') {
       if ((action.payload && action.payload.includes(RISK_FACTORS_SLICE))) {
         return {...initialState,subList:action.payload,list:RISK_FACTORS_SLICE};
       } else {
         return {...initialState,list:action.payload};
       }
+    } else {
+      return {...initialState}
     }
 }
 

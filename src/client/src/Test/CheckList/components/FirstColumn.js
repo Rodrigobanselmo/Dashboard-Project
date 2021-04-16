@@ -98,11 +98,13 @@ export function FirstColumn({openModalEdit,setOpenModalEdit,data=[],setData,posi
                 {data.map((item,index)=>{
                   return (
                     <CardDrop
+                      isDragDisabled={`${item.id}` == '1'}
                       fixedHeight title={item?.title}
                       key={item?.id ?? index}
                       position={position && position[0] && position[0].id == item.id}
                       onClick={()=>onChecklistHandle(item?.id,item?.title)}
-                      item={item}
+                      draggableId={`${item.id}/${index}`}
+                      item={`${item}`}
                       open={openModalEdit}
                       setOpen={setOpenModalEdit}
                       index={index}
