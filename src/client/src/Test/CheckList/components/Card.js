@@ -13,7 +13,7 @@ import { Draggable } from 'react-beautiful-dnd';
 
 //////import {useLoaderDash} from '../../../context/LoadDashContext'
 
-export function Card({open,setOpen,item,title,position,fixedHeight,button,...props}) {
+export function Card({open,setOpen,item,onClickEdit=()=>{},disableDel,disableEdit,disableDup,title,position,fixedHeight,button,...props}) {
   const anchorRef = React.useRef(null);
 
   function onRightClick(event) {
@@ -30,7 +30,7 @@ export function Card({open,setOpen,item,title,position,fixedHeight,button,...pro
           <IconsArrowCard style={{fontSize:22}} type={`KeyboardArrowRightIcon`}/>
         }
         { setOpen &&
-          <CardEdit open={open===item.id} setOpen={setOpen} anchorRef={anchorRef}/>
+          <CardEdit item={item} onClick={onClickEdit} open={open===item.id} setOpen={setOpen} disableDup={disableDup}  disableEdit={disableEdit}  disableDel={disableDel} anchorRef={anchorRef}/>
         }
       </CardChecklistContainer>
   );

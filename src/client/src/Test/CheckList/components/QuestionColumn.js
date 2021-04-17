@@ -168,7 +168,6 @@ export function QuestionColumn({
     return
   }
 
-
   return (
         <>
           <p className={'noBreakText'} style={{marginBottom:15,maxWidth:150}}>{question?.text ? question.text : 'Pergunta'}</p>

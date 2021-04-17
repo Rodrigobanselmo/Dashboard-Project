@@ -14,7 +14,7 @@ import useDraggableInPortal from '../../../hooks/useDraggableInPortal'
 
 //////import {useLoaderDash} from '../../../context/LoadDashContext'
 
-export function CardDrop({isDragDisabled,open,setOpen,item,title,position,fixedHeight,index,draggableId,...props}) {
+export function CardDrop({isDragDisabled,disableDel,disableEdit,disableDup,open,onClickEdit=()=>{},setOpen,item,title,position,fixedHeight,index,draggableId,...props}) {
   const anchorRef = React.useRef(null);
   const renderDraggable = useDraggableInPortal();
 
@@ -35,7 +35,7 @@ export function CardDrop({isDragDisabled,open,setOpen,item,title,position,fixedH
                 <IconsArrowCard style={{fontSize:22}} type={`KeyboardArrowRightIcon`}/>
               }
               { setOpen &&
-                <CardEdit open={open===item.id} setOpen={setOpen} anchorRef={anchorRef}/>
+                <CardEdit item={item} disableDup={disableDup}  disableEdit={disableEdit}  disableDel={disableDel} onClick={onClickEdit} open={open===item.id} setOpen={setOpen} anchorRef={anchorRef}/>
               }
             </CardChecklistContainer>
           </div>

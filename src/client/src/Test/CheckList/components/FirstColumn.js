@@ -104,7 +104,7 @@ export function FirstColumn({openModalEdit,setOpenModalEdit,data=[],setData,posi
                       position={position && position[0] && position[0].id == item.id}
                       onClick={()=>onChecklistHandle(item?.id,item?.title)}
                       draggableId={`${item.id}/${index}`}
-                      item={`${item}`}
+                      item={item}
                       open={openModalEdit}
                       setOpen={setOpenModalEdit}
                       index={index}

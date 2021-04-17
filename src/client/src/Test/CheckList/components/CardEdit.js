@@ -14,31 +14,27 @@ const ButtonRightClick = styled.button`
   border: none;
   background: ${({theme})=>theme.palette.type !=='dark'?darken(theme.palette.background.paper,0.00):lighten(theme.palette.background.default,0.1)};
   &:hover {
-    background: ${({theme})=>darken(theme.palette.background.paper,0.04)};
+    background: ${({theme,disable})=>disable?'transparent':darken(theme.palette.background.paper,0.04)};
   }
   span {
-        opacity:1
+    opacity:${({disable})=>disable?0.6:1};
   }
 `;
 
 
-export function CardEdit({open,setOpen,anchorRef,title="Filtro Avançado",onClick=()=>{},...restProps}) {
+export function CardEdit({open,item,disableDel,disableEdit,disableDup,setOpen,anchorRef,onClick,title="Filtro Avançado",...restProps}) {
   const theme = React.useContext(ThemeContext)
 
-  function onClose(item) {
-    onClick(item)
+  function onClickFunction(text) {
+    onClick(text,item)
     setOpen(false)
   }
 
-  function onClickCardRightButton() {
-  }
-
-  function Button({text}) {
-
+  function Button({text,disable}) {
     return(
-      <ButtonRightClick text={text}>
+      <ButtonRightClick onClick={()=>onClickFunction(text)} disable={disable} disabled={disable} text={text}>
         <div style={{padding:'7px 0px'}}>
-          <span>{text}</span>
+          <span className={'noSelect'}>{text}</span>
         </div>
       </ButtonRightClick>
     )
@@ -47,9 +43,9 @@ export function CardEdit({open,setOpen,anchorRef,title="Filtro Avançado",onClic
   return (
     <div ref={anchorRef} style={{marginBottom:-30,marginTop:-30}}>
       <RichTooltip elevation={theme.palette.type !=='dark'?5:15} {...restProps} open={open} setOpen={setOpen} width={100} background={theme.palette.type === 'dark' ? 'grey' : 'Light'} placement={'bottom-end'} anchorRef={anchorRef}  translateY={3}>
-          <Button text={'Editar'}/>
-          <Button text={'Duplicar'}/>
-          <Button text={'Deletar'}/>
+          <Button disable={disableEdit} text={'Editar'}/>
+          <Button disable={disableDup} text={'Duplicar'}/>
+          <Button disable={disableDel} text={'Deletar'}/>
       </RichTooltip>
     </div>
   )

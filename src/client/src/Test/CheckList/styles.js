@@ -276,7 +276,7 @@ export const AddedRiskContainer = styled.div`
 `;
 
 export const InputTitle = styled.input`
-  width:400px;
+  width:500px;
   padding:12px 8px 24px 8px;
   background-color: ${({theme})=>theme.palette.type !=='dark' ?darken(theme.palette.background.paper,0.01):lighten(theme.palette.background.paper,0.01)};
   color: ${({theme})=>theme.palette.type!=="dark"?theme.palette.background.secondary:theme.palette.text.primary};
@@ -429,4 +429,11 @@ export const ChooseDivYesNoNA = styled.div`
   ${props => props.active && css`
     background-color:${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.primary.main,0.2) : theme.palette.primary.main};
   `}
+`;
+
+export const SubText = styled.p`
+font-size:18px;
+display: flex;
+max-width:500px;
+margin: -15px 0 20px 0;
 `;

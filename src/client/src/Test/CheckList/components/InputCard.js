@@ -24,6 +24,12 @@ export function InputCard({initialValue='',onBlurTextEditSave,inputProps,...prop
   const handleOnChange = (e) => {
     setTitle(e.target.value);
   };
+  const onFocus = (e) => {
+    if (title=='...') {
+      setTitle('')
+      setOldValue('...')
+    }
+  };
 
   return (
     <div>
@@ -32,6 +38,7 @@ export function InputCard({initialValue='',onBlurTextEditSave,inputProps,...prop
           onChange={handleOnChange}
           multiline
           onBlur={() => onBlurTextEditSave(title,setTitle,oldValue, setOldValue)}
+          onFocus={onFocus}
           fullWidth
           inputProps={{
             className: classes.input,
