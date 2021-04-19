@@ -46,6 +46,7 @@ import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
 import MoreVertRoundedIcon from '@material-ui/icons/MoreVertRounded';
 import CameraAltOutlinedIcon from '@material-ui/icons/CameraAltOutlined';
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
 import Facebook from '@material-ui/icons/Facebook';
 import YouTube from '@material-ui/icons/YouTube';
@@ -201,6 +202,8 @@ export const Icons = ({ type, ...props }) => {
       return <Help {...props} />;
     case 'Video':
       return <VideoLibrary {...props} />;
+    case 'DeleteIcon':
+      return <DeleteOutlineIcon {...props} />;
 
     case 'Load':
       return (

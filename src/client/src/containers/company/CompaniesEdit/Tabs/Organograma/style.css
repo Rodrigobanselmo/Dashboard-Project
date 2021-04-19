@@ -44,6 +44,6 @@ svg.customLight .node {
 
 svg.customLight path.link {
 	fill: none;
-	stroke: #fc7a2c;
+	stroke: #fc7a2c99;
 	stroke-width: 1.5px;
 }

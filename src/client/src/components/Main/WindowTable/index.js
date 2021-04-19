@@ -392,7 +392,8 @@ const ReactWindowTable = ({ data, columns, initialOrder='creation',setSelected,s
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: "flex"
+    display: "flex",
+    flexDirection: "column"
   },
   paper: {
     height: "100%",
@@ -410,11 +411,11 @@ const App = ({rowsCells,headCells,setSelected,selected,handleCellClick,initialOr
   const classes = useStyles();
 
   return (
-
     <div className={classes.root}>
         <div style={{height:rowsCells.length > 7?440: rowsCells.length*rowSize+77,}} className={classes.paper}>
           <ReactWindowTable onCorrectData={onCorrectData} data={rowsCells} rowSize={rowSize} columns={headCells} setSelected={setSelected} selected={selected} handleCellClick={handleCellClick} initialOrder={initialOrder} />
         </div>
+        <p style={{textAlign:"left",marginBottom:-10}}>Total: {rowsCells.length}</p>
     </div>
   );
 };

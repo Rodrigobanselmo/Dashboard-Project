@@ -47,12 +47,13 @@ export function QuestionsData({
   }
 
   function onCreateNewQuestion() {
+    const uid = Math.floor((1 + Math.random()) * 0x100000000000).toString(16).substring(1);
     const addData = {type:'standard',group:position[2].title,action:{q_1:{id:'q_1',text:'SIM',data:[]},q_2:{id:'q_2',text:'NÃO',data:[]},q_3:{id:'q_3',text:'N.A.',data:[]}},photo:false,text:title,id:uid}
     setPosition([...position.slice(0,index+1),{id:uid,title:'Pergunta...'}]);
 
     var copyDataChecklist = {...dataChecklist}
     copyDataChecklist.data[categoryIndex].questions = [...copyDataChecklist.data[categoryIndex].questions,{...addData}]
-    setDataAll([...dataAll,{questionId:uid}])
+    setDataAll([...dataAll.slice(0,index+1),{id:uid,questionId:uid,type:'question'}])
 
     setDataChecklist({...copyDataChecklist})
     setSave(true)
@@ -60,6 +61,7 @@ export function QuestionsData({
   }
 
   function onHandleQuestion(id,title) {
+    console.log(dataAll.slice(0,index+1))
     setPosition([...position.slice(0,index+1),{id,title:title!=''?title:'Pergunta...'}]);
     setDataAll([...dataAll.slice(0,index+1),{id,questionId:id,type:'question'}])
   }
@@ -104,7 +106,7 @@ export function QuestionsData({
 
     let copyDataChecklist = {...dataChecklist}
     copyDataChecklist = clone(copyDataChecklist)
-    copyDataChecklist.data[categoryIndex].questions = [...copyDataChecklist.data[categoryIndex].questions.filter(i=>i.id != actionsData.id)]
+    copyDataChecklist.data[categoryIndex].questions = [...copyDataChecklist.data[categoryIndex].questions.filter(i => (i.id != actionsData.id)&&(!i?.parent||i.parent != actionsData.id)&&(!i?.subParent || (i?.subParent && !i.subParent.includes(actionsData.id))))]
 
     setDataAll(dataAll=>[...dataAll.slice(0,index+1)])
     setPosition(position=>[...position.slice(0,index+1)]);
@@ -144,14 +146,13 @@ export function QuestionsData({
     if (questions && questions.filter(i=>i.text == title.trim() && i.text != '').length > 0) return true
    }
 
-  console.log(data)
   return (
     <>
       <p style={{marginBottom:15}}>Perguntas</p>
       <Droppable droppableId={`question/${data.groupName}/${index}`}>
         {(provided,snapshot) => (
           <div style={{overflowY:'auto',height:'94%',paddingLeft:10}} ref={provided.innerRef} {...provided.droppableProps}>
-            {questions && questions.length > 0 ? questions.map((item,indexItem)=>{
+            {questions && questions.length > 0 ? questions.filter(i=>!i?.hide).map((item,indexItem)=>{
               return (
                 <CardDrop
                   fixedHeight

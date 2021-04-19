@@ -5,6 +5,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import styled, {ThemeContext,css} from "styled-components";
 import { lighten,darken,fade } from "@material-ui/core/styles";
 import { isNumber } from "lodash";
+import {BootstrapTooltip} from '../../Main/MuiHelpers/Tooltip'
 
 const LabelText = styled.p`
   position:absolute;
@@ -72,13 +73,20 @@ const DropDownList = styled.ul`
 `;
 
 const ListItem = styled.li`
+  position:relative;
   list-style: none;
   align-items:center;
   justify-content: center;
   border-bottom: 1px solid ${({theme})=>theme.palette.background.line};
   padding: 8px;
   border-radius:6px;
-
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
   &:hover {
     background-color: ${({theme})=>lighten(theme.palette.background.paper,0.03)};
   }
@@ -103,6 +111,10 @@ export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={
     onSelect(selectedOption)
   }, [selectedOption])
 
+  React.useEffect(() => {
+    setSelectedOption(defaultValue)
+  }, [defaultValue])
+
   const onOptionClicked = (value,index) => () => {
     setSelectedOption(value,index);
     setIsOpen(false);
@@ -120,8 +132,20 @@ export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={
           <DropDownListContainer>
             <DropDownList type={type} style={listStyle}>
               {options.map((option,index) => (
-                <ListItem type={type} style={itemStyle} onClick={onOptionClicked(option,index)} key={Math.random()}>
-                  {option}
+                <ListItem type={type} style={itemStyle} onClick={onOptionClicked(option?.text ?? option,index)} key={index}>
+                  {option?.text ?? option}
+                  {option?.tooltip &&
+                    <BootstrapTooltip
+                    placement="bottom"
+                    TransitionProps={{ timeout: {enter:500, exit: 50} }}
+                    title={option.tooltip}
+                    styletooltip={{transform: 'translateY(0px)'}}
+                    >
+                    <div>
+                      <Icons style={{fontSize:30,position: 'absolute',top:4,right:5,}} height={12} width={12} type={`Info`}/>
+                    </div>
+                  </BootstrapTooltip>
+                  }
                 </ListItem>
               ))}
             </DropDownList>

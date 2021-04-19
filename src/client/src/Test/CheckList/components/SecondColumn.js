@@ -43,9 +43,6 @@ export function SecondColumn({
   function onCreateNewCategory() {
     //update data of columns
     let uid = Math.floor((1 + Math.random()) * 0x100000000000).toString(16).substring(1);
-    let copyData = [...dataAll]
-    copyData[0] = [...copyData[0],{group:title,id:uid}] //title é o titulo colocado no modal para o card
-    setDataAll([...copyData])
 
     //update checklist data from database
     let copyDataChecklist = {...dataChecklist}

@@ -12,15 +12,28 @@ import {onGetAllCompanies} from '../func'
 import {Link} from "react-router-dom";
 import {useHistory} from "react-router-dom";
 import {CardDrop} from './CardDrop';
-import {ColumnContainer,AddCircle,InputTitle,ErrorMessage} from '../styles';
+import {ColumnContainer,AddCircle,InputTitle,ErrorMessage,SubText} from '../styles';
 import {ModalButtons} from '../../../components/Main/MuiHelpers/ModalButtons'
 import { lighten,darken, } from "@material-ui/core/styles";
 import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
 
-export function FirstColumn({openModalEdit,setOpenModalEdit,data=[],setData,position=[],setPosition,onChecklistHandle,onCreateNewChecklist }) {
+export function FirstColumn({
+  openModalEdit,
+  setOpenModalEdit,
+  data=[],
+  setData,
+  position=[],
+  setPosition,
+  onChecklistHandle,
+  onCreateNewChecklist,
+  onEditDataChecklist,
+  onDeleteDataChecklist,
+  onDuplicateNewChecklist
+}) {
 
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState('')
+  const [actionsData, setActionsData] = useState({})
 
   function onCloseModalAdd() {
     setTitle('')
@@ -30,6 +43,48 @@ export function FirstColumn({openModalEdit,setOpenModalEdit,data=[],setData,posi
   function onConfirmCreationChecklistModal() {
     onCreateNewChecklist(title)
     onCloseModalAdd()
+  }
+
+  function handleAddButton() {
+    setOpen(true)
+    setTitle('')
+  }
+
+  function onDuplicate() {
+    onCloseModalAdd()
+    onDuplicateNewChecklist(title)
+  }
+
+  function onEdit() {
+    onCloseModalAdd()
+    onEditDataChecklist(actionsData.checklistId,title)
+  }
+
+  function onDelete() {
+    onCloseModalAdd()
+    onDeleteDataChecklist(actionsData.checklistId)
+  }
+
+  function onRightClick(text,item) {
+    if (text == 'Duplicar') {
+      setOpen('dup')
+      setActionsData({checklistId:item.id})
+      var name = `${item.title} - cópia`
+      var cont = 1
+      while (data && data.filter(i=>i.title == name.trim()).length > 0) {
+        name = `${item.title} - cópia ${cont}`
+        cont++
+      }
+      setTitle(name)
+    } else if (text == 'Editar') {
+      setOpen('edit')
+      setActionsData({checklistId:item.id})
+      setTitle(item.title)
+    } else if (text == 'Deletar') {
+      setOpen('del')
+      setActionsData({checklistId:item.id})
+      setTitle(item.title)
+    }
   }
 
   const onDragEnd = (result) => {
@@ -48,45 +103,14 @@ export function FirstColumn({openModalEdit,setOpenModalEdit,data=[],setData,posi
       setData(List);
     }
 
-    // if (type === 'list') {
-    //   const newListIds = data.listIds;
-    //   newListIds.splice(source.index, 1);
-    //   newListIds.splice(destination.index, 0, draggableId);
-    //   return;
-    // }
-
-    // const sourceList = data.lists[source.droppableId];
-    // const destinationList = data.lists[destination.droppableId];
-    // const draggingCard = sourceList.cards.filter(
-    //   (card) => card.id === draggableId
-    // )[0];
-
-    // if (source.droppableId === destination.droppableId) {
-    //   sourceList.cards.splice(source.index, 1);
-    //   destinationList.cards.splice(destination.index, 0, draggingCard);
-    //   const newSate = {
-    //     ...data,
-    //     lists: {
-    //       ...data.lists,
-    //       [sourceList.id]: destinationList,
-    //     },
-    //   };
-    //   setData(newSate);
-    // } else {
-    //   sourceList.cards.splice(source.index, 1);
-    //   destinationList.cards.splice(destination.index, 0, draggingCard);
-
-    //   const newState = {
-    //     ...data,
-    //     lists: {
-    //       ...data.lists,
-    //       [sourceList.id]: sourceList,
-    //       [destinationList.id]: destinationList,
-    //     },
-    //   };
-    //   setData(newState);
-    // }
   };
+
+  function onDisable(hasTitle) {
+    if (open == 'del') return false
+    if (hasTitle && title=='') return true
+    if (open == 'edit' && actionsData?.checklistId && data && data.filter(i=>i.title == title.trim()).length == 1 && data.filter(i=>i.title == title.trim())[0].id == actionsData.checklistId) return false
+    if (data && data.filter(i=>i.title == title.trim()).length > 0) return true
+   }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -108,27 +132,37 @@ export function FirstColumn({openModalEdit,setOpenModalEdit,data=[],setData,posi
                       open={openModalEdit}
                       setOpen={setOpenModalEdit}
                       index={index}
-                    />
+                      onClickEdit={onRightClick}
+                  />
                   )
                 })}
                 {provided.placeholder}
               </div>
               )}
           </Droppable>
-        <AddCircle onClick={()=>setOpen(true)}>
-          <Icons style={{fontSize:22}} type={`Add`}/>
-        </AddCircle>
-        <ModalButtons open={open} disable={title=='' || (data && data.filter(i=>i.title == title).length > 0)} onClick={onConfirmCreationChecklistModal} onClose={onCloseModalAdd} title={'Adicionar Checklist'} >
-            <InputTitle
-              value={title}
-              onChange={({target})=>setTitle(target.value)}
-              placeholder={'Nome do checklist'}
-              error={data && data.filter(i=>i.title == title).length > 0}
-            />
-            {data && data.filter(i=>i.title == title).length > 0 &&
-              <ErrorMessage>Nome já existente, por favor cadastre um nome diferente.</ErrorMessage>
-            }
-        </ModalButtons>
+      <AddCircle onClick={handleAddButton}>
+        <Icons style={{fontSize:22}} type={`Add`}/>
+      </AddCircle>
+      <ModalButtons
+        open={Boolean(open)}
+        disable={onDisable(true)}
+        onClick={open=='dup'?onDuplicate:open=='edit'?onEdit:open=='del'?onDelete:onConfirmCreationChecklistModal}
+        onClose={onCloseModalAdd}
+        title={open=='del'?'Deletar Checklist' : open=='edit' ? 'Editar Checklist' : open=='dup' ? 'Duplicar Checklist':'Adicionar Checklist'}
+      >
+          {open=='del' && <SubText >Você tem certeza que deseja deletar este checkist? Após concluido não é possivel desfazer.</SubText>}
+          <InputTitle
+            value={title}
+            onChange={({target})=>setTitle(target.value)}
+            placeholder={'Nome do Checklist'}
+            error={onDisable()}
+            autoFocus={true}
+            readOnly={open=='del' ?true:false}
+          />
+          {onDisable() &&
+            <ErrorMessage>Nome já existente, por favor cadastre um nome diferente.</ErrorMessage>
+          }
+      </ModalButtons>
     </ColumnContainer >
    </DragDropContext>
   );

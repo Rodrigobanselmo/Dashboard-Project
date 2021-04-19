@@ -421,6 +421,7 @@ export const IconCircle = styled.div`
 `;
 
 export const ChooseDivYesNoNA = styled.div`
+  min-width: 30px;
   width: 100%;
   height: 5px;
   background-color:${({theme})=>theme.palette.type !== 'dark' ? fade(theme.palette.background.inactive,0.4) : theme.palette.background.inactive};
@@ -436,4 +437,24 @@ font-size:18px;
 display: flex;
 max-width:500px;
 margin: -15px 0 20px 0;
+`;
+
+export const AddButtonAnswer = styled.div`
+  cursor: pointer;
+  width: 30px;
+  border-radius: 10px;
+  padding: 0px 10px;
+  border: 1px solid ${({theme})=>theme.palette.text.third};
+  justify-content: center;
+  display: flex;
+  color: ${({theme})=>theme.palette.text.third};
+  font-size:10px;
+  &:hover {
+    opacity:0.9;
+    border: 1px solid ${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.primary.main,0.2) : theme.palette.primary.main};
+    color: ${({theme})=>theme.palette.type !== 'dark' ? lighten(theme.palette.primary.main,0.2) : theme.palette.primary.main};
+  }
+  &:active {
+    opacity:0.5;
+  }
 `;

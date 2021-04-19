@@ -162,7 +162,7 @@ export const ThirdColumn = React.memo((
     let copyDataChecklist = {...dataChecklist}
     copyDataChecklist = clone(copyDataChecklist)
     const categoryIndex = copyDataChecklist.data.findIndex(i=>i.id==position[1].id)
-    const questions = [...copyDataChecklist.data[categoryIndex].questions.filter(i=>!i?.mother)]
+    const questions = [...copyDataChecklist.data[categoryIndex].questions.filter(i=>!i?.mother&&!i?.subMother)]
 
     copyDataChecklist.data[categoryIndex].questions = [...questions]
 
@@ -194,8 +194,6 @@ export const ThirdColumn = React.memo((
       setActionsData({groupName:item.id})
       setTitle(item.id)
     }
-    console.log('text',text)
-    console.log('item',item)
   }
 
   function onRightMotherClick(text,item) {
@@ -203,8 +201,6 @@ export const ThirdColumn = React.memo((
       setOpen('del-mother')
       setTitle(item.text)
     }
-    console.log('text',text)
-    console.log('item',item)
   }
 
   function handleAddButton() {

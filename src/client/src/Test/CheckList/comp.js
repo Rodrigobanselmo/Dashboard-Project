@@ -7,7 +7,7 @@ import {
 import NewTabs, {TabPanel} from '../../components/Main/MuiHelpers/NewTabs'
 import {FilterComponent,LoadingContent,AddUserButton} from '../../components/Main/Table/comp'
 import {COMPANY} from '../../routes/routesNames.ts'
-import {onGetChecklist,onCreateChecklist,onSaveChecklistData,onGetRisks} from './func'
+import {onGetChecklist,onCreateChecklist,onSaveChecklistData,onGetRisks,onDeleteChecklist,onEditChecklist,onDuplicateChecklist} from './func'
 import store from './store'
 import { Header } from './components/Header'
 import { FirstColumn } from './components/FirstColumn'
@@ -75,129 +75,59 @@ export function MainComponent({currentUser,notification,setLoad}) {
     const uid = Math.floor((1 + Math.random()) * 0x1000000000000000000).toString(16).substring(1);
     setPosition([{id:uid,title}]);
 
-    function onSuccess() {
-      setData([[{title,id:uid}]])
+    function onSuccess(checklist) {
+      setData([{title,id:uid}])
+      setDataChecklist({...checklist})
     }
 
     onCreateChecklist({id:uid,setAllChecklists,onSuccess,title,currentUser,setLoad,notification})
   }
 
+  function onDuplicateNewChecklist(title) {
+    const uid = Math.floor((1 + Math.random()) * 0x1000000000000000000).toString(16).substring(1);
+
+    setPosition([{id:uid,title}]);
+    const checklistData = {...dataChecklist,id:uid,title}
+
+    function onSuccess(checklist) {
+      setData([{title,id:uid}])
+      setDataChecklist({...checklist})
+      setAllChecklists(data=>[...data,{id:uid,title}])
+    }
+
+    onDuplicateChecklist({id:uid,checklistData,setAllChecklists,onSuccess,title,currentUser,setLoad,notification})
+  }
+
+  function onDeleteDataChecklist(id) {
+
+    function onSuccess(id) {
+      setPosition([])
+      setData([])
+      //setDataChecklist({})
+    }
+
+    onDeleteChecklist({id,setAllChecklists,onSuccess,currentUser,setLoad,notification})
+  }
+
+  function onEditDataChecklist(id,title) {
+
+    function onSuccess() {
+      let copyDataChecklist = {...dataChecklist}
+      copyDataChecklist.title = title
+      let newData = [...allChecklists]
+      const dataIndex = allChecklists.findIndex(i=>i.id == id)
+      if (newData[dataIndex]) newData[dataIndex].title = title
+      setAllChecklists([...newData])
+      setPosition([{id,title}]);
+      setData([{title,id}])
+      setDataChecklist({...copyDataChecklist})
+    }
+
+    onEditChecklist({id,onSuccess,currentUser,setLoad,notification})
+  }
+
   //Question Manager
   function onChangeQuestion(action,index,dados) {
-
-    //let uid = Math.floor((1 + Math.random()) * 0x100000000000).toString(16).substring(1);
-    let copyDataChecklist = {...dataChecklist}
-    const categoryIndex = copyDataChecklist.data.findIndex(i=>i.id == position[1].id)
-    const questionIndexDatabase = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==dados.id)
-    const question = dataChecklist.data[categoryIndex].questions[questionIndexDatabase]
-
-    const dataQuestion = dataChecklist.data[categoryIndex].questions[questionIndexDatabase]
-    const questionIndex = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==dados.id)
-
-    //data from Data
-    let copyData = [...data]
-    // const dataQuestion = 'data' in copyData[index-1] ? copyData[index-1].data : copyData[index-1]
-    // const questionIndex = dataQuestion.findIndex(i=>i.id===dados.id)
-
-    ////data from DataChecklist
-    // let copyDataChecklist = {...dataChecklist}
-    // const categoryIndex = copyDataChecklist.data.findIndex(i=>i.id == position[1].id)
-    // const questionIndexDatabase = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==dados.id)
-    // const question = dataChecklist.data[categoryIndex].questions[questionIndexDatabase]
-
-    if (action == 'text') { //update text from question
-
-      //update data of columns
-      copyData[index] = {...copyData[index],text:dados.text}
-      if ('data' in copyData[index-1]) copyData[index-1].data[questionIndex] = {...copyData[index-1].data[questionIndex],text:dados.text}
-      else copyData[index-1][questionIndex] = {...copyData[index-1][questionIndex],text:dados.text,title:dados.text}
-      setData([...copyData])
-
-      //update checklist data from database
-      copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase] = {...question,text:dados.text}
-      setDataChecklist({...copyDataChecklist})
-      setSave(true)
-      return
-    }
-
-    if (action == 'photo') { //update text from question
-
-      //update data of columns
-      copyData[index] = {...copyData[index],photo:!copyData[index].photo}
-      setData([...copyData])
-
-      //update checklist data from database
-      copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase] = {...question,photo:!question.photo}
-      setDataChecklist({...copyDataChecklist})
-      setSave(true)
-      return
-    }
-
-    if (action == 'type') { //update text from question
-
-      setPosition([...position.slice(0,index+1)]);
-
-      //update data of columns
-      copyData[index] = {...copyData[index],type:dados.type}
-      setData([...copyData])
-
-      //update checklist data from database
-      copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase] = {...question,type:dados.type}
-      setDataChecklist({...copyDataChecklist})
-      //setSave(true)
-      return
-    }
-
-    if (action == 'answer') { //change from sim - nao - na
-
-      let newPosition = [...position]
-
-      //update data of columns
-
-      if (copyData[index+1] && copyData[index+1].type == 'risk') {
-        let strings = newPosition[index+1].title.split('-')
-        newPosition[index+1] = {id:dados.id,title:`${dados.title} - ${strings[strings.length-1]}`}
-        copyData[index+1] = {...copyData[index+1],...dados.action}
-      } else if (copyData[index+1] && copyData[index+1].type == 'jump') {
-        let strings = newPosition[index+1].title.split('-')
-        newPosition[index+1] = {id:`${dados.id}-jump`,title:`${dados.title} - ${strings[strings.length-1]}`}
-        copyData[index+1] = {...copyData[index+1],q:dados.q}
-      }
-
-      if (copyData[index+2] &&  !['riskData','jumpGroup'].includes(copyData[index+2].type)) {
-        copyData = [...copyData.slice(0,index+2)]
-        newPosition = [...newPosition.slice(0,index+2)];
-      }
-
-      if (copyData[index+2].type == 'jumpGroup') {
-        newPosition = [...newPosition.slice(0,index+3)];
-        copyData = [...copyData.slice(0,index+3)]
-      }
-
-      setPosition([...newPosition]);
-      setData([...copyData])
-      //setDataChecklist({...copyDataChecklist})
-      return
-    }
-
-    if (action == 'risk') { //click on add risk button
-      setPosition([...position.slice(0,index+1),{id:dados.id,title:dados.title},{id:'search',title:'Pesquisa Fatores de Risco'}]);
-      if (risk.length == 0) onGetRisks({currentUser,notification,dispatch})
-      //update data of columns
-      setData([...copyData.slice(0,index+1),{...dados.action,type:'risk'},{type:'riskData',disabled:false}])
-      setDataChecklist(copyDataChecklist)
-      return
-
-    }
-
-    if (action == 'jump') { //click on add risk button
-      setPosition([...position.slice(0,index+1),{id:dados.id,title:dados.title},{id:'jumpGroup',title:'Pesquisar Grupos'}]);
-      //update data of columns
-      setData([...copyData.slice(0,index+1),{q:dados.q,id:dados.id,jump:dados.jump,type:'jump'},{type:'jumpGroup',disabled:false,questionId:dados.questionId}])
-      return
-
-    }
-
 
   }
 
@@ -580,11 +510,14 @@ export function MainComponent({currentUser,notification,setLoad}) {
             openModalEdit={openModalEdit}
             setOpenModalEdit={setOpenModalEdit}
             onCreateNewChecklist={onCreateNewChecklist}
+            onEditDataChecklist={onEditDataChecklist}
+            onDeleteDataChecklist={onDeleteDataChecklist}
+            onDuplicateNewChecklist={onDuplicateNewChecklist}
             />
           {data && data.map((item,index)=>{
             return (
               <Column
-                key={item?.id??index}
+                key={index}
                 index={index}
                 data={item}
                 openModalEdit={openModalEdit}

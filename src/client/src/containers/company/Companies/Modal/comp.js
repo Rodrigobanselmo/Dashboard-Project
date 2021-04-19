@@ -110,19 +110,19 @@ AddCompany.Input =  function EmailInput({setData,data,onCheckCNPJExists,notifica
 
   return(
     <InputsContainer>
-        <Input
-            style={{width:'100%'}}
+        <InputEnd
+            width={'100%'}
             status={data?.status && data.status}
             icon={data?.status && data.status}
             onChange={addCNPJ}
             size={'small'}
+            labelWidth={42}
+            name={'responsavel'}
             label={'CNPJ'}
             title={data.message}
             variant="outlined"
             validation={(data && data?.status && (data.status === 'Check' || data.status === 'Warn' || data.status === 'Load'))}
-            InputProps={{
-              inputComponent: NumberFormatCNPJ,
-            }}
+            inputComponent={NumberFormatCNPJ}
           />
     </InputsContainer>
   )

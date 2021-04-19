@@ -16,9 +16,8 @@ const useStyle = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
 }));
-export function InputCard({initialValue='',onBlurTextEditSave,inputProps,...props}) {
+export function InputCard({initialValue='',title, setTitle,onBlurTextEditSave,inputProps,...props}) {
   const classes = useStyle();
-  const [title, setTitle] = useState(initialValue);
   const [oldValue, setOldValue] = useState(initialValue);
 
   const handleOnChange = (e) => {

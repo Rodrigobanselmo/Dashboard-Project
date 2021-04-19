@@ -113,7 +113,7 @@ export function RiskSuggestions({
             //draggingOverWithSameRisk={snapshot.draggingOverWith&& data.data.findIndex(i=>i.risk==snapshot.draggingOverWith.split('/')[1]) != -1 ? 'exist':'different'}
             style={{paddingLeft: '10px'}}
           >
-            {`${positionType}Sug` in questionActionTypeRisk && Array.isArray(questionActionTypeRisk[positionType]) && questionActionTypeRisk[`${positionType}Sug`].length > 0 ?
+            {`${positionType}Sug` in questionActionTypeRisk && Array.isArray(questionActionTypeRisk[`${positionType}Sug`]) && questionActionTypeRisk[`${positionType}Sug`].length > 0 ?
               questionActionTypeRisk[`${positionType}Sug`].map((item,indexItem)=>{
                 const recIndex = suggestion().findIndex(i=>i.id==item)
                 const recData = suggestion()[recIndex]

@@ -55,6 +55,9 @@ export const AddAnotherForm = styled.div`
     &:hover {
         border-color: ${({theme})=> theme.palette.primary.main };
     }
+    &:active {
+      opacity:0.6;
+    }
 `;
 
 const ButtonF = styled(ContinueButton)`

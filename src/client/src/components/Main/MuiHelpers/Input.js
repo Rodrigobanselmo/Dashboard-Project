@@ -14,6 +14,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { fade } from '@material-ui/core/styles';
 import { useField } from '@unform/core'
 import { uniqueId } from 'lodash/util'
+
+const ContainerIcon = styled.div`
+    &:active {
+      opacity:0.5;
+    }
+`;
+
 // <Input key={index} status={emails[index]?.status && emails[index].status} icon={emails[index]?.status && emails[index].status} validation={(emails && emails[index] && emails[index]?.status && (emails[index].status === 'Check' || emails[index].status === 'Warn' || emails[index].status === 'Load'))} onBlur={({target})=>checkEmail(index,target.value)} onChange={addEmail(index)} size={'small'} label="Email" variant="outlined"  />
 
 
@@ -105,20 +112,21 @@ export default function Input({validation=false,status,icon,width='100%',title='
     );
 }
 
-export function InputEnd({validation=false,option=false,marginTop=10,marginBottom=10,labelWidth,label,status,icon,width='100%',title='OK',...props}) {
+export function InputEnd({validation=false,option=false,marginTop=10,marginBottom=10,labelWidth,label,status,icon,width='100%',title='OK',iconProps,...props}) {
 
     return (
         <FormControl style={{width:width,marginTop,marginBottom}} variant="outlined">
           <InputLabelEnd margin={'dense'} htmlFor="outlined-adornment-password" >{label}{option && <span style={{fontSize:10,verticalAlign:'middle',marginLeft:8}}>{option===true?'(OPCIONAL)':`(${option})`}</span>}</InputLabelEnd>
           <OutlinedInputEnd
             margin={'dense'}
+            autoComplete={'off'}
             endAdornment={
               <InputAdornment position="end">
                 {validation &&
                 <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={title} styletooltip={{transform: 'translateY(0px)'}}>
-                    <div>
+                    <ContainerIcon {...iconProps}>
                         <IconEnd status={status} type={icon}/>
-                    </div>
+                    </ContainerIcon>
                 </BootstrapTooltip>
                 }
               </InputAdornment>
