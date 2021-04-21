@@ -6,7 +6,7 @@ import {
 } from './styles';
 import NewTabs, {TabPanel} from '../../../components/Main/MuiHelpers/NewTabs'
 import {FilterComponent,LoadingContent,AddUserButton,FilterButton,FilterListButton} from '../../../components/Main/Table/comp'
-import {COMPANY} from '../../../routes/routesNames.ts'
+import {RISK_FACTORS_SLICE} from '../../../routes/routesNames.ts'
 import {onGetAllRisksAndGroups} from './func'
 import {Link} from "react-router-dom";
 import {keepOnlyNumbers} from '../../../helpers/StringHandle';
@@ -40,7 +40,9 @@ export function TableContainer({risk,tabValue,setTabValue,setSelected,selected,d
   }, [risk])
 
   function handleCellClick(e,rowId) {
-    //history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
+    console.log(rowId)
+    console.log(selected)
+    history.push(`${RISK_FACTORS_SLICE}/risco/${keepOnlyNumbers(rowId)}/0`);
     //setLoaderDash(true)
   }
 
@@ -90,7 +92,7 @@ export function TableContainer({risk,tabValue,setTabValue,setSelected,selected,d
             </>
           }
           {selected.length == 1 &&
-          <Link style={{textDecoration: 'none', }} to={`${COMPANY}/${keepOnlyNumbers(selected[0])}/0`}>
+          <Link style={{textDecoration: 'none', }} to={`${RISK_FACTORS_SLICE}/${keepOnlyNumbers(selected[0])}/0`}>
             <AddUserButton text={'Editar'} icon={'Edit'} width={100} />
           </Link>
           }

@@ -43,6 +43,7 @@ export function Organograma({data,cnpj,currentUser,notification}) {
 
   const [position, setPosition] = useState({top:0,left:0,nodeKey:'',fromTop:0})
   const [positionScroll, setPositionScroll] = useState(0)
+  const [initialized, setInitialized] = useState(false)
   const [dataInitial,setDataInitial] = useState(clone(dataFake))
   const [dataBeforeFilter,setDataBeforeFilter] = useState(clone(dataFake))
   const [dataState, setDataState] = useState(clone(dataFake))
@@ -59,11 +60,14 @@ export function Organograma({data,cnpj,currentUser,notification}) {
   const ContainerMain = document.getElementById('someRandomID');
 
   useEffect(() => {
-    ContainerMain.addEventListener('scroll', setScrollPosition);
-    return function cleanupListener() {
-      ContainerMain.removeEventListener('scroll', setScrollPosition)
+    if (initialized) {
+      ContainerMain.addEventListener('scroll', setScrollPosition);
+      return function cleanupListener() {
+        ContainerMain.removeEventListener('scroll', setScrollPosition)
+      }
     }
-  }, []);
+    if (!initialized) setInitialized(true)
+  }, [initialized]);
 
   const setScrollPosition = (value) => {
     setPositionScroll(value.target.scrollTop);

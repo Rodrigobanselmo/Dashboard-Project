@@ -26,7 +26,7 @@ const light = {
     },
     background: {
       paper: '#fff',
-      paperModal: '#1b1c21',
+      paperModal: '#fafafa',
       default: '#e0e0e0',
       contrast: '#A8A8B355',
       iconsPaper: '#e6e6e6',
@@ -47,7 +47,7 @@ const light = {
       checkboxBack: '#fff',
       line: '#ccc',
       header: '#26262A',
-      everyOtherRow: '#f0f0f0',
+      everyOtherRow: '#fafafa',
     },
     text: {
       tabsText: '#1b1c21',

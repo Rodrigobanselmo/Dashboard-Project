@@ -159,11 +159,11 @@ TableTabs.TableRows = function RowComponent(row, index,data,selected,handleClick
   );
 }
 
-export function LoadingContent() {
+export function LoadingContent({margin=10}) {
 
 
   return (
-    <div style={{margin:10,height:350}}>
+    <div style={{margin:margin,height:350}}>
       <LinearProgress />
     </div>
   );

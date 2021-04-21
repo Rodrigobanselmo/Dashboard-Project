@@ -16,6 +16,7 @@ import {
   RISK_FACTORS_FIS,
   RISK_FACTORS_ACI,
   RISK_FACTORS_AMB,
+  IMPORT,
   TESTE
 } from '../routes/routesNames'
 
@@ -561,6 +562,15 @@ const itemsList = [
     description:'Download dos dados obtidos em campo utilizando o App SimpleSST',
     to:DATA,
     id:DATA,
+    onClick: () => {}
+  },
+  {
+    text: "Importar Dados",
+    icon: 'Storage',
+    //items: itemsSubList2,
+    description:'Importar dados para o banco de dados de sua empresa',
+    to:IMPORT,
+    id:IMPORT,
     onClick: () => {}
   },
   {

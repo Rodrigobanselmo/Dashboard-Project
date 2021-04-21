@@ -15,6 +15,7 @@ export const COMPANY = `${DASHBOARD}/empresas-cadastradas`;
 export const COMPANY_MODAL_OPEN = `${COMPANY}?m=1`;
 export const COMPANY_EDIT = `${COMPANY}/:cnpj/:tabId?`;
 export const DATA = `${DASHBOARD}/data`;
+export const IMPORT = `${DASHBOARD}/importar`;
 
 // Fator de Risco
 export const RISK_FACTORS = `${DASHBOARD}/fatores-de-risco/:risk/:tabId?`;
@@ -29,6 +30,7 @@ export const RISK_FACTORS_INS = `${RISK_FACTORS_SLICE}/insalubridade`;
 export const RISK_FACTORS_NOC = `${RISK_FACTORS_SLICE}/nocivos`;
 export const RISK_FACTORS_AMB = `${RISK_FACTORS_SLICE}/ambientais`;
 export const RISK_FACTORS_OTHERS = `${RISK_FACTORS_SLICE}/outros`;
+export const RISK_FACTORS_EDIT = `${RISK_FACTORS_SLICE}/risco/:riskId/:tabId?`;
 
 // subList
 // ...

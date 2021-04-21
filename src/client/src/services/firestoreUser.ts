@@ -253,7 +253,10 @@ export function GetAllUsersCompany(
       querySnapshot.forEach(function (doc) {
         const docx = doc.data();
         docx.company = docx.company.name;
-        docx.creation = docx.creation.start;
+        if (docx?.creation) {
+          docx.end = docx.creation.end;
+          docx.creation = docx.creation.start;
+        }
         response.push(docx);
       });
       checkSuccess(response);

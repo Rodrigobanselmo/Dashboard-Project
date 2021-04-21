@@ -15,7 +15,7 @@ const FullModalContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${props=>props.transparent?'#000000bb':props.theme.palette.background.paper};
+  background-color: ${props=>props.transparent?'#000000bb':props.theme.palette.type!=='dark'?props.theme.palette.background.paperModal:props.theme.palette.background.paper};
   position:relative;
   z-index:1111110;
   width:100%;
@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
   fullScreen: {
     position:'relative',
     zIndex:1111110,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.paperModal,
     width:'100%',
     height:'100%',
     overflowY:'scroll'
@@ -160,7 +160,7 @@ export function ModalFullScreen({children,open,transparent,onClose,infoModal=fal
 
     function onCloseModal() {
       if (infoModal && infoModal?.title) {
-        notification.modal({title: infoModal.title,text:infoModal.text,open:true,onClick:onCloseInfoModalAndFullScreen})
+        notification.modal({title: infoModal.title,text:infoModal.text,rightBnt:'Fechar',open:true,onClick:onCloseInfoModalAndFullScreen})
       } else {
         onClose()
       }

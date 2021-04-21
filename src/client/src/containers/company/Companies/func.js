@@ -25,6 +25,7 @@ export function onGetAllCompanies(companyId,setDataRows,setLoadContent,notificat
         setLoadContent(false)
         setDataRows([...response])
         setLoaderDash(false)
+        //console.log(response)
       }
 
       function checkError(error) {

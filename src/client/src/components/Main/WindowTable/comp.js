@@ -6,14 +6,15 @@ import styled, {css} from "styled-components";
 import {NormalizeData} from '../../../helpers/DataHandler';
 
 const StatusComponent = styled.div`
-    background-color: ${({theme})=> (theme.palette.status.fail) };
+    background-color: ${({theme})=> (theme.palette.status.success) };
     border-radius: 10px;
     width:10px;
     height:10px;
-    ${props => (props.status === 'Ativo' || props.status === 'Sim') && css`
-      background-color: ${({theme})=> (theme.palette.status.success) };
+    ${props => (props.status === 'none' || props.status === 'Não') && css`
+      background-color: ${({theme})=> (theme.palette.status.fail) };
+      /* background-color: ${({theme})=> (theme.palette.status.success) }; */
     `}
-    ${props => (props.status === 'Aguardando Autenticação' || props.status === 'Não') && css`
+    ${props => (props.status === 'Aguardando Autenticação'/*  || props.status === 'Não' */) && css`
       background-color: ${({theme})=> (theme.palette.status.orange ) };
     `}
 `;
@@ -120,6 +121,14 @@ function Paragraph({column, classes, item, rowSize, onClick, colIndex}) {
 function StatusCell({column, classes, item, rowSize, onClick,colIndex}) {
 
   let ItemToShow = item[column.id]
+  function setTitle() {
+    if (ItemToShow == 'Sim') return 'Dado padrão do sistema, previamente cadastrado pela SimpleSST conforme legislação e/ou norma técnica.'
+    if (ItemToShow == 'Não') return 'Dado criado pela equipe de sua empresa.'
+    if (Array.isArray(ItemToShow) && ItemToShow.length>0 && column.id == 'rec') return 'Possui Medida de controle equivalente a recomendação em questão.'
+    if (Array.isArray(ItemToShow) && ItemToShow.length>0 && column.id == 'med') return 'Possui recomendação equivalente a Medida de controle em questão.'
+    if (typeof ItemToShow == 'string') return ItemToShow
+    return 'Não identificado'
+  }
   return (
     <TableCell
       component="div"
@@ -140,7 +149,7 @@ function StatusCell({column, classes, item, rowSize, onClick,colIndex}) {
       }}
       onClick={onClick}
     >
-      <BootstrapTooltip placement="bottom"  title={ItemToShow ? (ItemToShow === 'Sim' ? 'Dado padrão do sistema, previamente cadastrado pela SimpleSST conforme legislação e/ou norma técnica.' : ItemToShow):'Não identificado'} styletooltip={{transform: 'translate(0px,-22px)'}}>
+      <BootstrapTooltip placement="bottom"  title={setTitle()} styletooltip={{transform: 'translate(0px,-22px)'}}>
         <div style={{padding:30,paddingLeft:30}}>
           <StatusComponent status={ItemToShow ? ItemToShow : 'none'} />
         </div>

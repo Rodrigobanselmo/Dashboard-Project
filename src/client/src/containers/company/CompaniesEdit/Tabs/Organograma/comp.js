@@ -162,6 +162,7 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
               inputProps={{style: {textTransform: 'capitalize'}}}
             />
             <Menu
+              reloadDefault={false}
               options={onOptions()}
               onSelect={onSelect}
               placeholder={"Selecione o tipo de área"}

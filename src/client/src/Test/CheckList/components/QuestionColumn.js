@@ -151,7 +151,7 @@ export function QuestionColumn({
     let newPosition = [...position]
     let copyData = [...dataAll]
 
-    if (dataAll[index+1] && dataAll[index+1].type == 'risk') {
+    if (dataAll[index+1] && newPosition[index+1] && dataAll[index+1].type == 'risk') {
       let strings = newPosition[index+1].title.split('-')
       newPosition[index+1] = {id:dados.id,title:`${dados.title} - ${strings[strings.length-1]}`}
       copyData[index+1] = {...copyData[index+1],action:dados.action}
@@ -171,7 +171,7 @@ export function QuestionColumn({
       copyData = [...copyData.slice(0,index+3)]
     }
 
-    if (dataAll[index+1] && dataAll[index+1].type == 'question') {
+    if (dataAll[index+1] && newPosition[index+1] && dataAll[index+1].type == 'question') {
       newPosition = [...newPosition.slice(0,index+1)];
       copyData = [...copyData.slice(0,index+1)]
     }

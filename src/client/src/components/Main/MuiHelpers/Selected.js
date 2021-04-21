@@ -88,7 +88,7 @@ const ListItem = styled.li`
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
   &:hover {
-    background-color: ${({theme})=>lighten(theme.palette.background.paper,0.03)};
+    background-color:${({theme})=>theme.palette.type !== 'dark' ? darken(theme.palette.background.paper,0.05) : darken(theme.palette.background.contrast,0.2)};
   }
 
   ${props => props.type == 'box' && css`
@@ -101,7 +101,7 @@ const ListItem = styled.li`
 `;
 
 
-export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={},label='Tipo',onSelect,placeholder='Selecione',defaultValue,defaultValueIndex,...props}) {
+export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={},label='Tipo',onSelect,placeholder='Selecione',reloadDefault=true,defaultValue,defaultValueIndex,...props}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(options.length == 1 ? options[0] : defaultValueIndex ? options[defaultValueIndex] : defaultValue);
 
@@ -112,7 +112,9 @@ export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={
   }, [selectedOption])
 
   React.useEffect(() => {
-    setSelectedOption(defaultValue)
+    if (reloadDefault) {
+      setSelectedOption(defaultValue)
+    }
   }, [defaultValue])
 
   const onOptionClicked = (value,index) => () => {

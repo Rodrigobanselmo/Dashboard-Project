@@ -21,7 +21,7 @@ function Companies() {
 
     return (
         <>
-            <Header icons={'Business'} title={'Gerenciar suas Empresas'} video={true}/>
+            <Header icons={'Checklist'} title={'Gerenciar Checklists'} video={true}/>
             <Container >
             <MainComponent
                 setRowsCells={setRowsCells}

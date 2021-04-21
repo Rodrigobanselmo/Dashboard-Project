@@ -61,7 +61,6 @@ export function QuestionsData({
   }
 
   function onHandleQuestion(id,title) {
-    console.log(dataAll.slice(0,index+1))
     setPosition([...position.slice(0,index+1),{id,title:title!=''?title:'Pergunta...'}]);
     setDataAll([...dataAll.slice(0,index+1),{id,questionId:id,type:'question'}])
   }
@@ -135,8 +134,6 @@ export function QuestionsData({
       setActionsData({id:item.id})
       setTitle(item.text)
     }
-    console.log('text',text)
-    console.log('item',item)
   }
 
   function onDisable(hasTitle) {
