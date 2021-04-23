@@ -1,4 +1,4 @@
-//import {GetCompany} from '../../../services/firestoreCompany'
+import {GetRisk,GetAllRisks} from '../../../services/firestoreRisks'
 //import {GetAllCompanies} from '../../../../../services/firestoreCompany'
 
 import {v4} from "uuid";
@@ -17,12 +17,15 @@ const risk = ({
   id: `123`,
 });
 
-export function onGetRisk({companyId,riskId,setData,setLoadContent,notification,setLoaderDash}) {
+export function onGetRisk({companyId,itemId,setData,setLoadContent,notification,setLoaderDash,dispatch,getRiskData}) {
     function checkSuccess(response) {
+      setData({...response})
+      if (!getRiskData) {
         setLoadContent(false)
-        setData({...response})
         setLoaderDash(false)
-        console.log('data',{...response});
+      } else {
+        onGetRisksData(companyId,notification,dispatch,setLoadContent,setLoaderDash)
+      }
       }
 
       function checkError(error) {
@@ -32,8 +35,7 @@ export function onGetRisk({companyId,riskId,setData,setLoadContent,notification,
         }, 600);
       }
 
-      checkSuccess(risk)
-      //GetCompany(companyId,riskId,checkSuccess,checkError)
+      GetRisk(companyId,itemId,checkSuccess,checkError)
 }
 
 function random() {
@@ -51,7 +53,7 @@ const risks = [
 ]
 
 const rec = [
-{id:'12345',text:`${random()}`,risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},
+{id:'12345',type:'rec',text:`${random()}`,risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},
 {id:'wiw',text:random(),category:['aci']},
 {id:v4(),text:random(),category:['qui','fis']},
 {id:v4(),text:random(),category:['aci']},
@@ -81,9 +83,11 @@ if (b.name > a.name) {
 return 0;
 };
 
-export function onGetRisksData({currentUser,notification,dispatch}) {
+export function onGetRisksData(companyId,notification,dispatch,setLoadContent,setLoaderDash) {
 function checkSuccess(response) {
-  console.log({...response})
+  console.log('responseRisk',response.risks)
+  setLoadContent(false)
+  setLoaderDash(false)
   dispatch({ type: 'CREATE_RISKS', payload: [...response.risks.sort(sort)] })
   dispatch({ type: 'CREATE_RISKS_DATA', payload: {...response.data} })
 }
@@ -91,10 +95,10 @@ function checkSuccess(response) {
   function checkError(error) {
     setLoadContent(false)
     setTimeout(() => {
-      notification.error({message:error,modal:true})
+      notification.error({message:error})
     }, 600);
   }
 
-  //GetAllCompanies(currentUser.company.id,checkSuccess,checkError)
-  checkSuccess({risks,data:{rec,med,font}})
+  GetAllRisks(companyId,checkSuccess,checkError)
+  //checkSuccess({risks,data:{rec,med,font}})
 }

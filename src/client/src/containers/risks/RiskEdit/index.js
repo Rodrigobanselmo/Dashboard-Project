@@ -22,8 +22,6 @@ function Companies() {
 
   const tabsLabel = ['Principal', 'Fonte Geradora','Medidas de Controle', 'Recomendações',/* 'Meio de Propagação','Possiveis Danos A Saúde' */]
 
-    console.log('tabId',tabId);
-    console.log('itemId',itemId);
     return (
         <>
             <Header icons={'Risk'} path={'Fator de Risco'} title={'Fator de Risco'} video={true}/>
@@ -37,6 +35,7 @@ function Companies() {
                 setData={setData}
                 tabId={tabId}
                 setLoaderDash={setLoaderDash}
+                setLoad={setLoad}
               />
             </Container>
             <div style={{height:200,width:1}}/>

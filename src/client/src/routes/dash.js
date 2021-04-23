@@ -1,4 +1,4 @@
-import { Team, Perfil,Companies,Excel,CompaniesEdit,ImportExcel } from '../containers';
+import { Team, Perfil,Companies,Excel,CompaniesEdit,ImportExcel,Home } from '../containers';
 import {TEAM,USER,DASHBOARD,COMPANY,DATA,TESTE,COMPANY_EDIT,IMPORT} from './routesNames'
 import {risks} from './paths/risks'
 
@@ -7,7 +7,7 @@ import Teste from '../Test/index';
 const routes = [
   {
     path: DASHBOARD,
-    component: Excel,
+    component: Home,
     exact:true,
   },
   {

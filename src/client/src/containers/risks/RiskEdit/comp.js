@@ -22,7 +22,7 @@ export function Container({children}) {
     );
 }
 
-export function TableTabs({tabsLabel,data,itemId,tabId,setData,currentUser,notification,setLoaderDash}) {
+export function TableTabs({tabsLabel,data,itemId,tabId,setData,currentUser,notification,setLoaderDash,setLoad}) {
 
     const [loadContent, setLoadContent] = useState(true)
     const [tabValue, setTabValue] = useState(tabId ? parseInt(tabId) : 0)
@@ -35,12 +35,13 @@ export function TableTabs({tabsLabel,data,itemId,tabId,setData,currentUser,notif
 
 
     useEffect(() => {
-      onGetRisk({setData,companyId:currentUser.company.id,itemId,setLoadContent,notification,setLoaderDash})
+      const getRiskData = (riskData?.rec && riskData.rec.length == 0) || (risk&&risk.length == 0)
+      onGetRisk({setData,companyId:currentUser.company.id,itemId,setLoadContent,notification,setLoaderDash,dispatch,getRiskData})
     }, [])
 
-    useEffect(() => {
-      if((riskData?.rec && riskData.rec.length == 0) || (risk&&risk.length == 0)) onGetRisksData({currentUser,notification,dispatch})
-    }, [])
+    // useEffect(() => {
+    //   if((riskData?.rec && riskData.rec.length == 0) || (risk&&risk.length == 0)) onGetRisksData({currentUser,notification,dispatch})
+    // }, [])
 
     return (
       <NewTabs tabStayle={{fontSize:14}} tabValue={tabValue} setTabValue={setTabValue} tabsLabel={tabsLabel} >

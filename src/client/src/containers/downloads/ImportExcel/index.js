@@ -3,7 +3,7 @@ import {useNotification} from '../../../context/NotificationContext'
 import {useLoaderDashboard} from '../../../context/LoadDashContext'
 import {useLoaderScreen} from '../../../context/LoaderContext'
 import { Container,TableTabs } from './comp'
-import { onSetChemicalRisks } from './func'
+import { onSetRisks } from './func'
 import {useAuth} from '../../../context/AuthContext'
 import Header from '../../../components/Dashboard/Components/Blocks/Header'
 import * as XLSX from "xlsx";
@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 
 export default function Excel() {
 
-  const [items, setItems] = useState([]);
+  const [key, setKey] = useState('');
   const {setLoad} = useLoaderScreen();
   const {currentUser} = useAuth()
   const notification = useNotification()
@@ -33,12 +33,13 @@ export default function Excel() {
       fileReader.onload = (e) => {
         const bufferArray = e.target.result;
 
-        const wb = XLSX.read(bufferArray, { type: "buffer" });
+        const wb = XLSX.read(bufferArray, { type: "buffer"});
 
         const wsname = wb.SheetNames[0];
 
         const ws = wb.Sheets[wsname];
-
+        console.log(wb)
+        //const data = XLSX.utils.sheet_to_json(ws, {raw: true,header:1});
         const data = XLSX.utils.sheet_to_json(ws);
         resolve(data);
       };
@@ -49,9 +50,12 @@ export default function Excel() {
     });
 
     promise.then((d) => {
-      if (type = 'qui') onSetChemicalRisks(d,setLoad,currentUser,notification,dispatch)
+      console.log(d)
+      onSetRisks(d,setLoad,currentUser,notification,dispatch)
+      setKey(Math.random().toString(36))
     }).catch((error)=>{
       notification.error({message:error})
+      setKey(Math.random().toString(36))
     })
   };
 
@@ -89,6 +93,7 @@ export default function Excel() {
         currentUser={currentUser}
         setLoaderDash={setLoaderDash}
         readExcel={readExcel}
+        _key={key}
       />
     </Container>
     <div style={{height:200,width:1}}/>

@@ -49,15 +49,15 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-/*     const unsubscribe = auth.onAuthStateChanged(user => {
-      if (!user) {
-        setCurrentUser(user)
-        setLoad(false)
-      }
-      if (user) GetUserData(user,checkSuccess,checkError)
-    })
+    // const unsubscribe = auth.onAuthStateChanged(user => {
+    //   if (!user) {
+    //     setCurrentUser(user)
+    //     setLoad(false)
+    //   }
+    //   if (user) GetUserData(user,checkSuccess,checkError)
+    // })
 
-    return unsubscribe */
+    // return unsubscribe
     setCurrentUser({
       company: {
           name: "simplesst",

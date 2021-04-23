@@ -1,14 +1,16 @@
 import React, {useState, useEffect,useMemo} from 'react';
 import {AddModal} from './comp'
+import {onCreateNewRiskData} from './func'
 import {SubText,DescText,TextArea,} from './styles'
 import { useSelector,useDispatch } from 'react-redux'
 import {EspecialSelector} from '../../../../components/Main/MuiHelpers/EspecialSelector'
 import {filterObject} from '../../../../helpers/ObjectArray'
 import {ContinueButton} from '../../../../components/Main/MuiHelpers/Button'
 import {useNotification} from '../../../../context/NotificationContext'
+import {useLoaderScreen} from '../../../../context/LoaderContext'
 import {useAuth} from '../../../../context/AuthContext'
 
-export default function Modal({open,setOpen,type}) {
+export default function Modal({open,setOpen,type, data}) {
 
     const [data1, setData1] = useState('')
     const [data2, setData2] = useState('')
@@ -19,13 +21,22 @@ export default function Modal({open,setOpen,type}) {
     const [selectedAci, setSelectedAci] = useState([])
     const [selectedErg, setSelectedErg] = useState([])
     const {currentUser} = useAuth()
+    const {setLoad} = useLoaderScreen();
     const notification = useNotification()
     const riskData = useSelector(state => state.riskData)
     const risk = useSelector(state => state.risk)
     const dispatch = useDispatch()
 
-    function onClose() {
-        setOpen(false)
+    function onClose(allGood) {
+      setOpen(false)
+      setData1('')
+      setData2('')
+      setSelectedFis([])
+      setSelectedQui([])
+      setSelectedBio([])
+      setSelectedAci([])
+      setSelectedErg([])
+      if (allGood) setTimeout(() => {notification.success({message:allGood})}, 1000);
     }
 
     function onData2(id) {
@@ -67,6 +78,54 @@ export default function Modal({open,setOpen,type}) {
         title1:'Fonte Geradora',
         text1:'Descrição da fonte geradora',
       }
+    }
+
+    function createData() {
+      const uid = Math.floor((1 + Math.random()) * 0x1000000000000000).toString(32).substring(1);
+      const uid2 = Math.floor((1 + Math.random()) * 0x1000000000000000).toString(32).substring(1);
+      const category = []
+      const riskIds = []
+
+      if (selectedFis.length == 1 && selectedFis[0] == 'all') category.push('fis')
+      else if (selectedFis.length > 0 && selectedFis[0] !== 'all') riskIds.push(...selectedFis)
+
+      if (selectedQui.length == 1 && selectedQui[0] == 'all') category.push('qui')
+      else if (selectedQui.length > 0 && selectedQui[0] !== 'all') riskIds.push(...selectedQui)
+
+      if (selectedBio.length == 1 && selectedBio[0] == 'all') category.push('bio')
+      else if (selectedBio.length > 0 && selectedBio[0] !== 'all') riskIds.push(...selectedBio)
+
+      if (selectedAci.length == 1 && selectedAci[0] == 'all') category.push('aci')
+      else if (selectedAci.length > 0 && selectedAci[0] !== 'all') riskIds.push(...selectedAci)
+
+      if (selectedErg.length == 1 && selectedErg[0] == 'all') category.push('erg')
+      else if (selectedErg.length > 0 && selectedErg[0] !== 'all') riskIds.push(...selectedErg)
+
+      //console.log(category)
+      //console.log(riskIds)
+      if (data1.length > 0 && (category.length || riskIds.length)) {
+        if (type == 'rec') {
+          let dataRec = {id:uid,type:'rec',text:data1,risk:[...riskIds],category:[...category]}
+          if (data2.length > 0) {
+            let dataMed = {id:uid2,rec:uid,type:'med',text:data2,risk:[...riskIds],category:[...category]}
+            dataRec.med = uid2
+            onCreateNewRiskData({data:[{...dataRec},{...dataMed}],companyId:currentUser.company.id,notification,dispatch,setLoad,onClose})
+          } else onCreateNewRiskData({data:[{...dataRec}],companyId:currentUser.company.id,notification,dispatch,setLoad,onClose})
+        }
+        if (type == 'med') {
+          let dataMed = {id:uid,type:'rec',text:data1,risk:[...riskIds],category:[...category]}
+          if (data2.length > 0) {
+            let dataRec = {id:uid2,med:uid,type:'med',text:data2,risk:[...riskIds],category:[...category]}
+            dataMed.rec = uid2
+            onCreateNewRiskData({data:[{...dataRec},{...dataMed}],companyId:currentUser.company.id,notification,dispatch,setLoad,onClose})
+          } else onCreateNewRiskData({data:[{...dataMed}],companyId:currentUser.company.id,notification,dispatch,setLoad,onClose})
+        }
+        if (type == 'font') {
+          let dataFont = {id:uid,type:'font',text:data1,risk:[...riskIds],category:[...category]}
+          onCreateNewRiskData({data:[{...dataFont}],companyId:currentUser.company.id,notification,dispatch,setLoad,onClose})
+        }
+      } else if (data1.length == 0) return notification.error({message:`Campo ˜${override.title1}˜ não pode ser nulo.`,modal:true})
+      else return notification.error({message:`É Necessário selecionar ao menos um risco para continuar.`,modal:true})
     }
 
     return (
@@ -114,7 +173,7 @@ export default function Modal({open,setOpen,type}) {
                     <DescText>Fatores de Risco Associados</DescText>
                     <SubText>Relacionar a Fatores de Risco <strong>Físicos</strong></SubText>
                       <EspecialSelector
-                        defaultValue={[]}
+                        defaultValue={data.type=='fis'?[data.id]:[]}
                         width={'100%'}
                         onSelectFunction={setSelectedFis}
                         onSearch={setSearch}
@@ -124,16 +183,18 @@ export default function Modal({open,setOpen,type}) {
                   <div style={{width:'93%'}}>
                     <SubText>Relacionar a Fatores de Risco <strong>Químicos</strong></SubText>
                     <EspecialSelector
+                      defaultValue={data.type=='qui'?[data.id]:[]}
                       width={'100%'}
                       isToMany
                       onSelectFunction={setSelectedQui}
                       onSearch={setSearch}
-                      options={risk.filter(i=>i.type == 'qui' && (search == '' || filterObject(i,search,'name')))}
+                      options={risk.filter(i=>i.type == 'qui' && (search == '' || filterObject(i,search,'name'))).slice(0,30)}
                     />
                   </div>
                   <div style={{width:'93%'}}>
                     <SubText>Relacionar a Fatores de Risco <strong>Biológicos</strong></SubText>
                     <EspecialSelector
+                      defaultValue={data.type=='bio'?[data.id]:[]}
                       width={'100%'}
                       onSelectFunction={setSelectedBio}
                       onSearch={setSearch}
@@ -143,6 +204,7 @@ export default function Modal({open,setOpen,type}) {
                   <div style={{width:'93%'}}>
                     <SubText>Relacionar a Fatores de Risco <strong>Acidentes</strong></SubText>
                     <EspecialSelector
+                      defaultValue={data.type=='aci'?[data.id]:[]}
                       bottom
                       width={'100%'}
                       onSelectFunction={setSelectedAci}
@@ -153,6 +215,7 @@ export default function Modal({open,setOpen,type}) {
                   <div style={{width:'93%'}}>
                     <SubText>Relacionar a Fatores de Risco <strong>Ergonômicos</strong></SubText>
                     <EspecialSelector
+                      defaultValue={data.type=='erg'?[data.id]:[]}
                       bottom
                       width={'100%'}
                       onSelectFunction={setSelectedErg}
@@ -160,7 +223,7 @@ export default function Modal({open,setOpen,type}) {
                       options={risk.filter(i=>i.type == 'erg' && (search == '' || filterObject(i,search,'name')))}
                     />
                   </div>
-                  <ContinueButton style={{position:'absolute',right:0,bottom:-80}} primary={'true'} size={'medium'} disable={`${false}`}>
+                  <ContinueButton onClick={createData} style={{position:'absolute',right:0,bottom:-80}} primary={'true'} size={'medium'} disable={`${false}`}>
                     <p>Continuar</p>
                   </ContinueButton>
                 </div>

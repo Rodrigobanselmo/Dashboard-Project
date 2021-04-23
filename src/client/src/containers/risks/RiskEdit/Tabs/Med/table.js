@@ -14,7 +14,7 @@ const TableComponent = React.memo(({
 
   const headCells = [
     { id: 'text', label: 'Descrição', type:'paragraph',minWidth:280,flex:9},
-    { id: 'rec', label: 'Medida de Controle', minWidth: 200, type:'status',align:'center',flex:2},
+    { id: 'rec', label: 'Recomendação', minWidth: 200, type:'status',align:'center',flex:2},
     { id: 'padrao', label: 'Padrão', minWidth: 90, type:'status',align:'center',flex:1},
     { id: 'status', label: 'Status', minWidth: 90, type:'status',align:'center',flex:1}
   ];

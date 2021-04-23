@@ -10,7 +10,7 @@ import TableComponent from './table';
 import { useSelector,useDispatch } from 'react-redux'
 import Modal from '../../Modal'
 
-export function Med({currentUser,notification,data,setLoad,setLoaderDash}) {
+export function Med({data}) {
 
   const [loadContent, setLoadContent] = useState(false)
   const [search, setSearch] = useState('')
@@ -54,7 +54,7 @@ export function Med({currentUser,notification,data,setLoad,setLoaderDash}) {
           handleCellClick={handleCellClick}
           />
         }
-        <Modal type={'med'} open={open} setOpen={setOpen}/>
+        <Modal type={'med'} open={open} setOpen={setOpen} data={data}/>
       </div>
   );
 }

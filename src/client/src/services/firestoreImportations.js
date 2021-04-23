@@ -4,29 +4,43 @@ import {keepOnlyNumbers,formatCPFeCNPJeCEPeCNAE} from '../helpers/StringHandle'
 import {v4} from "uuid";
 
 
-export function ImportationChemRisks(data,companyId,checkSuccess,checkError) { //get data and create if doesnt exists
+export function ImportationRisks(risksData,reduceReadData,companyId,checkSuccess,checkError,t) { //get data and create if doesnt exists
   var companyRef = db.collection("company").doc(companyId)
-  var companiesRef = companyRef.collection('companies')
+  var riskRef = companyRef.collection('risks')
   var reduceRef = companyRef.collection('reduceRead')
 
+  var data = [];
+  var reduceRead = [];
+  var tries = t?t:0
+  if (risksData.length > 490) {
+    data = [...risksData.slice(tries*490,(tries+1)*490)]
+    reduceRead = [...reduceReadData.slice(tries*490,(tries+1)*490)]
+  } else {
+    data = [...risksData]
+    reduceRead = [...reduceReadData]
+  }
+
   let docId = null;
+  let docData = [];
 
   var batch = db.batch();
 
 
-
   //verifica se possui reduceRead doc com espaco vazio se nao ele cria
-  reduceRef.where("id", "==", 'companies').get()
+  reduceRef.where("id", "==", 'risks').get()
   .then(function(querySnapshot) {
     querySnapshot.forEach(function(doc) {
-      if(doc.data().data.length < 500) docId=doc.id
+      if(doc.data().data.length < 500-reduceRead.length) {
+        docId=doc.id
+        docData = doc.data().data
+      }
     })
     if (docId !== null) {
       batchCreate()
     } else {
       docId = v4()
       reduceRef.doc(docId).set({
-        id:'companies',
+        id:'risks',
         data:[]
       }).then(()=>{
         batchCreate()
@@ -37,34 +51,28 @@ export function ImportationChemRisks(data,companyId,checkSuccess,checkError) { /
   });
 
   function batchCreate() {
-
-    batch.set(companiesRef.doc(keepOnlyNumbers(data.cnpj)),{...data})
-    batch.update(reduceRef.doc(docId),{data:fb.firestore.FieldValue.arrayUnion({...readData})})
+    data.map(item=>{
+      batch.set(riskRef.doc(item.id),{...item})
+    })
+    batch.update(reduceRef.doc(docId),{data:[...docData,...reduceRead]})
 
     batch.commit().then(() => {
-      checkSuccess({...readData})
+      if (risksData.length > 490*(tries+1)) {
+        checkSuccess(tries+1)
+        console.log('one more')
+      }
+      else checkSuccess()
     }).catch((error) => {
       checkError(errorCatch(error))
     });
   }
 
-/*   function batchCreates() {
-    companiesRef.doc(keepOnlyNumbers(data.CNPJ)).get()
-    .then((docSnapshot) => {
-      if (docSnapshot.exists) {
-        checkError('Empresa já possui cadastro')
-      } else {
-        companiesRef.doc(keepOnlyNumbers(data.CNPJ)).set({...data})
-        .then(()=>{
-          checkSuccess()
-        }).catch((err)=>{
-          checkError(errorCatch(err))
-        })
-      }
-    }).catch((error) => {
-      checkError(errorCatch(error))
-    });
-  } */
+  // batch.commit().then(() => {
+  //   checkSuccess({...data})
+  // }).catch((error) => {
+  //   checkError(errorCatch(error))
+  // });
+
 }
 
 export function SeeIfCNPJExists(CNPJ,companyId,checkSuccess,checkError) {
@@ -100,7 +108,6 @@ export function GetAllCompanies(companyId,checkSuccess,checkError) {
       checkError(errorCatch(error))
   });
 }
-
 export function GetCompany(companyId,cnpj,checkSuccess,checkError) {
 
   var dataRef = db.collection("company").doc(companyId).collection('companies').doc(keepOnlyNumbers(cnpj))

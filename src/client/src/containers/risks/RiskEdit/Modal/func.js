@@ -1,13 +1,13 @@
 import {GetCNPJ} from '../../../../services/handleCNPJ'
-import {SeeIfCNPJExists,CreateNewCompany} from '../../../../services/firestoreCompany'
+import {CreateNewRiskData} from '../../../../services/firestoreRisks'
 import {wordUpper,formatTel,formatCPFeCNPJeCEPeCNAE} from '../../../../helpers/StringHandle'
 
-export function onCreateNewCompany({data,setDataRows,receitaFederal,currentUser,notification,setLoad,onClose}) {
+export function onCreateNewRiskData(companyId,notification,dispatch,setLoad,onClose) {
 
   function checkSuccess(resp) {
     setLoad(false)
-    onClose('Empresa Adicionada com sucesso!')
-    setDataRows(data=>[...data,resp])
+    onClose('Dado Adicionado com sucesso!')
+    //dispatch({ type: 'CREATE_RISKS_DATA', payload: {...response.data} })
   }
 
   function checkError(error) {
@@ -16,8 +16,8 @@ export function onCreateNewCompany({data,setDataRows,receitaFederal,currentUser,
       notification.error({message:error,modal:true})
     }, 600);
   }
-
-  CreateNewCompany(companyData,readData,currentUser.company.id,checkSuccess,checkError)
+  setLoad(true)
+  CreateNewCompany(companyId,data,checkSuccess,checkError)
 
 }
 

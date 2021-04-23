@@ -10,7 +10,7 @@ import TableComponent from './table';
 import { useSelector,useDispatch } from 'react-redux'
 import Modal from '../../Modal'
 
-export function Fonts({currentUser,notification,data,setLoad,setLoaderDash}) {
+export function Fonts({data}) {
 
   const [loadContent, setLoadContent] = useState(false)
   const [search, setSearch] = useState('')
@@ -20,9 +20,6 @@ export function Fonts({currentUser,notification,data,setLoad,setLoaderDash}) {
   const dispatch = useDispatch()
   const history = useHistory();
 
-  useEffect(() => {
-    if(riskData?.font && riskData.font.length == 0 ) onGetRisksData({currentUser,notification,dispatch})
-  }, [])
   function handleCellClick(e,rowId) {
     //history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
     //setLoaderDash(true)
@@ -57,7 +54,7 @@ export function Fonts({currentUser,notification,data,setLoad,setLoaderDash}) {
           handleCellClick={handleCellClick}
           />
         }
-        <Modal data={data} type={'font'} open={open} setOpen={setOpen}/>
+        <Modal data={data} type={'font'} open={open} setOpen={setOpen} data={data}/>
       </div>
   );
 }

@@ -15,7 +15,7 @@ export function Container({children}) {
     );
 }
 
-export function TableTabs({tabId,readExcel,currentUser,notification,setLoaderDash}) {
+export function TableTabs({tabId,readExcel,_key,currentUser,notification,setLoaderDash}) {
 
     const [tabValue, setTabValue] = useState(tabId ? parseInt(tabId) : 0)
     const riskData = useSelector(state => state.riskData)
@@ -31,6 +31,7 @@ export function TableTabs({tabId,readExcel,currentUser,notification,setLoaderDas
               <p style={{marginBottom:5}}>Fatores de Risco</p>
               <p style={{marginBottom:5}}>Químicos</p>
               <input
+                key={_key || ''}
                 type="file"
                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 onChange={(e) => {

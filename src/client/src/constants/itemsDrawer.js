@@ -564,15 +564,15 @@ const itemsList = [
     id:DATA,
     onClick: () => {}
   },
-  {
-    text: "Importar Dados",
-    icon: 'Storage',
-    //items: itemsSubList2,
-    description:'Importar dados para o banco de dados de sua empresa',
-    to:IMPORT,
-    id:IMPORT,
-    onClick: () => {}
-  },
+  // {
+  //   text: "Importar Dados",
+  //   icon: 'Storage',
+  //   //items: itemsSubList2,
+  //   description:'Importar dados para o banco de dados de sua empresa',
+  //   to:IMPORT,
+  //   id:IMPORT,
+  //   onClick: () => {}
+  // },
   {
     text: "Fatores de Risco",
     icon: 'Risk',

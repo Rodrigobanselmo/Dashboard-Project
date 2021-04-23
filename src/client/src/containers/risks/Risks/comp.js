@@ -42,7 +42,7 @@ export function TableContainer({risk,tabValue,setTabValue,setSelected,selected,d
   function handleCellClick(e,rowId) {
     console.log(rowId)
     console.log(selected)
-    history.push(`${RISK_FACTORS_SLICE}/risco/${keepOnlyNumbers(rowId)}/0`);
+    history.push(`${RISK_FACTORS_SLICE}/risco/${rowId}/0`);
     //setLoaderDash(true)
   }
 

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor:theme.palette.background.paper,
   },
   paperDark: {
-    backgroundColor:theme.palette.background.paperModal,
+    backgroundColor:theme.palette.type !== 'dark' ?theme.palette.background.nav:theme.palette.background.paperModal,
   },
   paperGrey: {
     backgroundColor:theme.palette.background.contrast,
@@ -74,22 +74,22 @@ const useStyles = makeStyles((theme) => ({
   popperDark: {
     '&[x-placement*="bottom"] $arrow': {
       '&::before': {
-        borderColor: `transparent transparent ${theme.palette.background.paperModal} transparent`,
+        borderColor: `transparent transparent ${theme.palette.type !== 'dark' ?theme.palette.background.nav:theme.palette.background.paperModal} transparent`,
       },
     },
     '&[x-placement*="top"] $arrow': {
       '&::before': {
-        borderColor: `${theme.palette.background.paperModal} transparent transparent transparent`,
+        borderColor: `${theme.palette.type !== 'dark' ?theme.palette.background.nav:theme.palette.background.paperModal} transparent transparent transparent`,
       },
     },
     '&[x-placement*="right"] $arrow': {
       '&::before': {
-        borderColor: `transparent ${theme.palette.background.paperModal} transparent transparent`,
+        borderColor: `transparent ${theme.palette.type !== 'dark' ?theme.palette.background.nav:theme.palette.background.paperModal} transparent transparent`,
       },
     },
     '&[x-placement*="left"] $arrow': {
       '&::before': {
-        borderColor: `transparent transparent transparent ${theme.palette.background.paperModal}`,
+        borderColor: `transparent transparent transparent ${theme.palette.type !== 'dark' ?theme.palette.background.nav:theme.palette.background.paperModal}`,
       },
     },
   },

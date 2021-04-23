@@ -30,7 +30,7 @@ export const RISK_FACTORS_INS = `${RISK_FACTORS_SLICE}/insalubridade`;
 export const RISK_FACTORS_NOC = `${RISK_FACTORS_SLICE}/nocivos`;
 export const RISK_FACTORS_AMB = `${RISK_FACTORS_SLICE}/ambientais`;
 export const RISK_FACTORS_OTHERS = `${RISK_FACTORS_SLICE}/outros`;
-export const RISK_FACTORS_EDIT = `${RISK_FACTORS_SLICE}/risco/:riskId/:tabId?`;
+export const RISK_FACTORS_EDIT = `${RISK_FACTORS_SLICE}/risco/:itemId/:tabId?`;
 
 // subList
 // ...

@@ -5,8 +5,8 @@ import styled from "styled-components";
 
 const TableComponent = React.memo(({rowsCells,loadContent,search,setSelected,selected,handleCellClick,routeInfo,filterTabs,filterButton}) => {
 
-  const headCells = [ { id: 'desc', label: 'Descrição', type:'paragraph',minWidth:280,flex:9},];
-  const searchParams = ['desc']
+  const headCells = [ { id: 'name', label: 'Descrição', type:'paragraph',minWidth:280,flex:9},];
+  const searchParams = ['name']
 
   if (routeInfo?.tableCol) routeInfo.tableCol.map(item=>{
     if (item === 'ins') {

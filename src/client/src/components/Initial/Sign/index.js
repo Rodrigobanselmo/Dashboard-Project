@@ -15,8 +15,9 @@ import {DASHBOARD} from '../../../routes/routesNames'
 export default function SignIn({emailQuery}) {
 
   const initialState = {
-    emailAddress: emailQuery ? emailQuery:'rodrigobanselmo@gmail.com',
-    password: 'qweqwe',
+    //emailAddress: emailQuery ? emailQuery:'rodrigobanselmo@gmail.com',
+    emailAddress: emailQuery ? emailQuery:'',
+    password: '',
     confirmPassword: '',
     warnMessage: {body:'Campo de email não pode ser nulo',type:'none'},
     warnPassMessage: {body:'Campo de senha não pode ser nulo',type:'none'},
@@ -126,7 +127,7 @@ export default function SignIn({emailQuery}) {
     <Sign >
     <Sign.VideoBackground/>
       <Sign.Logo/>
-      <Form style={{transform: 'scale(0.9)'}} >
+      <Form style={{transform: 'scale(1)'}} >
         <Title fade={fade}>{change}</Title>
         <Collapse timeout={1000} in={error && error !== '' ? true : false}>
           <Sign.Errors error={error}/>
@@ -168,7 +169,7 @@ export default function SignIn({emailQuery}) {
             setRecoveryModal={setRecoveryModal}
           />
         </Base>
-        <div onClick={() => onLoginUser({data,setLoad,setError,onErrorNotification})}>jio</div>
+        {/* <div onClick={() => onLoginUser({data,setLoad,setError,onErrorNotification})}>jio</div> */}
         <Sign.Duvida/>
       </Form>
       <Sign.RecoveryModal email={data.emailAddress} onSentRecoveryEmail={onSentRecoveryEmail} setRecoveryModal={setRecoveryModal} recoveryModal={recoveryModal} />

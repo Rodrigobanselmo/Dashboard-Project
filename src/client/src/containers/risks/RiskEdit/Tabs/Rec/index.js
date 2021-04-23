@@ -10,7 +10,7 @@ import TableComponent from './table';
 import { useSelector,useDispatch } from 'react-redux'
 import Modal from '../../Modal'
 
-export function Rec({currentUser,notification,data,setLoad,setLoaderDash}) {
+export function Rec({data}) {
 
   const [loadContent, setLoadContent] = useState(false)
   const [search, setSearch] = useState('')
@@ -54,7 +54,7 @@ export function Rec({currentUser,notification,data,setLoad,setLoaderDash}) {
           handleCellClick={handleCellClick}
           />
         }
-        <Modal type={'rec'} open={open} setOpen={setOpen}/>
+        <Modal type={'rec'} open={open} setOpen={setOpen} data={data}/>
       </div>
   );
 }
