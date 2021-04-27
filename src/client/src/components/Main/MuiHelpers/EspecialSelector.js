@@ -108,7 +108,6 @@ export function EspecialSelector({options=[],defaultValue=[],hideSelectAll,botto
     const [isOpen, setIsOpen] = useState(false);
     const [onTimeOut,onClearTime] = useTimeOut();
 
-
     var text = {
       "allItemsAreSelected": "Todo os items foram selecionados",
       "noOptions": "Nenhuma opção",

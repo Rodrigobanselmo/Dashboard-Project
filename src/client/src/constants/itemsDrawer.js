@@ -17,6 +17,7 @@ import {
   RISK_FACTORS_ACI,
   RISK_FACTORS_AMB,
   IMPORT,
+  CHECKLIST_MANAGER,
   TESTE
 } from '../routes/routesNames'
 
@@ -562,6 +563,15 @@ const itemsList = [
     description:'Download dos dados obtidos em campo utilizando o App SimpleSST',
     to:DATA,
     id:DATA,
+    onClick: () => {}
+  },
+  {
+    text: "Checklist",
+    icon: 'Checklist',
+    //items: itemsSubList2,
+    description:'Gerenciamento de seus checklist existentes.',
+    to:CHECKLIST_MANAGER,
+    id:CHECKLIST_MANAGER,
     onClick: () => {}
   },
   // {

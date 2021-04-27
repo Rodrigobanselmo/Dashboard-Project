@@ -3,6 +3,7 @@ import {GetAllUsersCompany} from '../../../services/firestoreUser'
 export function onGetAllUsersCompany(companyId,setUsersRows,setLoadContent,notification,setLoaderDash) {
     function checkSuccess(response) {
         setLoadContent(false)
+        console.log('iofhewhifwihofhoifiehoiohfweoihwefhiofwehoiwfehiofwehiowefhiowfe',response)
         setUsersRows([...response])
         setLoaderDash(false)
       }
@@ -10,7 +11,7 @@ export function onGetAllUsersCompany(companyId,setUsersRows,setLoadContent,notif
       function checkError(error) {
         setLoadContent(false)
         setTimeout(() => {
-          notification.error({message:error,modal:true})
+          notification.error({message:error})
         }, 600);
         setLoaderDash(false)
       }

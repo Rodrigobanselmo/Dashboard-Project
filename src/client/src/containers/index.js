@@ -8,3 +8,4 @@ export { default as RiskEdit } from './risks/RiskEdit';
 export { default as Periculosidade } from './risks/Periculosidade';
 export { default as Excel } from './downloads/Excel';
 export { default as ImportExcel } from './downloads/ImportExcel';
+export { default as ChecklistManager } from './checklist';

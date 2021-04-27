@@ -148,7 +148,7 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
         {open!=='none' &&
         <ContainerInputs style={{top:position.top+30,transform:`translate( 0px, ${(-positionScroll+position.fromTop)}px)`, left:validationDirectionOnLeft() ? position.left-400:position.left+30}}>
           {open ==='Deletar' ?
-            <p style={{fontSize:16,marginTop:8,marginBottom:12}}>Você reamente deseja deletar este campo? Está ação é irreversivel!</p>
+            <p style={{fontSize:16,marginTop:8,marginBottom:12}}>Você realmente deseja deletar este campo? Está ação é irreversível!</p>
           :
           <>
             <InputEnd

@@ -14,15 +14,43 @@ export function Rec({data}) {
 
   const [loadContent, setLoadContent] = useState(false)
   const [search, setSearch] = useState('')
+  const [initialData, setInitialData] = useState(null)
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState([]);
   const riskData = useSelector(state => state.riskData)
+  const risk = useSelector(state => state.risk)
   const dispatch = useDispatch()
   const history = useHistory();
 
-  function handleCellClick(e,rowId) {
-    //history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
-    //setLoaderDash(true)
+  function handleCellClick(e,rowId,row) {
+
+    var initial = {data1:'',data2:'',fis:[],qui:[],bio:[],aci:[],erg:[],...row}
+
+    if (row?.risk) {
+      row.risk.map(item=>{
+        const index = risk.findIndex(i=>i.id==item)
+        if (risk[index]) initial[risk[index].type] = [...initial[risk[index].type],item]
+      })
+    }
+
+    if (row?.category) {
+      row.category.map(item=>{
+        initial[item] = ['all']
+      })
+    }
+
+    if (riskData.rec) {
+      const index = riskData.rec.findIndex(i=>i.id==row.id)
+      if (riskData.rec[index]) initial.data1 = riskData.rec[index].text
+      if (riskData.rec[index] && riskData.rec[index]?.med) {
+        const indexOther = riskData.med.findIndex(i=>i.id==riskData.rec[index].med)
+        if (riskData.med[indexOther]) initial.data2 = riskData.med[indexOther].text
+      }
+      console.log(initial)
+      setInitialData(initial)
+      setOpen(true)
+      return
+    }
   }
 
   console.log('riskData',riskData.rec)
@@ -54,7 +82,7 @@ export function Rec({data}) {
           handleCellClick={handleCellClick}
           />
         }
-        <Modal type={'rec'} open={open} setOpen={setOpen} data={data}/>
+        <Modal type={'rec'} open={open} setOpen={setOpen} data={data} initialData={initialData} setInitialData={setInitialData}/>
       </div>
   );
 }

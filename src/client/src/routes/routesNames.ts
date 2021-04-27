@@ -17,6 +17,9 @@ export const COMPANY_EDIT = `${COMPANY}/:cnpj/:tabId?`;
 export const DATA = `${DASHBOARD}/data`;
 export const IMPORT = `${DASHBOARD}/importar`;
 
+// checklists
+export const CHECKLIST_MANAGER = `${DASHBOARD}/checklist/gerenciar`;
+
 // Fator de Risco
 export const RISK_FACTORS = `${DASHBOARD}/fatores-de-risco/:risk/:tabId?`;
 export const RISK_FACTORS_SLICE = `${DASHBOARD}/fatores-de-risco`;

@@ -14,15 +14,38 @@ export function Fonts({data}) {
 
   const [loadContent, setLoadContent] = useState(false)
   const [search, setSearch] = useState('')
+  const [initialData, setInitialData] = useState(null)
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState([]);
   const riskData = useSelector(state => state.riskData)
+  const risk = useSelector(state => state.risk)
   const dispatch = useDispatch()
   const history = useHistory();
 
-  function handleCellClick(e,rowId) {
-    //history.push(`${COMPANY}/${keepOnlyNumbers(rowId)}/0`);
-    //setLoaderDash(true)
+  function handleCellClick(e,rowId,row) {
+    var initial = {data1:'',data2:'',fis:[],qui:[],bio:[],aci:[],erg:[],...row}
+
+    if (row?.risk) {
+      row.risk.map(item=>{
+        const index = risk.findIndex(i=>i.id==item)
+        if (risk[index]) initial[risk[index].type] = [...initial[risk[index].type],item]
+      })
+    }
+
+    if (row?.category) {
+      row.category.map(item=>{
+        initial[item] = ['all']
+      })
+    }
+
+    if (riskData.font) {
+      const index = riskData.font.findIndex(i=>i.id==row.id)
+      if (riskData.rec[index]) initial.data1 = riskData.font[index].text
+      console.log(initial)
+      setOpen(true)
+      setInitialData(initial)
+      return
+    }
   }
 
   console.log('riskData',riskData.font)
@@ -54,7 +77,7 @@ export function Fonts({data}) {
           handleCellClick={handleCellClick}
           />
         }
-        <Modal data={data} type={'font'} open={open} setOpen={setOpen} data={data}/>
+        <Modal data={data} type={'font'} open={open} setOpen={setOpen} data={data} initialData={initialData} setInitialData={setInitialData}/>
       </div>
   );
 }

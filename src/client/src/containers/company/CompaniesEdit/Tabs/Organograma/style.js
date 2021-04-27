@@ -1,5 +1,5 @@
 import styled, {css} from "styled-components";
-import { lighten } from '@material-ui/core/styles';
+import { lighten,darken } from '@material-ui/core/styles';
 
 export const ContainerButtons = styled.div`
   width: 100px;
@@ -34,15 +34,19 @@ export const ContainerButtons = styled.div`
 `;
 
 export const ButtonRightClick = styled.button`
+  cursor: pointer;
   width:100%;
   height: 33%;
   position: relative;
   border-radius:5px;
   color: ${({theme})=>lighten(theme.palette.text.primary,0.031)};
   border: none;
-  background: ${({theme})=>lighten(theme.palette.background.paper,0.058)};
+  background-color:${({theme})=>theme.palette.type !== 'dark'?theme.palette.background.paper : lighten(theme.palette.background.paper,0.058)};
   &:hover {
-    background: ${({theme})=>lighten(theme.palette.background.paper,0.0)};
+    background-color:${({theme})=>theme.palette.type !== 'dark'?darken(theme.palette.background.paper,0.02) :lighten(theme.palette.background.paper,0.098)};
+  }
+  &:active {
+    opacity:0.7
   }
   span {
         opacity:1

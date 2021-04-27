@@ -58,9 +58,8 @@ const useTableStyles = makeStyles(theme => ({
   table: {
     height: "100%",
     overflow: 'auto hidden',
-    borderRight: `1px ${theme.palette.table.line} solid`,
-    borderLeft: `1px ${theme.palette.table.line} solid`,
     // borderBottom: `2px ${theme.palette.table.line} solid`,
+    border: `1px ${theme.palette.table.line} solid`,
     padding:0,
     marginBottom:-10
   },
@@ -267,7 +266,7 @@ const Row = memo(({ index, style, data: { columns, items, classes, setSelected, 
   const item = items[index];
 
   const labelId = `enhanced-table-checkbox-${index}`;
-  const isItemSelected = selected ? selected.indexOf(item?.CNPJ ?? item?.cnpj ?? item?.id ) !== -1 : false;
+  const isItemSelected = selected ? selected.indexOf(item?.CNPJ ?? item?.cnpj ?? item?.id ?? item?.uid ) !== -1 : false;
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -299,7 +298,7 @@ const Row = memo(({ index, style, data: { columns, items, classes, setSelected, 
           <Check >
           <Checkbox
             checked={isItemSelected}
-            onClick={(e)=>handleClick(e,item?.id ?? item?.CNPJ)}
+            onClick={(e)=>handleClick(e,item?.id ?? item?.CNPJ ?? item?.uid ,item)}
             inputProps={{ 'aria-labelledby': labelId }}
             color={'primary'}
             />
@@ -308,7 +307,7 @@ const Row = memo(({ index, style, data: { columns, items, classes, setSelected, 
       }
       {columns.map((column, colIndex) => {
         if (column) return (
-          <RowCell onCorrectData={onCorrectData} colIndex={colIndex} onClick={(e)=>handleCellClick(e,item?.CNPJ ?? item?.cnpj ?? item?.id,item)} key={item?.id ? item.id + colIndex: item.CNPJ + colIndex} column={column} classes={classes} item={item} rowSize={rowSize}/>
+          <RowCell onCorrectData={onCorrectData} colIndex={colIndex} onClick={(e)=>handleCellClick(e,item?.CNPJ ?? item?.cnpj ?? item?.id ?? item?.uid,item)} key={item?.id ? item.id + colIndex: item.CNPJ?item.CNPJ + colIndex:item.uid + colIndex} column={column} classes={classes} item={item} rowSize={rowSize}/>
         );
         else null
       })}
@@ -316,7 +315,7 @@ const Row = memo(({ index, style, data: { columns, items, classes, setSelected, 
   );
 },areEqual);
 
-const itemKey = (index, data) => data.items[index]?.id ?? data.items[index]?.cnpj ?? data.items[index]?.CNPJ; //To fix
+const itemKey = (index, data) => data.items[index]?.id ?? data.items[index]?.cnpj ?? data.items[index]?.CNPJ ?? data.items[index]?.uid; //To fix
 
 const createItemData = memoize((classes, columns, data, setSelected, selected, handleCellClick, rowSize, onCorrectData ) => ({
   columns,
@@ -342,7 +341,7 @@ const ReactWindowTable = ({ data, columns, initialOrder='creation',setSelected,s
 
     const handleSelectAllClick = (event) => {
       if (event.target.checked) {
-        const newSelected = data.map((n) => n?.id ?? n?.CNPJ );
+        const newSelected = data.map((n) => n?.id ?? n?.CNPJ ?? n?.uid );
         setSelected(newSelected);
         return;
       }
@@ -396,7 +395,7 @@ const ReactWindowTable = ({ data, columns, initialOrder='creation',setSelected,s
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   paper: {
     height: "100%",
@@ -405,8 +404,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     //overflow: 'hidden hidden',
     overflow: 'auto hidden',
-    marginBottom:5,
-    borderBottom: `2px ${theme.palette.table.line} solid`,
+    borderBottom: `0px ${theme.palette.table.line} solid`,
     borderRadius:10,
   },
 }));
@@ -416,10 +414,10 @@ const App = ({rowsCells,headCells,setSelected,selected,handleCellClick,initialOr
 
   return (
     <div className={classes.root}>
-        <div style={{height:rowsCells.length > 7?440: rowsCells.length*rowSize+77,}} className={classes.paper}>
+        <div style={{height:rowsCells.length > 7?440: rowsCells.length*rowSize+rowSize+5,borderRadius:10}} className={classes.paper}>
           <ReactWindowTable onCorrectData={onCorrectData} data={rowsCells} rowSize={rowSize} columns={headCells} setSelected={setSelected} selected={selected} handleCellClick={handleCellClick} initialOrder={initialOrder} />
         </div>
-        <p style={{textAlign:"left",marginBottom:-10}}>Total: {rowsCells.length}</p>
+        <p style={{textAlign:"right",marginBottom:-10,marginTop:0}}>Total: {rowsCells.length}</p>
     </div>
   );
 };

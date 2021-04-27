@@ -4,9 +4,10 @@ import Modal from './Modal'
 import Header from '../../../components/Dashboard/Components/Blocks/Header'
 import {useNotification} from '../../../context/NotificationContext'
 import {useAuth} from '../../../context/AuthContext'
+import {useLoaderScreen} from '../../../context/LoaderContext'
 import { useLocation } from 'react-router-dom';
 import {useLoaderDashboard} from '../../../context/LoadDashContext'
-import {Container} from './comp'
+import {Container,TableContainer} from './comp'
 
 function Team() {
 
@@ -16,6 +17,7 @@ function Team() {
   const [selected, setSelected] = useState([]);
 
   const {currentUser} = useAuth()
+  const {setLoad} = useLoaderScreen();
   const notification = useNotification()
   const query = new URLSearchParams(useLocation().search)
   const { setLoaderDash } = useLoaderDashboard();
@@ -28,12 +30,16 @@ function Team() {
         <>
             <Header icons={'Admin'} title={'Gerenciamento de Usuários'} video={true}/>
             <Container >
-                <TableMembers
+                <TableContainer
                   setLoaderDash={setLoaderDash}
+                  setLoad={setLoad}
+                  tabsLabel={['Suas Empresas']}
                   currentUser={currentUser}
                   notification={notification}
-                  setUsersRows={setUsersRows}
-                  usersRows={usersRows}
+                  setDataRows={setUsersRows}
+                  dataRows={usersRows}
+                  setSelected={setSelected}
+                  selected={selected}
                   setOpen={setOpen}
                 />
             </Container>

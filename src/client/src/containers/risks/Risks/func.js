@@ -4,7 +4,7 @@ export function onGetAllRisksAndGroups(companyId,setDataRows,setLoadContent,noti
   function checkSuccess(response) {
       setLoadContent(false)
       //setDataRows([Row1,Row2,Row3,...createData()])
-      setDataRows([...response])
+      setDataRows([...response.risks])
       setLoaderDash(false)
     }
 

@@ -26,7 +26,7 @@ background-color: ${({theme})=> theme.palette.type!== 'dark'? lighten(theme.pale
 border-color: ${({theme})=> theme.palette.background.line };
 border-width: 1px;
 border-style: solid;
-width:45px;
+width: ${({initialWidth})=> initialWidth? initialWidth :'45px' };
 transition: width 0.5s ease;
 margin-left:10px;
 animation: ${fadeIn} 0.3s ease-in;
@@ -43,6 +43,10 @@ cursor:pointer;
 
     }
 
+    & span {
+      font-weight: ${({theme})=>theme.palette.type!== 'dark'? 'bold':'normal'}
+    }
+
 &:hover {
     & p {
       color: ${({theme})=>theme.palette.type!== 'dark'? theme.palette.primary.contrastText: theme.palette.text.primary };
@@ -51,6 +55,22 @@ cursor:pointer;
     border-color: ${({theme})=> theme.palette.type!== 'dark'? theme.palette.background.line:theme.palette.primary.main };
     width:${props=>`${props.width}px`};
   }
+
+
+  ${props => props.transparent && css`
+    background-color: transparent;
+    color: ${({theme})=>theme.palette.primary.main };
+    font-weight: normal;
+    & span {
+      font-weight: normal;
+    }
+    &:hover {
+    & p {
+    color: ${({theme})=>theme.palette.primary.main };
+    font-weight: normal;
+  }
+  `}
+
 
 `;
 

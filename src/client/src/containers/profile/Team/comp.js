@@ -62,18 +62,17 @@ export function TableContainer({setSelected,selected,dataRows,setDataRows,tabsLa
       { loadContent ?
           <LoadingContent />
         :
-          null
+          <TabPanel key={0} value={tabValue} index={0} >
+            <TableComponent
+              rowsCells={dataRows}
+              selected={selected}
+              setSelected={setSelected}
+              loadContent={loadContent}
+              search={search}
+              handleCellClick={handleCellClick}
+            />
+          </TabPanel>
       }
-      <TabPanel key={0} value={tabValue} index={0} >
-        <TableComponent
-          rowsCells={dataRows}
-          selected={selected}
-          setSelected={setSelected}
-          loadContent={loadContent}
-          search={search}
-          handleCellClick={handleCellClick}
-        />
-      </TabPanel>
       </div>
     </NewTabs>
   );

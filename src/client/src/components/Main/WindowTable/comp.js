@@ -2,22 +2,8 @@ import TableCell from "@material-ui/core/TableCell";
 import {BootstrapTooltip} from '../MuiHelpers/Tooltip'
 import clsx from "clsx";
 import {Icons} from '../../Icons/iconsDashboard';
-import styled, {css} from "styled-components";
+import {UserContainer,UserAvatar,GroupIcon,TextNameEmail,EmailSpan,StatusComponent} from './styles';
 import {NormalizeData} from '../../../helpers/DataHandler';
-
-const StatusComponent = styled.div`
-    background-color: ${({theme})=> (theme.palette.status.success) };
-    border-radius: 10px;
-    width:10px;
-    height:10px;
-    ${props => (props.status === 'none' || props.status === 'Não') && css`
-      background-color: ${({theme})=> (theme.palette.status.fail) };
-      /* background-color: ${({theme})=> (theme.palette.status.success) }; */
-    `}
-    ${props => (props.status === 'Aguardando Autenticação'/*  || props.status === 'Não' */) && css`
-      background-color: ${({theme})=> (theme.palette.status.orange ) };
-    `}
-`;
 
 function NormalCell({column, classes, item, rowSize, onClick, onCorrectData,colIndex}) {
 
@@ -72,6 +58,39 @@ function NormalCell({column, classes, item, rowSize, onClick, onCorrectData,colI
   )
 }
 
+function UserCell({column, classes, item, rowSize, onClick}) {
+
+  return (
+    <TableCell
+      component="div"
+      className={clsx(
+        classes.cell,
+        !column.width && classes.expandingCell,
+      )}
+      style={{
+        flex:column.flex || false,
+        height: rowSize,
+        minWidth:column.minWidth || false,
+        display:'flex',
+        justifyContent: column.align ? column.align : 'flex-start',
+        position:'relative',
+        alignItems:'center',
+        //transform: column.align === 'center' ? `translateX(${10}px)`:`translateX(0px)`,
+        //backgroundColor:colIndex ==0?'grey':colIndex ==1?'green':colIndex ==2?'red':colIndex ==3?'blue':colIndex ==4?'orange':colIndex ==4?'yellow':colIndex ==4?'black':'transparent',
+      }}
+      onClick={onClick}
+    >
+      <UserContainer >
+          <UserAvatar >
+              <GroupIcon style={{fontSize:28}} type={item.image}/>
+          </UserAvatar>
+          <TextNameEmail >{item.name?item.name:'Aguardando...'}<br/>
+          <EmailSpan >{item.email}</EmailSpan> </TextNameEmail>
+      </UserContainer>
+    </TableCell>
+  )
+}
+
 function Paragraph({column, classes, item, rowSize, onClick, colIndex}) {
 
   let ItemToShow = item[column.id]
@@ -122,10 +141,10 @@ function StatusCell({column, classes, item, rowSize, onClick,colIndex}) {
 
   let ItemToShow = item[column.id]
   function setTitle() {
-    if (ItemToShow == 'Sim') return 'Dado padrão do sistema, previamente cadastrado pela SimpleSST conforme legislação e/ou norma técnica.'
-    if (ItemToShow == 'Não') return 'Dado criado pela equipe de sua empresa.'
-    if (Array.isArray(ItemToShow) && ItemToShow.length>0 && column.id == 'rec') return 'Possui Medida de controle equivalente a recomendação em questão.'
-    if (Array.isArray(ItemToShow) && ItemToShow.length>0 && column.id == 'med') return 'Possui recomendação equivalente a Medida de controle em questão.'
+    if (ItemToShow == 'yes') return 'Dado padrão do sistema, previamente cadastrado pela SimpleSST conforme legislação e/ou norma técnica.'
+    if (ItemToShow == 'no') return 'Dado criado pela equipe de sua empresa.'
+    if (typeof ItemToShow == 'string' && column.id == 'rec') return 'Possui Medida de controle equivalente a recomendação em questão.'
+    if (typeof ItemToShow == 'string' && column.id == 'med') return 'Possui recomendação equivalente a Medida de controle em questão.'
     if (typeof ItemToShow == 'string') return ItemToShow
     return 'Não identificado'
   }
@@ -174,6 +193,9 @@ export function RowCell({column, classes, item, rowSize, onClick,colIndex,onCorr
       :
         column.type === 'paragraph' ?
         <Paragraph colIndex={colIndex} onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
+      :
+        column.type === 'user' ?
+        <UserCell onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
       :
         <NormalCell onCorrectData={onCorrectData} colIndex={colIndex} onClick={onClick} column={column} classes={classes} item={item} rowSize={rowSize}/>
       }

@@ -26,11 +26,13 @@ import {v4} from "uuid";
 import { useResizeDetector } from 'react-resize-detector';
 import {dataFake,onAdd,onDelete,onEdit,onContract} from './func';
 import {CardEdit} from './comp';
-import {FilterComponent,AddUserButton} from '../../../../../components/Main/Table/comp'
+import {FilterComponent,AddUserButton,AddTextButton} from '../../../../../components/Main/Table/comp'
 import { ViewArray } from '@material-ui/icons';
 import clone from 'clone';
 import {ContinueButton} from '../../../../../components/Main/MuiHelpers/Button'
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Modal from './Modal'
+import { truncate } from 'lodash';
 
 const Container = styled.div`
   align-items: center;
@@ -53,6 +55,7 @@ export function Organograma({data,cnpj,currentUser,notification}) {
   const [sizeHeight, setSizeHeight] = useState(500)
   const [filter, setFilter] = useState('')
   const [prevFilter, setPrevFilter] = useState('')
+  const [open, setOpen] = useState(false)
 
   const { width, height, ref } = useResizeDetector();
   const theme = useContext(ThemeContext)
@@ -237,6 +240,7 @@ export function Organograma({data,cnpj,currentUser,notification}) {
             {loading && <CircularProgress size={24} style={{color: theme.palette.primary.main,position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}} />}
           </div>
           <AddUserButton style={{marginRight:20}} onClick={onHandleExpand} text={'Expandir Todos'} icon={'AllOut'} width={180} />
+          <AddTextButton transparent style={{marginLeft:'auto'}} onClick={()=>setOpen(true)} text={'-  Grupo Homogenio de Exposixão'} shortText={'GHE'} width={290} />
         </div>
         {width >10 &&
         <Tree
@@ -261,6 +265,7 @@ export function Organograma({data,cnpj,currentUser,notification}) {
         {show &&
           <CardEdit deepestJson={deepestJson} nodeKey={position.nodeKey} positionScroll={positionScroll} onContractChild={onContractChild} filter={filter} dataState={filter ? dataInitial : dataState} data={dataState} theme={theme} onDeleteChild={onDeleteChild} onEditChild={onEditChild} onAddChild={onAddChild} removeMenu={removeMenu} position={position}/>
         }
+        <Modal type={'rec'} open={open} setOpen={setOpen}/>
       </Container>
   );
 }

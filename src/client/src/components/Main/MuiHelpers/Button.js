@@ -63,6 +63,10 @@ export const ContinueButton = styled(Button)`
 
     ${props => props.primary === 'outlined' && css`
       border: 1px ${({theme})=>theme.palette.background.line} solid;
+      color:${({theme})=>theme.palette.type !== 'dark'?lighten(theme.palette.text.secondary,0.1) :theme.palette.text.secondary};
+      &:hover {
+        background-color: ${({theme})=>theme.palette.background.line};
+      }
       background-color: transparent;
       ${props => props.disable === 'true' && css`
         color:${({theme})=>theme.palette.type !== 'dark'?theme.palette.text.third :theme.palette.text.secondary};

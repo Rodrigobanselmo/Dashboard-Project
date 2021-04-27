@@ -23,6 +23,8 @@ export default function EnhancedTable({currentUser,notification,setOpen,usersRow
         onGetAllUsersCompany(currentUser.company.id,setUsersRows,setLoadContent,notification,setLoaderDash)
     }, [])
 
+    console.log(data,'data')
+
     function TableContainer() {
 
         let filterData = {...data}

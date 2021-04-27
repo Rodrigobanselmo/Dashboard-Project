@@ -179,6 +179,16 @@ export function AddUserButton({onClick,width=165,text='Nova Empresa',icon='Add',
   )
 }
 
+export function AddTextButton({onClick,initialWidth='52px',width=165,text='Nova Empresa',shortText='GHE',...restProps}) {
+
+  return (
+    <ButtonContainer initialWidth={initialWidth} onClick={onClick} width={width} className={'rowCenter'}  {...restProps}>
+      <span  className={'noBreakText'}>{shortText}</span>
+      <p  className={'noBreakText'}>{text}</p>
+    </ButtonContainer>
+  )
+}
+
 export function FilterListButton({title="Filtro Avançado",dataArray=[],onClick,setFilterButton,filterButton,...restProps}) {
   const anchorRef = React.useRef(null);
   const [openFilter,setOpenFilter] = React.useState(false)

@@ -1,6 +1,7 @@
 import { Team, Perfil,Companies,Excel,CompaniesEdit,ImportExcel,Home } from '../containers';
 import {TEAM,USER,DASHBOARD,COMPANY,DATA,TESTE,COMPANY_EDIT,IMPORT} from './routesNames'
 import {risks} from './paths/risks'
+import {checklist} from './paths/checklist'
 
 import Teste from '../Test/index';
 
@@ -71,7 +72,8 @@ const routes = [
     component: Teste,
     exact:true,
   },
-  ...risks
+  ...risks,
+  ...checklist,
 ];
 
 
