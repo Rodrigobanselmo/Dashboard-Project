@@ -271,7 +271,7 @@ export function QuestionColumn({
   }
 
   function handleDelete() {
-    notification.modal({title: 'Deletar Pergunta',text:'Você tem certeza que deseka excluir essa pergunta? Essa ação é irreversível',open:true,onClick:()=>onDelete()})
+    notification.modal({title: 'Deletar Pergunta',text:'Você tem certeza que deseka excluir essa pergunta? Essa ação é irreversível',rightBnt:'Deletar',open:true,onClick:()=>onDelete()})
   }
 
   function saveOptions() {

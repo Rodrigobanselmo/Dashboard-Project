@@ -9,6 +9,7 @@ import {lists} from '../../../constants/itemsDrawer'
 import { useSelector,useDispatch } from 'react-redux'
 import InputBase from '@material-ui/core/InputBase';
 import useWaitAction from '../../../hooks/useWaitAction'
+import {useNotification} from '../../../context/NotificationContext'
 import {BootstrapTooltip} from '../../Main/MuiHelpers/Tooltip'
 import { useHistory } from "react-router-dom"
 import {ThemeContext} from "styled-components";
@@ -17,8 +18,10 @@ import {useLoaderDashboard} from '../../../context/LoadDashContext'
 function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
 
   const activeRoute = useSelector(state => state.route)
+  const save = useSelector(state => state.save)
   const dispatch = useDispatch()
   const [noHandle,value,onActionTimeOut] = useWaitAction();
+  const notification = useNotification()
   const theme = React.useContext(ThemeContext)
 
   const [allOpen, setAllOpen] = useState([])
@@ -47,7 +50,22 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
     })
  },[history])
 
-  function onClickList(item) {
+  function onClickList(item,onSave) {
+
+    if (save && !onSave && !item?.items) {
+      notification.modal({
+        title: 'Você tem certeza?',
+        text:'Você possui informações que não estão salvas, tem certeza que deseja sair sem salvar?',
+        rightBnt:'Sair',
+        open:true,
+        onClick:()=>{
+          dispatch({ type: 'SAVE', payload: false })
+          onClickList(item,true)
+        }
+      })
+      return
+    }
+
     if (search && search.length>=1) {
       if (item.items) {
         if ( allOpen.find(i=>i===item.id) ) setAllOpen(allOpen=>allOpen.filter(i => i !== item.id));
@@ -85,7 +103,22 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
     }
   }
 
-  function onClickSubList(item,subItem) {
+  function onClickSubList(item,subItem,onSave) {
+
+    if (save && !onSave && !subItem?.items) {
+      notification.modal({
+        title: 'Você tem certeza?',
+        text:'Você possui informações que não estão salvas, tem certeza que deseja sair sem salvar?',
+        rightBnt:'Sair',
+        open:true,
+        onClick:()=>{
+          dispatch({ type: 'SAVE', payload: false })
+          onClickSubList(item,subItem,true)
+        }
+      })
+      return
+    }
+
     if (search && search.length>=1) {
       if (subItem.items) {
         if ( allOpen.find(i=>i===subItem.id) ) setAllOpen(allOpen=>allOpen.filter(i => i !== subItem.id));
@@ -113,7 +146,22 @@ function DrawerMenu({open,setOpen,lock,onClearTimeOut,onTimeOut,setLock}) {
     }
   }
 
-  function onClickSubSubList(item,subItem,subSubItem) {
+  function onClickSubSubList(item,subItem,subSubItem,onSave) {
+
+    if (save && !onSave) {
+      notification.modal({
+        title: 'Você tem certeza?',
+        text:'Você possui informações que não estão salvas, tem certeza que deseja sair sem salvar?',
+        rightBnt:'Sair',
+        open:true,
+        onClick:()=>{
+          dispatch({ type: 'SAVE', payload: false })
+          onClickSubSubList(item,subItem,subSubItem,true)
+        }
+      })
+      return
+    }
+
     if (activeRoute.subSubList!==subSubItem.id) {
       history.push(subSubItem.random ? `${subSubItem.to}${Math.floor(Math.random()*1000)}` : subSubItem.to)
       dispatch({ type: 'SET_ROUTE', payload:{list:item.id,subList:subItem.id,subSubList:subSubItem.id} })

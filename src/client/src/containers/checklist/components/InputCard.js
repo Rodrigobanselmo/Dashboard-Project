@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Paper, InputBase } from '@material-ui/core';
+import {BootstrapTooltip} from '../../../components/Main/MuiHelpers/Tooltip'
+import {Icons} from '../../../components/Icons/iconsDashboard';
 import { makeStyles, fade } from '@material-ui/core/styles';
+import IconButton from '../../../components/Main/MuiHelpers/IconButton';
 
 const useStyle = makeStyles((theme) => ({
   card: {
@@ -16,7 +19,7 @@ const useStyle = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
 }));
-export function InputCard({initialValue='',title, setTitle,onBlurTextEditSave,inputProps,...props}) {
+export function InputCard({initialValue='',title, setTitle,onBlurTextEditSave,inputProps,onSetSubText,more,minus,...props}) {
   const classes = useStyle();
   const [oldValue, setOldValue] = useState(initialValue);
 
@@ -31,7 +34,7 @@ export function InputCard({initialValue='',title, setTitle,onBlurTextEditSave,in
   };
 
   return (
-    <div>
+    <div style={{position:'relative'}}>
       <div className={classes.card} {...props}>
         <InputBase
           onChange={handleOnChange}
@@ -42,11 +45,20 @@ export function InputCard({initialValue='',title, setTitle,onBlurTextEditSave,in
           inputProps={{
             className: classes.input,
           }}
-          value={title}
-          placeholder={'Insira sua pergunta...'}
+          value={title == '...'?'':title}
+          placeholder={more?'Informação adicional...':'Insira sua pergunta...'}
           {...inputProps}
         />
       </div>
+      {!more &&
+      <div style={{position:'absolute',bottom:3,right:19}}>
+        <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={minus?'Remover Informação complementar':'Gerar Informação complementar'} styletooltip={{transform: 'translateX(0px)'}}>
+            <div>
+              <IconButton style={{height:12,width:12,marginRight:-8,opacity:0.7}} iconProps={{style:{fontSize:12}}} onClick={onSetSubText} aria-label="Add" icon={minus?'Remove':'Add'}/>
+            </div>
+        </BootstrapTooltip>
+      </div>
+      }
     </div>
   );
 }

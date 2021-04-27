@@ -63,7 +63,7 @@ export function QuestionColumn({
   setPosition,
   data,
   index,
-  onChangeQuestion:onGetRisks,
+  onGetRisks,
   setDataAll,
   dataAll,
   dataChecklist,
@@ -78,6 +78,7 @@ export function QuestionColumn({
   const [options, setOptions] = useState(getOptions(question))
   const [active, setActive] = useState(0)
   const [title, setTitle] = useState(question?.text);
+  const [subTitle, setSubTitle] = useState(question?.subText);
   const theme = React.useContext(ThemeContext)
   const notification = useNotification();
 
@@ -189,7 +190,7 @@ export function QuestionColumn({
     }
 
     setPosition([...position.slice(0,index+1),{id:dados.id,title:dados.title},{id:'search',title:'Pesquisa Fatores de Risco'}]);
-    //onGetRisks() //if (risk.length == 0) onGetRisks({currentUser,notification,dispatch})
+    onGetRisks() //if (risk.length == 0) onGetRisks({currentUser,notification,dispatch})
     setDataAll([...dataAll.slice(0,index+1),{id:dados.id,action:dados.action,questionId:question.id,type:'risk'},{type:'riskData',disabled:false}])
     return
   }
@@ -271,7 +272,7 @@ export function QuestionColumn({
   }
 
   function handleDelete() {
-    notification.modal({title: 'Deletar Pergunta',text:'Você tem certeza que deseka excluir essa pergunta? Essa ação é irreversível',open:true,onClick:()=>onDelete()})
+    notification.modal({title: 'Deletar Pergunta',text:'Você tem certeza que deseka excluir essa pergunta? Essa ação é irreversível',rightBnt:'Deletar',open:true,onClick:()=>onDelete()})
   }
 
   function saveOptions() {
@@ -313,6 +314,38 @@ export function QuestionColumn({
     setOptions([...newOptions])
   }
 
+  function onBlurSubTextEditSave(title,setTitle,oldValue, setOldValue) {
+    if (title == '') {
+      setTitle(oldValue)
+      return
+    }
+
+    setOldValue(title)
+    let copyDataChecklist = {...dataChecklist}
+    copyDataChecklist = clone(copyDataChecklist)
+    copyDataChecklist.data[categoryIndex].questions[questionIndex] = {...question,subText:title}
+    setDataChecklist({...copyDataChecklist})
+    setSave(true)
+  }
+
+  function onSetSubText() {
+    if ('subText' in question) {
+      let copyDataChecklist = {...dataChecklist}
+      copyDataChecklist = clone(copyDataChecklist)
+      delete copyDataChecklist.data[categoryIndex].questions[questionIndex]['subText']
+      setDataChecklist({...copyDataChecklist})
+      setSave(true)
+    } else {
+      let copyDataChecklist = {...dataChecklist}
+      copyDataChecklist = clone(copyDataChecklist)
+      copyDataChecklist.data[categoryIndex].questions[questionIndex] = {...question,subText:''}
+      setSubTitle('')
+      setDataChecklist({...copyDataChecklist})
+      setSave(true)
+    }
+
+  }
+
   return (
         <>
           <div style={{paddingRight:'10px',marginBottom:15,display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
@@ -325,7 +358,10 @@ export function QuestionColumn({
             </BootstrapTooltip>
           </div>
           <div style={{overflowY:'auto',height:'94%',paddingLeft:0}}>
-            <InputCard title={title} setTitle={setTitle} onBlurTextEditSave={onBlurTextEditSave}/>
+            <InputCard title={title} setTitle={setTitle} onBlurTextEditSave={onBlurTextEditSave} onSetSubText={onSetSubText} minus={'subText' in question}/>
+            {'subText' in question &&
+              <InputCard title={subTitle} setTitle={setSubTitle} onBlurTextEditSave={onBlurSubTextEditSave} more/>
+            }
             <div style={{paddingLeft:10,marginBottom:17,marginTop:15,}}>
               <div style={{flexDirection:'row',display:'flex',alignItems:'center'}}>
                 <BootstrapTooltip placement="bottom" enterDelay={400} TransitionProps={{ timeout: {enter:500, exit: 50} }} title={'Indicar para quem estiver realizando o checklist para tirar uma foto da situação apresentada.'} styletooltip={{transform: 'translateY(0px)'}}>
@@ -351,7 +387,7 @@ export function QuestionColumn({
                   )
                   if (question.type == 'mult'|| question.type == 'pers')
                   return (
-                    <Choose key={index} onClick={()=>onChangeAnswerYesNoNA(index)} text={index} active={active==index}/>
+                    <Choose key={index} onClick={()=>onChangeAnswerYesNoNA(index)} text={`R. ${index+1}`} active={active==index}/>
                   )
                 })}
               </div>

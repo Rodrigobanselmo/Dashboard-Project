@@ -35,7 +35,7 @@ export function Column({
   index,
   position,
   setPosition,
-  onChangeQuestion,
+  onGetRisks,
   type,
   searchRisk,
   onSearchRisk,
@@ -97,7 +97,7 @@ export function Column({
             setPosition={setPosition}
             data={data}
             index={index}
-            onChangeQuestion={onChangeQuestion}
+            onGetRisks={onGetRisks}
             setDataAll={setDataAll}
             dataAll={dataAll}
             dataChecklist={dataChecklist}

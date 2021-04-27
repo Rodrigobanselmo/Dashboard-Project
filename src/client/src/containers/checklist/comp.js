@@ -5,7 +5,7 @@ import {
   ButtonContainer
 } from './styles';
 import {COMPANY} from '../../routes/routesNames.ts'
-import {onGetChecklist,onCreateChecklist,onSaveChecklistData,onGetRisks,onDeleteChecklist,onEditChecklist,onDuplicateChecklist} from './func'
+import {onGetAllChecklists,onGetChecklist,onCreateChecklist,onSaveChecklistData,onGetRisks,onDeleteChecklist,onEditChecklist,onDuplicateChecklist} from './func'
 import store from './store'
 import { Header } from './components/Header'
 import { FirstColumn } from './components/FirstColumn'
@@ -15,6 +15,7 @@ import {useHistory} from "react-router-dom";
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { useSelector,useDispatch } from 'react-redux'
 import useTimeOut from '../../hooks/useTimeOut';
+import {LoadingContent} from '../../components/Main/Table/comp'
 import clone from 'clone';
 
 //import { useResizeDetector } from 'react-resize-detector';
@@ -31,32 +32,45 @@ export default function Container({children}) {
 export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) {
 
   const [data, setData] = useState([]); //dado do checklist presente nas telas
-  const [allChecklists,setAllChecklists] = useState(store); //somente as informacoes dos nomes e ids dos checklists
+  const [allChecklists,setAllChecklists] = useState([]); //somente as informacoes dos nomes e ids dos checklists
+  const [loadContent, setLoadContent] = useState(true)
   const [dataChecklist, setDataChecklist] = useState({data:[]}); //dado do checklist vindo do backend com tuso possivel
   const [position, setPosition] = useState([]);
   const [openModalEdit,setOpenModalEdit] = React.useState(false) //modal para editar/duplicar/deletar
-  const [save, setSave] = useState(false) //para dizer se pode ou nao salvar
   const [searchRisk, setSearchRisk] = useState('')
   const [loading, setLoading] = useState(false)
 
   const history = useHistory();
   const risk = useSelector(state => state.risk)
+  const riskData = useSelector(state => state.riskData)
+  const save = useSelector(state => state.save)
   const dispatch = useDispatch()
   const [onTimeOut,onClearTime] = useTimeOut()
   //const { width, ref } = useResizeDetector();
   /////const {setLoadDash} = React.useCallback(()=>useLoaderDash(),[]);
 
   React.useEffect(() => {
-    //onGetAllCompanies(currentUser.company.id,setRowsCells,setLoadContent,notification)
+    onGetAllChecklists(currentUser.company.id,setAllChecklists,setLoadContent,setLoaderDash,notification)
     return onClearTime()
   }, [])
 
+  function setSave(bool) {
+    dispatch({ type: 'SAVE', payload: bool })
+  }
+
   //Card Handler
-  function onChecklistHandle(id,title) {
-    if (position && position[0] && position[0].id == id) return;
-    setPosition([{id,title}]);
-    onGetChecklist({currentUser,id,setDataChecklist,setData,setLoad})
-    onGetRisks({currentUser,notification,dispatch})
+  function onChecklistHandle(id,title,confirmation) {
+
+    if (confirmation || !save || position[0]?.id == id) {
+      if (position && position[0] && position[0].id == id) return;
+      setPosition([{id,title}]);
+      setData([])
+      onGetChecklist({currentUser,id,setDataChecklist,setData,setLoad})
+      onGetRisksData()
+      setSave(false)
+    } else {
+      notification.modal({title: 'Você tem certeza?',text:'Você possui informações não salvas, tem certeza que deseja sair sem salvar?',rightBnt:'Sair',open:true,onClick:()=>onChecklistHandle(id,title,true)})
+    }
   }
 
   function onJumpGroupsHandle(index,positionId,dados) {
@@ -70,7 +84,7 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
   //Card Creation Operations
   function onCreateNewChecklist(title) {
     // notification.error({message: ''})
-    const uid = Math.floor((1 + Math.random()) * 0x1000000000000000000).toString(16).substring(1);
+    const uid = Math.floor((1 + Math.random()) * 0x1000000000000000).toString(32).substring(1);
     setPosition([{id:uid,title}]);
 
     function onSuccess(checklist) {
@@ -121,12 +135,14 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
       setDataChecklist({...copyDataChecklist})
     }
 
-    onEditChecklist({id,onSuccess,currentUser,setLoad,notification})
+    onEditChecklist({id,title,onSuccess,currentUser,setLoad,notification})
   }
 
   //Question Manager
-  function onChangeQuestion(action,index,dados) {
-
+  function onGetRisksData() {
+    if (risk.length == 0 || riskData.rec.length == 0) {
+      onGetRisks({currentUser,notification,dispatch})
+    }
   }
 
   function onSearchRisk(action,index,dados) {
@@ -136,7 +152,7 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
       onClearTime()
       onTimeOut(()=>{
         setLoading(false)
-        if (risk.length == 0) onGetRisks({currentUser,notification,dispatch})
+        onGetRisksData()
       },600)
       return
     }
@@ -336,7 +352,7 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
       // if (columnDestination in copyData[index] && copyData[index][columnDestination].findIndex(i=>i == draggableArray[1]) != -1) return;
 
       sourceList.splice(source.index, 1);
-      destinationList.splice(destination.index, 0, draggingCard);
+      destinationList.filter(i=>i!=draggingCard).splice(destination.index, 0, draggingCard);
 
       copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[answerId].data[questionActionTypeIndex][columnSource] = [...sourceList]
       copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[answerId].data[questionActionTypeIndex][columnDestination] = [...destinationList]
@@ -385,12 +401,15 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
       const draggableArray = draggableId.split('/')
       const index = destArray[2] //index do data -- copyData
 
+      console.log('DATA',data[index])
+      console.log('draggableArray',draggableArray[1])
       //update checklist data from database
       const categoryIndex = copyDataChecklist.data.findIndex(i=>i.id == position[1].id)
       const questionId = data[index].questionId
       const questionIndexDatabase = copyDataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==questionId)
       const riskId = data[index].riskId
       const answerId = data[index].answerId
+      const question = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase]
       const questionActionTypeIndex = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[answerId].data.findIndex(i=>i.risk==riskId)
       const questionActionData = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[answerId].data[questionActionTypeIndex][column]
 
@@ -398,8 +417,42 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
       destinationChecklist.splice(destination.index, 0, draggableArray[1]);
 
       copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[answerId].data[questionActionTypeIndex][column] = [...destinationChecklist]
+
       setDataChecklist({...copyDataChecklist})
       setSave(true)
+
+      if (riskData[draggableArray[0]] && question.type == 'standard' && question.action[answerId].id != 'q_3') {
+        const riskDataIndex = riskData[draggableArray[0]].findIndex(i=>i.id == draggableArray[1])
+        const riskDataObject = riskData[draggableArray[0]][riskDataIndex]
+
+        if (riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']) {
+          console.log('riskDataObject',riskData[draggableArray[0]][riskDataIndex])
+          const oppositeAnswerId = question.action[answerId].id === 'q_1' ?'q_2':'q_1'
+          const droppableId = [column]
+          const riskDataIndexes = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data.findIndex(i=>i.risk==riskId)
+          if (riskDataIndexes != -1) {
+            const exists = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[riskDataIndexes][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']
+            const existsData = exists?copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[riskDataIndexes][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']:[]
+            copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[riskDataIndexes][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug'] = [...existsData.filter(i=>i!=riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']),riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']]
+          } else {
+            copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data = [...copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data,{risk:riskId}]
+            const lastIndex = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data.length -1
+            const exists = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[lastIndex][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']
+            const existsData = exists?copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[lastIndex][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']:[]
+            copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[lastIndex][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug'] = [...existsData.filter(i=>i!=riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']),riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']]
+          }
+
+          notification.modal({
+            title: draggableArray[0]=='med'?'Adicionar Recomendação Equivalente':'Adicionar Medida Equivalente',
+            text:`Você deseja adicionar a ${draggableArray[0]=='med'?'recomendação':'medida de controle'} equivalente à ${draggableArray[0]!=='med'?'recomendação':'medida de controle'} selecionada para a resposta "${question.action[answerId].id === 'q_1' ?'Não':'Sim'}"?`,
+            rightBnt:'Adicionar',
+            open:true,
+            onClick:()=>setDataChecklist({...copyDataChecklist})
+          })
+        }
+      }
+
+
     }
 
     //removendo risks
@@ -498,54 +551,62 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
     <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <div style={{height: 600,display:'flex',flexDirection:'column',width:'100%',minWidth:800}}>
         <Header setData={setData} setPosition={setPosition} position={position} save={save} setSave={setSave} onSaveChecklist={onSaveChecklist}/>
-        <div style={{display:'flex',height: 550,flexDirection:'row',width:'100%',transition:'transform 0.4s ease',transform:`translateX(-${![0,1,2,3].includes(position.length) ? 25*(position.length-3):0}%)`}}>
-          <FirstColumn
-            position={position}
-            setPosition={setPosition}
-            data={allChecklists}
-            setData={setAllChecklists}
-            onChecklistHandle={onChecklistHandle}
-            openModalEdit={openModalEdit}
-            setOpenModalEdit={setOpenModalEdit}
-            onCreateNewChecklist={onCreateNewChecklist}
-            onEditDataChecklist={onEditDataChecklist}
-            onDeleteDataChecklist={onDeleteDataChecklist}
-            onDuplicateNewChecklist={onDuplicateNewChecklist}
-            />
-          {data && data.map((item,index)=>{
-            return (
-              <Column
-                key={index}
-                index={index}
-                data={item}
-                openModalEdit={openModalEdit}
-                setOpenModalEdit={setOpenModalEdit}
-                position={position}
-                setPosition={setPosition}
-                onChangeQuestion={onChangeQuestion}
-                onJumpGroupsHandle={onJumpGroupsHandle}
-                type={item}
-                searchRisk={searchRisk}
-                onSearchRisk={onSearchRisk}
-                loading={loading}
-                dataAll={data}
-                setDataAll={setData}
-                dataChecklist={dataChecklist}
-                setDataChecklist={setDataChecklist}
-                setSave={setSave}
+        { loadContent ?
+            <LoadingContent />
+          :
+          <div style={{display:'flex',height: 550,flexDirection:'row',width:'100%',transition:'transform 0.4s ease',transform:`translateX(-${![0,1,2,3].includes(position.length) ? 25*(position.length-3):0}%)`}}>
+            <FirstColumn
+              position={position}
+              setPosition={setPosition}
+              data={allChecklists}
+              setData={setAllChecklists}
+              onChecklistHandle={onChecklistHandle}
+              openModalEdit={openModalEdit}
+              setOpenModalEdit={setOpenModalEdit}
+              onCreateNewChecklist={onCreateNewChecklist}
+              onEditDataChecklist={onEditDataChecklist}
+              onDeleteDataChecklist={onDeleteDataChecklist}
+              onDuplicateNewChecklist={onDuplicateNewChecklist}
+              save={save}
+              setSave={setSave}
+              notification={notification}
               />
-            )
-          })}
-          {data && data.length ==0 &&
-            <Column/>
-          }
-          {data && data.length <=1 &&
-            <Column/>
-          }
-          {data && data.length <=2 &&
-            <Column/>
-          }
-        </div>
+            {data && data.map((item,index)=>{
+              return (
+                <Column
+                  key={index}
+                  index={index}
+                  data={item}
+                  openModalEdit={openModalEdit}
+                  setOpenModalEdit={setOpenModalEdit}
+                  position={position}
+                  setPosition={setPosition}
+                  onGetRisks={onGetRisksData}
+                  onJumpGroupsHandle={onJumpGroupsHandle}
+                  type={item}
+                  searchRisk={searchRisk}
+                  onSearchRisk={onSearchRisk}
+                  loading={loading}
+                  dataAll={data}
+                  setDataAll={setData}
+                  dataChecklist={dataChecklist}
+                  setDataChecklist={setDataChecklist}
+                  setSave={setSave}
+                />
+              )
+            })}
+            {data && data.length ==0 &&
+              <Column/>
+            }
+            {data && data.length <=1 &&
+              <Column/>
+            }
+            {data && data.length <=2 &&
+              <Column/>
+            }
+          </div>
+        }
+
       </div>
     </DragDropContext>
   );

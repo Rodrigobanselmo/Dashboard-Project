@@ -27,6 +27,7 @@ import {CardDrop} from './CardDrop';
 import { Droppable, Draggable,DragDropContext } from 'react-beautiful-dnd';
 import useTimeOut from '../../../hooks/useTimeOut';
 import { AscendentText } from '../../../helpers/Sort';
+import Modal from '../../risks/RiskEdit/Modal'
 
 export function RiskSuggestData({
   position,
@@ -37,9 +38,12 @@ export function RiskSuggestData({
   dataChecklist,
 }) {
   const [search, setSearch] = useState('')
+  const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [initialData, setInitialData] = useState(null)
   const [filterSelected, setFilterSelected] = useState([])
   const theme = React.useContext(ThemeContext)
+  const risk = useSelector(state => state.risk)
   const riskData = useSelector(state => state.riskData)
   const [onTimeOut,onClearTime] = useTimeOut()
 
@@ -90,6 +94,64 @@ export function RiskSuggestData({
     },600)
   }
 
+  function handleAddButton() {
+    setOpen(true)
+  }
+
+  //////para caso queria futuramente editar diretamente aqui
+  function handleClickCard(row) {
+
+    var initial = {data1:'',data2:'',fis:[],qui:[],bio:[],aci:[],erg:[],...row}
+
+    if (row?.risk) {
+      row.risk.map(item=>{
+        const index = risk.findIndex(i=>i.id==item)
+        if (risk[index]) initial[risk[index].type] = [...initial[risk[index].type],item]
+      })
+    }
+
+    if (row?.category) {
+      row.category.map(item=>{
+        initial[item] = ['all']
+      })
+    }
+
+    if (dataKey() == 'rec' && riskData.rec) {
+      const index = riskData.rec.findIndex(i=>i.id==row.id)
+      if (riskData.rec[index]) initial.data1 = riskData.rec[index].text
+      if (riskData.rec[index] && riskData.rec[index]?.med) {
+        const indexOther = riskData.med.findIndex(i=>i.id==riskData.rec[index].med)
+        if (riskData.med[indexOther]) initial.data2 = riskData.med[indexOther].text
+      }
+      console.log(initial)
+      setInitialData(initial)
+      setOpen(true)
+      return
+    }
+
+    if (dataKey() == 'med' && riskData.med) {
+      const index = riskData.med.findIndex(i=>i.id==row.id)
+      if (riskData.med[index]) initial.data1 = riskData.med[index].text
+      if (riskData.med[index] && riskData.med[index]?.rec) {
+        const indexOther = riskData.rec.findIndex(i=>i.id==riskData.med[index].rec)
+        if (riskData.rec[indexOther]) initial.data2 = riskData.rec[indexOther].text
+        }
+      console.log(initial)
+      setInitialData(initial)
+      setOpen(true)
+      return
+    }
+
+    if (dataKey() == 'font' && riskData.font) {
+      const index = riskData.font.findIndex(i=>i.id==row.id)
+      if (riskData.rec[index]) initial.data1 = riskData.font[index].text
+      console.log(initial)
+      setOpen(true)
+      setInitialData(initial)
+      return
+    }
+  }
+
   return (
     <>
       <p className={'noBreakText'} style={{marginBottom:15,maxWidth:210}}>{TITLE()}</p>
@@ -117,11 +179,7 @@ export function RiskSuggestData({
                       item={item}
                       index={indexItem}
                       draggableId={`${dataKey()}/${item.id}/${index}`}
-                      onClick={()=>{}}
-                      //position={position && position[0] && position[0].id == item.id}
-                      //open={openModalEdit}
-                      //setOpen={setOpenModalEdit}
-                      //onClick={()=>onChecklistHandle(item?.id,item?.title)}
+                      onClick={()=>handleClickCard(riskData[dataKey()][riskData[dataKey()].findIndex(i=>i.id == item.id)])}
                     />
                   )
                 })
@@ -138,6 +196,10 @@ export function RiskSuggestData({
         </AddedRiskContainer>
       )}
       </Droppable>
+      <AddCircle onClick={handleAddButton}>
+        <Icons style={{fontSize:22}} type={`Add`}/>
+      </AddCircle>
+      <Modal type={dataKey()} open={open} setOpen={setOpen} data={risk?{}:risk[risk.findIndex(i=>i.id==data.riskId)]} initialData={initialData} setInitialData={setInitialData}/>
     </>
   );
 }

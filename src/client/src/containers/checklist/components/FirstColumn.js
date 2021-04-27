@@ -28,7 +28,10 @@ export function FirstColumn({
   onCreateNewChecklist,
   onEditDataChecklist,
   onDeleteDataChecklist,
-  onDuplicateNewChecklist
+  onDuplicateNewChecklist,
+  save,
+  notification,
+  setSave
 }) {
 
   const [open, setOpen] = useState(false)
@@ -65,7 +68,15 @@ export function FirstColumn({
     onDeleteDataChecklist(actionsData.checklistId)
   }
 
-  function onRightClick(text,item) {
+  function onRightClick(text,item,again) {
+    if (save && !again && !(position[0] && position[0].id == item.id && text == 'Editar')) {
+      notification.modal({title: 'Você tem certeza?',text:'Você possui informações não salvas, tem certeza que deseja mudar de checklist? Isso acarretará na perda dos dados não salvos.',rightBnt:'Mudar',open:true,onClick:()=>
+        {
+          setSave(false)
+        }
+      })
+      return
+    }
     if (text == 'Duplicar') {
       setOpen('dup')
       setActionsData({checklistId:item.id})

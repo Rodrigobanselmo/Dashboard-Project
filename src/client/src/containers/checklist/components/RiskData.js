@@ -50,7 +50,7 @@ export function RiskData({
   dataChecklist,
 }) {
   const [open, setOpen] = useState(false)
-  const [filterSelected, setFilterSelected] = useState([])
+  const [filterSelected, setFilterSelected] = useState(['fis'])
   const theme = React.useContext(ThemeContext)
   const risk = useSelector(state => state.risk)
 
@@ -58,9 +58,6 @@ export function RiskData({
   const categoryIndex = dataChecklist.data.findIndex(i=>i.id==position[1].id)
   const questionIndex = dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==dataLast.questionId)
   const _data = dataChecklist.data[categoryIndex].questions[questionIndex].action[dataLast.action]
-
-  console.log('_data',_data)
-  console.log(dataAll[parseInt(index)-1])
 
   function onFilterRisk(item) {
     if(filterSelected.includes(item.icon.toLocaleLowerCase())) {
@@ -72,28 +69,31 @@ export function RiskData({
 
   function filter() {
     let normalized = searchRisk.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "")
-    let filtered = [];
 
-    if (searchRisk.length > 0) filtered = [...risk].filter(i=>i.name.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes(normalized)).slice(0,20)
-    else if (filterSelected.length > 0) {
-      filtered = [...risk].filter(i=>i.type!=='qui')
-      filtered.push(...[...risk].filter(i=>i.type==='qui').slice(0,10))
-    }
-
-    const filterButtons = []
+    let filterButtons = []
     if (filterSelected.length > 0) {
       let filterData = [];
       filterSelected.map((type)=>{
-        filtered.map((item)=>{
+        risk.map((item)=>{
           if (item.type == type) filterData.push({...item})
         })
       })
       filterButtons.push(...filterData)
+    } else {
+      filterButtons = [...risk]
     }
+
+    let filtered = [];
+    if (searchRisk.length > 0) filtered = [...filterButtons].filter(i=>i.name.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes(normalized)).slice(0,30)
+    else if (filterSelected.length > 0) {
+      filtered = [...filterButtons].filter(i=>i.type!=='qui')
+      filtered.push(...[...filterButtons].filter(i=>i.type==='qui').slice(0,10))
+    }
+
     return filterSelected.length == 0 ?
-      filtered.filter(i=>( !_data?.data||(_data?.data && _data.data.findIndex(item=>item.risk == i.id) == -1) )).sort(sort)
+      filtered.filter(i=>( !_data?.data||(_data?.data && _data.data.findIndex(item=>item.risk == i.id) == -1) )).sort(sort).slice(0,40)
       :
-      filterButtons.filter(i=>!_data?.data||(_data?.data && _data.data.findIndex(item=>item.risk == i.id) == -1)).sort(sort)
+      filtered.filter(i=>!_data?.data||(_data?.data && _data.data.findIndex(item=>item.risk == i.id) == -1)).sort(sort).slice(0,40)
   }
 
   return (

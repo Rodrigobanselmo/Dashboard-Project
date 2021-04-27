@@ -72,7 +72,7 @@ const HeaderComponent = React.memo(({icons, title,path, video=false,subTitle}) =
                   <span key={index} style={{color:'grey'}}>&nbsp;/&nbsp;{item}</span>
                 ))
               :
-              <span style={{color:'grey'}}>&nbsp;/bsp;{path ?? title}</span>
+              <span style={{color:'grey'}}>&nbsp;/&nbsp;{path ?? title}</span>
               }
             </p>
             </div>

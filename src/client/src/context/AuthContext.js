@@ -49,37 +49,37 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    // const unsubscribe = auth.onAuthStateChanged(user => {
-    //   if (!user) {
-    //     setCurrentUser(user)
-    //     setLoad(false)
-    //   }
-    //   if (user) GetUserData(user,checkSuccess,checkError)
-    // })
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (!user) {
+        setCurrentUser(user)
+        setLoad(false)
+      }
+      if (user) GetUserData(user,checkSuccess,checkError)
+    })
 
-    // return unsubscribe
-    setCurrentUser({
-      company: {
-          name: "simplesst",
-          id: "nDSBFRU9H180cpXyAbtE"
-      },
-      image: "Admin",
-      creation: {
-          end: 0,
-          start: 1613677117162
-      },
-      access: "master",
-      type: "Master",
-      status: "Ativo",
-      admin: "Current",
-      email: "rodrigobanselmo@gmail.com",
-      uid: "IEU8lYKaOifsF1pXeIxWFffPfzZ2",
-      info: {
-          CREA: "123",
-          CPF: "656.564.672-99"
-      },
-     name: "Rodrigo Barbosa Anselmo"
-  })
+    return unsubscribe
+  //   setCurrentUser({
+  //     company: {
+  //         name: "simplesst",
+  //         id: "nDSBFRU9H180cpXyAbtE"
+  //     },
+  //     image: "Admin",
+  //     creation: {
+  //         end: 0,
+  //         start: 1613677117162
+  //     },
+  //     access: "master",
+  //     type: "Master",
+  //     status: "Ativo",
+  //     admin: "Current",
+  //     email: "rodrigobanselmo@gmail.com",
+  //     uid: "IEU8lYKaOifsF1pXeIxWFffPfzZ2",
+  //     info: {
+  //         CREA: "123",
+  //         CPF: "656.564.672-99"
+  //     },
+  //    name: "Rodrigo Barbosa Anselmo"
+  // })
     setLoad(false)
   }, [])
 

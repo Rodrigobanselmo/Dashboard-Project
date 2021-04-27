@@ -11,6 +11,7 @@ import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Search from '@material-ui/icons/Search';
 import Add from '@material-ui/icons/Add';
+import Remove from '@material-ui/icons/Remove';
 import Cancel from '@material-ui/icons/Cancel';
 import Close from '@material-ui/icons/Close';
 import HighlightOff from '@material-ui/icons/HighlightOff';
@@ -157,6 +158,8 @@ export const Icons = ({ type, ...props }) => {
       return <ArrowDropDownIcon {...props} />;
     case 'Add':
       return <Add {...props} />;
+    case 'Remove':
+      return <Remove {...props} />;
     case 'Search':
       return <Search {...props} />;
     case 'Cancel':

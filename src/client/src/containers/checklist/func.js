@@ -1,4 +1,5 @@
-import {GetAllCompanies} from '../../services/firestoreCompany'
+import {CreateNewChecklist,GetAllChecklist,GetChecklist,SaveChecklist,EditChecklist} from '../../services/firestoreChecklist'
+import {GetAllRisks} from '../../services/firestoreRisks'
 import {v4} from "uuid";
 import faker from 'faker';
 
@@ -22,17 +23,30 @@ const Check = {title:"PGR",id:'1',company:'cnpj',worker:{cargo:'',setor:'',cargo
   ]},
 ]}
 
-const Check2 = {title:"Porte",id:'23eqwewq',data:[]}
+export function onGetAllChecklists(companyId,setAllChecklists,setLoadContent,setLoaderDash,notification) {
+  function checkSuccess(response) {
+      setLoadContent(false)
+      setLoaderDash(false)
+      setAllChecklists([...response])
+
+    }
+
+    function checkError(error) {
+      setLoadContent(false)
+      setLoaderDash(false)
+      setTimeout(() => {
+        notification.error({message:error})
+      }, 600);
+    }
+
+    GetAllChecklist(companyId,checkSuccess,checkError)
+}
 
 export function onGetChecklist({currentUser,id: checklistId,setDataChecklist,setData,setLoad,notification}) {
     function checkSuccess(response) {
-        setTimeout(() => {
           setLoad(false)
-        }, 600);
-        const checklist = checklistId !=1?Check2:response
-
-        setDataChecklist(checklist)
-        setData([[{title:checklist.title,id:checklist.id}]])
+        setDataChecklist({...response})
+        setData([[{title:response.title,id:response.id}]])
       }
 
       function checkError(error) {
@@ -42,29 +56,27 @@ export function onGetChecklist({currentUser,id: checklistId,setDataChecklist,set
         }, 600);
       }
 
-      //GetAllCompanies(currentUser.company.id,checkSuccess,checkError)
+      GetChecklist(currentUser.company.id,checklistId,checkSuccess,checkError)
       setLoad(true)
-      checkSuccess(Check)
 }
 
 export function onCreateChecklist({id,setAllChecklists,onSuccess,title,currentUser,setLoad,notification}) {
   const Checklist = {title,id,data:[]}
-  function checkSuccess(response) {
+  function checkSuccess() {
     setTimeout(() => {setLoad(false)}, 600);
     onSuccess(Checklist)
-    setAllChecklists(data=>[...data,{id:response.id,title}])
+    setAllChecklists(data=>[...data,{id,title}])
   }
 
   function checkError(error) {
     setLoadContent(false)
     setTimeout(() => {
-      notification.error({message:error,modal:true})
+      notification.error({message:error})
     }, 600);
   }
 
-  //GetAllCompanies(currentUser.company.id,checkSuccess,checkError)
+  CreateNewChecklist(id,title,currentUser.company.id,checkSuccess,checkError)
   setLoad(true)
-  checkSuccess({id})
 }
 
 export function onDuplicateChecklist({id,title,checklistData,onSuccess,currentUser,setLoad,notification}) {
@@ -106,7 +118,7 @@ export function onDeleteChecklist({id,setAllChecklists,onSuccess,currentUser,set
   checkSuccess()
 }
 
-export function onEditChecklist({id,onSuccess,currentUser,setLoad,notification}) {
+export function onEditChecklist({id,title,onSuccess,currentUser,setLoad,notification}) {
 
   function checkSuccess() {
     setTimeout(() => {setLoad(false)}, 600);
@@ -114,69 +126,36 @@ export function onEditChecklist({id,onSuccess,currentUser,setLoad,notification})
   }
 
   function checkError(error) {
-    setLoadContent(false)
+    setLoad(false)
     setTimeout(() => {
-      notification.error({message:error,modal:true})
+      notification.error({message:error})
     }, 600);
   }
 
-  //GetAllCompanies(currentUser.company.id,checkSuccess,checkError)
+  EditChecklist(id,title,currentUser.company.id,checkSuccess,checkError)
   setLoad(true)
-  checkSuccess()
 }
 
 export function onSaveChecklistData({dataChecklist,setSave,setLoading,currentUser,notification}) {
     function checkSuccess() {
         setTimeout(() => {
           setLoading(false)
-        }, 1500);
+          notification.success({message:'Checklist salvo com sucesso!'})
+        }, 900);
         setSave(false)
         console.log('dataChecklist save',dataChecklist)
       }
 
       function checkError(error) {
-        setLoadContent(false)
+        setLoading(false)
         setTimeout(() => {
-          notification.error({message:error,modal:true})
+          notification.error({message:error})
         }, 600);
       }
 
-      //GetAllCompanies(currentUser.company.id,checkSuccess,checkError)
-      checkSuccess()
+      SaveChecklist(dataChecklist,currentUser.company.id,checkSuccess,checkError)
 }
 
-function random() {
-    return `${faker.random.words()} ${faker.random.words()} ${faker.random.words()} ${faker.random.words()} ${faker.random.words()}`
-}
-
-const types = ['fis','qui','bio','aci','erg','qui','qui','qui','qui','qui','qui']
-const risks = [
-  {id:'123',name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},
-  {id:'2',name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},
-  {id:'3',name:random(),type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},
-  {id:'4',name:faker.random.words() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},
-  {id:'5',name:faker.random.words() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},
-  {id:'6',name:faker.random.words() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},{id:v4(),name:random() ,type:types[Math.floor(Math.random()*10)]},
-]
-
-const rec = [
-  {id:'12345',text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},
-  {id:'wiw',text:random(),category:['aci']},
-  {id:v4(),text:random(),category:['qui','fis']},
-  {id:v4(),text:random(),category:['aci']},
-]
-const med = [
-  {id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},
-  {id:v4(),text:random(),risk:['6'],category:[]},
-  {id:v4(),text:random(),risk:[],category:['qui','fis']},
-  {id:v4(),text:random(),risk:[],category:['qui']},
-]
-const font = [
-  {id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},{id:v4(),text:random(),risk:['123','2','3'],category:[]},
-  {id:v4(),text:random(),risk:[],category:['qui']},
-  {id:v4(),text:random(),risk:[],category:['qui','fis']},
-  {id:v4(),text:random(),risk:['3'],category:[]},
-]
 const sort = function (a, b) {
   if (a.name > b.name) {
       return 1;
@@ -189,7 +168,6 @@ const sort = function (a, b) {
 
 export function onGetRisks({currentUser,notification,dispatch}) {
   function checkSuccess(response) {
-    console.log({...response})
     dispatch({ type: 'CREATE_RISKS', payload: [...response.risks.sort(sort)] })
     dispatch({ type: 'CREATE_RISKS_DATA', payload: {...response.data} })
   }
@@ -197,32 +175,9 @@ export function onGetRisks({currentUser,notification,dispatch}) {
     function checkError(error) {
       setLoadContent(false)
       setTimeout(() => {
-        notification.error({message:error,modal:true})
+        notification.error({message:error})
       }, 600);
     }
 
-    //GetAllCompanies(currentUser.company.id,checkSuccess,checkError)
-    checkSuccess({risks,data:{rec,med,font}})
+    GetAllRisks(currentUser.company.id,checkSuccess,checkError)
 }
-
-
-
-// const createRow = () => ({
-//   CNPJ: `${Math.random()*1000000000000000}`,
-//   creation: 1614528749269,
-//   end: 0,
-//   name: `${Math.random()*1000000000000000}`,
-//   responsavel: `${Math.random()*1000000000000000}`,
-//   status: 'Ativo',
-// });
-
-// const createData = (qty = 3) => {
-//   let data = [];
-
-//   for (let i = 0; i < qty; i++) {
-//     const row = createRow();
-//     data.push(row);
-//   }
-
-//   return data;
-// };
