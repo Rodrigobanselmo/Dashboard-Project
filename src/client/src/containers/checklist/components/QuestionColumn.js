@@ -108,12 +108,25 @@ export function QuestionColumn({
     return
   }
 
-  function onChangeQuestionType(value) {
+  function onChangeQuestionType(value,bool,again,func) {
+    if (!bool && question && question.action[`q_${active+1}`] && question.action[`q_${active+1}`]?.child && dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child) != -1) {
+      notification.modal({
+        title: 'Deletar Sub-Pergunta',
+        text:'A categória de multiplas perguntas não permite sub perguntas, ao continuar ela será deletada e está ação é irreversivel, deseja continuar mesmo assim?',
+        rightBnt:'Continuar',
+        open:true,
+        onClick:()=>{
+          onChangeQuestionType(value,true)
+          if (func) func()
+        }
+      })
+      return
+    }
+
     const type = value == 'Padrão' ? 'standard':value == 'Multiplos' ? 'mult':value == 'Personalizado' ? 'pers' : value
     setPosition([...position.slice(0,index+1)]);
     let copyDataChecklist = {...dataChecklist}
     copyDataChecklist = clone(copyDataChecklist)
-
     if (type == 'standard') {
       const newActions = {}
       const actions = {...copyDataChecklist.data[categoryIndex].questions[questionIndex].action}
@@ -136,6 +149,8 @@ export function QuestionColumn({
     copyDataChecklist.data[categoryIndex].questions[questionIndex] = {...copyDataChecklist.data[categoryIndex].questions[questionIndex],type}
     setOptions([...getOptions(copyDataChecklist.data[categoryIndex].questions[questionIndex])])
     setDataChecklist({...copyDataChecklist})
+    if (func) func()
+    if (!again && value == 'Multiplos' && question && question.action[`q_${active+1}`] && question.action[`q_${active+1}`]?.child && dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child) != -1) onDelete(true,copyDataChecklist)
   }
 
   function onChangeAnswerYesNoNA(indexes) {
@@ -231,7 +246,9 @@ export function QuestionColumn({
     let copyDataChecklist = {...dataChecklist}
     copyDataChecklist = clone(copyDataChecklist)
     copyDataChecklist.data[categoryIndex].questions[questionIndex].action[`q_${active+1}`] = {...copyDataChecklist.data[categoryIndex].questions[questionIndex].action[`q_${active+1}`],child:uid}
-    copyDataChecklist.data[categoryIndex].questions = [...copyDataChecklist.data[categoryIndex].questions,{...addData}]
+
+    copyDataChecklist.data[categoryIndex].questions.splice(questionIndex+1, 0, {...addData});
+    //copyDataChecklist.data[categoryIndex].questions = [...copyDataChecklist.data[categoryIndex].questions,{...addData}]
 
     setPosition([...position.slice(0,index+1),{id:uid,title:'Pergunta...'}]);
     setDataAll([...dataAll.slice(0,index+1),{id:uid,questionId:uid,type:'question'}])
@@ -244,8 +261,8 @@ export function QuestionColumn({
     setDataAll([...dataAll.slice(0,index+1),{id:questionSub.id,questionId:questionSub.id,type:'question'}])
   }
 
-  function onDelete() {
-    let copyDataChecklist = {...dataChecklist}
+  function onDelete(sub,copy) {
+    let copyDataChecklist = copy?{...copy}:{...dataChecklist}
     copyDataChecklist = clone(copyDataChecklist)
 
     if (question?.parent) {
@@ -261,12 +278,12 @@ export function QuestionColumn({
       copyDataChecklist.data[categoryIndex].questions[parentIndex] = {...parent}
     }
 
-    const newQuestions = copyDataChecklist.data[categoryIndex].questions.filter(i => (i.id != question.id)&&(!i?.parent||i.parent != question.id)&&(!i?.subParent || (i?.subParent && !i.subParent.includes(question.id))))
+    const newQuestions = copyDataChecklist.data[categoryIndex].questions.filter(i => (sub?true:(i.id != question.id)) && (!i?.parent||i.parent != question.id) && (!i?.subParent || (i?.subParent && !i.subParent.includes(question.id))))
 
     copyDataChecklist.data[categoryIndex].questions = [...newQuestions]
 
-    setDataAll(dataAll=>[...dataAll.slice(0,index)])
-    setPosition(position=>[...position.slice(0,index)]);
+    setDataAll(dataAll=>[...dataAll.slice(0,sub?index+1:index)])
+    setPosition(position=>[...position.slice(0,sub?index+1:index)]);
     setDataChecklist({...copyDataChecklist})
     setSave(true)
   }
@@ -415,29 +432,33 @@ export function QuestionColumn({
                 onClick={onAddJump}
               />
 
-              <p className={'noBreakText'} style={{marginTop:15,marginBottom:15,maxWidth:150}}>{'Sub-Pergunta'}</p>
-              {question && question.action[`q_${active+1}`] && question.action[`q_${active+1}`]?.child && dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child) != -1 ?
-                  <div style={{marginBottom:17}}>
-                  <Card
-                    fixedHeight
-                    title={dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)].text}
-                    key={dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)].id}
-                    position={position && position[index+1] && position[index+1]?.id == dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)].id}
-                    onClick={()=>onHandleSubQuestion(dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)])}
-                    item={dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)]}
-                    index={index}
-                    //questionChild=>dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)]
-                    />
-                </div >
-              :
-                <EmptyField style={{marginLeft:0}} onClick={onCreateSubQuestion}>
-                  <p>Adicionar Sub Pergunta</p>
-                  <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={'Pergunta posterior caso responda conforme o item selecionado a cima.'} styletooltip={{transform: 'translateY(10px)'}}>
-                    <div style={{top:10,position:'absolute',right:10,}}>
-                      <Icons type="InfoShade"/>
-                    </div >
-                  </BootstrapTooltip>
-                </EmptyField>
+              {question.type != 'mult' &&
+              <>
+                <p className={'noBreakText'} style={{marginTop:15,marginBottom:15,maxWidth:150}}>{'Sub-Pergunta'}</p>
+                {question && question.action[`q_${active+1}`] && question.action[`q_${active+1}`]?.child && dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child) != -1 ?
+                    <div style={{marginBottom:17}}>
+                    <Card
+                      fixedHeight
+                      title={dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)].text}
+                      key={dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)].id}
+                      position={position && position[index+1] && position[index+1]?.id == dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)].id}
+                      onClick={()=>onHandleSubQuestion(dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)])}
+                      item={dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)]}
+                      index={index}
+                      //questionChild=>dataChecklist.data[categoryIndex].questions[dataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==question.action[`q_${active+1}`].child)]
+                      />
+                  </div >
+                :
+                  <EmptyField style={{marginLeft:0}} onClick={onCreateSubQuestion}>
+                    <p>Adicionar Sub Pergunta</p>
+                    <BootstrapTooltip placement="bottom" TransitionProps={{ timeout: {enter:500, exit: 50} }} title={'Pergunta posterior caso responda conforme o item selecionado a cima.'} styletooltip={{transform: 'translateY(10px)'}}>
+                      <div style={{top:10,position:'absolute',right:10,}}>
+                        <Icons type="InfoShade"/>
+                      </div >
+                    </BootstrapTooltip>
+                  </EmptyField>
+                }
+              </>
               }
             </div >
           </div>

@@ -47,6 +47,7 @@ export function JumpQuestionsData({
   const categoryIndex = dataChecklist.data.findIndex(i=>i.id==position[1].id)
   const category = dataChecklist.data[categoryIndex]
   const questionIndex = category.questions.findIndex(i=>i.id==dataLast.questionId)
+  const questionGroup = category.questions[questionIndex].group
   const _data = category.questions[questionIndex].action[dataLast.action]
 
   function filter() {
@@ -54,9 +55,9 @@ export function JumpQuestionsData({
     let filtered = [];
 
     if (search.length > 0) {
-      filtered = [...category.questions].filter(i=>!i.mother && i.id !== data.questionId && i.group==position[index].id && i.text.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes(normalized)).sort(AscendentText).slice(0,20)
+      filtered = [...category.questions].filter((i,idx)=> (position[index].id != questionGroup || idx >= questionIndex) && !i.mother && !i.subMother && !i.hide && i.id !== data.questionId && i.group==position[index].id && i.text.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes(normalized)).sort(AscendentText).slice(0,20)
     } else {
-      filtered = [...category.questions].filter(i=>!i.mother && i.id !== data.questionId && i.group==position[index].id).sort(AscendentText).slice(0,20)
+      filtered = [...category.questions].filter((i,idx)=> (position[index].id != questionGroup || idx >= questionIndex) && !i.mother && !i.subMother && !i.hide && i.id !== data.questionId && i.group==position[index].id).sort(AscendentText).slice(0,20)
     }
     if (_data?.jump && _data.jump?.q) filtered = filtered.filter(i=>!_data.jump.q.includes(i.id))
 

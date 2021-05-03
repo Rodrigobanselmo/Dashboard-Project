@@ -486,9 +486,16 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
       const categoryIndex = copyDataChecklist.data.findIndex(i=>i.id == position[1].id)
       const questionId = position[index-1].id
       const questionIndex = copyDataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==questionId)
+      const questionGroup = copyDataChecklist.data[categoryIndex].questions[questionIndex].group
       const questionAction= copyDataChecklist.data[categoryIndex].questions[questionIndex].action[destArray[1]]
 
       if (source.droppableId == 'jumpGroups' && draggableArray[0] == 'jumpGroup') {
+
+        if (questionGroup == draggableArray[1]) {
+          notification.error({message:'Não é possivel pular o grupo o qual a pergunta faz parte.'})
+          return
+        }
+
         if (questionAction?.jump && questionAction.jump?.g) {
           const destinationChecklist = [...questionAction.jump.g]
           destinationChecklist.splice(destination.index, 0, draggableArray[1]);
@@ -519,6 +526,9 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
         }
       }
 
+      const newJumpData = {questionId:copyDataChecklist.data[categoryIndex].questions[questionIndex].id,selected:destArray[1],...copyDataChecklist.data[categoryIndex].questions[questionIndex].action[destArray[1]].jump}
+      if (Array.isArray(copyDataChecklist.data[categoryIndex].jump)) copyDataChecklist.data[categoryIndex].jump = [...copyDataChecklist.data[categoryIndex].jump.filter(i=>i.questionId != copyDataChecklist.data[categoryIndex].questions[questionIndex].id), newJumpData]
+      else copyDataChecklist.data[categoryIndex].jump = [newJumpData]
       setDataChecklist({...copyDataChecklist})
       setSave(true)
     }
@@ -541,6 +551,17 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
         const destinationChecklist = [...questionAction.jump.q.filter(i=>i!=draggableArray[1])]
         copyDataChecklist.data[categoryIndex].questions[questionIndex].action[sourceArray[1]].jump.q = [...destinationChecklist]
       }
+
+      const newJumpData = {questionId:copyDataChecklist.data[categoryIndex].questions[questionIndex].id,selected:sourceArray[1],...copyDataChecklist.data[categoryIndex].questions[questionIndex].action[sourceArray[1]].jump}
+      const jump = copyDataChecklist.data[categoryIndex].questions[questionIndex].action[sourceArray[1]].jump
+      if (jump?.g && jump?.p && (jump.g.length > 0 || jump?.p > 0) ) {
+        if (Array.isArray(copyDataChecklist.data[categoryIndex].jump)) copyDataChecklist.data[categoryIndex].jump = [...copyDataChecklist.data[categoryIndex].jump.filter(i=>i.questionId != copyDataChecklist.data[categoryIndex].questions[questionIndex].id), newJumpData]
+        else copyDataChecklist.data[categoryIndex].jump = [newJumpData]
+      } else {
+        if (Array.isArray(copyDataChecklist.data[categoryIndex].jump)) copyDataChecklist.data[categoryIndex].jump = [...copyDataChecklist.data[categoryIndex].jump.filter(i=>i.questionId != copyDataChecklist.data[categoryIndex].questions[questionIndex].id)]
+        else copyDataChecklist.data[categoryIndex].jump = []
+      }
+
       setDataChecklist({...copyDataChecklist})
       setSave(true)
     }

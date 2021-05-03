@@ -103,13 +103,18 @@ const ListItem = styled.li`
 
 export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={},label='Tipo',onSelect,placeholder='Selecione',reloadDefault=true,defaultValue,defaultValueIndex,...props}) {
   const [isOpen, setIsOpen] = useState(false);
+  const [run, setRun] = useState(0);
   const [selectedOption, setSelectedOption] = useState(options.length == 1 ? options[0] : defaultValueIndex ? options[defaultValueIndex] : defaultValue);
 
   const toggling = () => setIsOpen(!isOpen);
 
   React.useEffect(() => {
-    onSelect(selectedOption)
-  }, [selectedOption])
+    console.log(run)
+    if (selectedOption != 'Multiplos' && run != 'Multiplos') onSelect(selectedOption,true,true)
+    else onSelect(selectedOption,false,true,()=>{
+      setRun(0)
+      setSelectedOption('Multiplos')})
+  }, [selectedOption,run])
 
   React.useEffect(() => {
     if (reloadDefault) {
@@ -118,6 +123,11 @@ export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={
   }, [defaultValue])
 
   const onOptionClicked = (value,index) => () => {
+    if (value == 'Multiplos') {
+      setRun(value)
+      setIsOpen(false);
+      return
+    }
     setSelectedOption(value,index);
     setIsOpen(false);
   };

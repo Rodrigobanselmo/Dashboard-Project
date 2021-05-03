@@ -74,22 +74,27 @@ export function JumpGroupsData({
     onJumpGroupsHandle(index,positionId,{...data})
   }
 
+  const groups = dataChecklist.data[categoryIndex].groups
+  const questionGroup = category.questions[questionIndex].group
+  const groupIndexQuestion = groups.findIndex(i=>i == questionGroup)
+
   function filter() {
     let normalized = search.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "")
     let filtered = [];
 
     if (search.length > 0) {
-      filtered = [...category.questions].filter(i=>!i.mother && i.id !== data.questionId && i.text.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes(normalized)).slice(0,20)
+      filtered = [...category.questions].filter((i,idx)=> idx >= questionIndex && !i.mother && !i.subMother && !i.hide && i.id !== data.questionId && i.text.toLowerCase().normalize("NFD").replace(/[^a-zA-Z0-9s]/g, "").includes(normalized)).slice(0,20)
       if (_data?.jump && _data.jump?.q) filtered = filtered.filter(i=>!_data.jump.q.includes(i.id))
       //if (_data?.jump && _data.jump?.g) filtered = filtered.filter(!_data.jump.g.includes(i.id))
     }
     return filtered.sort(AscendentText)
   }
 
+
   function filterGroup() {
     let filtered = [...category.groups]
-    if (_data?.jump && _data.jump?.g) filtered = filtered.filter(i=>!_data.jump.g.includes(i))
-    return filtered
+    if (_data?.jump && _data.jump?.g) filtered = filtered.filter((i)=>!_data.jump.g.includes(i))
+    return filtered.filter((i,idx)=>idx >= groupIndexQuestion)
     // return filtered.sort(Ascendent)
   }
 
