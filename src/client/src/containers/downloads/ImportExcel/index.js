@@ -50,8 +50,11 @@ export default function Excel() {
     });
 
     promise.then((d) => {
-      console.log(d)
-      onSetRisks(d,setLoad,currentUser,notification,dispatch)
+      if (type == 'per') {
+        console.log(d)
+      } else {
+        onSetRisks(d,setLoad,currentUser,notification,dispatch)
+      }
       setKey(Math.random().toString(36))
     }).catch((error)=>{
       notification.error({message:error})
@@ -93,7 +96,7 @@ export default function Excel() {
         currentUser={currentUser}
         setLoaderDash={setLoaderDash}
         readExcel={readExcel}
-        _key={key}
+        _key={key} //somente para reload/limpar input depois de baixar
       />
     </Container>
     <div style={{height:200,width:1}}/>

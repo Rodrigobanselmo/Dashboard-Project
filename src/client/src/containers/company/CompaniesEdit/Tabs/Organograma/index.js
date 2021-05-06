@@ -24,7 +24,7 @@ import styled, {ThemeContext} from "styled-components";
 import './style.css';
 import {v4} from "uuid";
 import { useResizeDetector } from 'react-resize-detector';
-import {dataFake,onAdd,onDelete,onEdit,onContract} from './func';
+import {dataFake,onAdd,onDelete,onEdit,onContract,onSave as onSaveOrganograma} from './func';
 import {CardEdit} from './comp';
 import {FilterComponent,AddUserButton,AddTextButton} from '../../../../../components/Main/Table/comp'
 import { ViewArray } from '@material-ui/icons';
@@ -41,7 +41,7 @@ const Container = styled.div`
 	background-color: ${({theme})=>theme.palette.background.paper};
 `;
 
-export function Organograma({data,cnpj,currentUser,notification}) {
+export function Organograma({data,cnpj,currentUser,notification,setData}) {
 
   const [position, setPosition] = useState({top:0,left:0,nodeKey:'',fromTop:0})
   const [positionScroll, setPositionScroll] = useState(0)
@@ -210,11 +210,14 @@ export function Organograma({data,cnpj,currentUser,notification}) {
   }, [filter,dataInitial,dataBeforeFilter])
 
   function onSave() {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-    }, 1500);
-    setSave(false)
+
+    onSaveOrganograma({setLoading,setSave,data,setData,currentUser,notification,dataInitial})
+    // setLoading(true)
+    // setTimeout(() => {
+    //   setLoading(false)
+    // }, 1500);
+    // setSave(false)
+    // setData()
   }
 
   function onHandleExpand() {

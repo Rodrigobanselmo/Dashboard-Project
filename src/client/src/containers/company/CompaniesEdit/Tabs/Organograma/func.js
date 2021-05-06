@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import clone from 'clone';
 import {v4} from "uuid";
+import {SetOrganograma} from '../../../../../services/firestoreCompany'
 
 export const Container = styled.div`
   align-items: center;
@@ -416,7 +417,6 @@ export function onEdit({nodeKey,setDataState,dataState,text='',type='',setPrevFi
   setDataState({...dataCopy})
 }
 
-
 export function onContract({nodeKey,setDataState,dataState,setSizeHeight}) {
 
   let dataCopy = {...dataState};
@@ -476,3 +476,21 @@ export function onContract({nodeKey,setDataState,dataState,setSizeHeight}) {
   setDataState({...dataCopy})
 }
 
+export function onSave({setLoading,setSave,setData,data,currentUser,notification,dataInitial}) {
+  function checkSuccess(response) {
+    setLoading(false)
+    setData(data=>({...data,org:{...dataInitial}}))
+  }
+
+  function checkError(error) {
+    setSave(true)
+    setLoading(false)
+    setTimeout(() => {
+      notification.error({message:error,modal:true})
+    }, 600);
+  }
+  setSave(false)
+  setLoading(true)
+  SetOrganograma(currentUser.company.id,data.cnpj,dataInitial,checkSuccess,checkError)
+  //console.log(currentUser.company.id,data.cnpj,dataInitial)
+}

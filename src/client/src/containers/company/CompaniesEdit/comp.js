@@ -36,7 +36,7 @@ Container.TableTabs =  function TableTabs({tabsLabel,data,cnpj,tabId,setData,cur
               <Principal setData={setData} data={data}/>
             </TabPanel>
             <TabPanel key={1} value={tabValue} index={1} >
-              <Organograma data={data} cnpj={cnpj} currentUser={currentUser} notification={notification}/>
+              <Organograma setData={setData} data={data} cnpj={cnpj} currentUser={currentUser} notification={notification}/>
             </TabPanel>
             <TabPanel key={2} value={tabValue} index={2} >
             </TabPanel>

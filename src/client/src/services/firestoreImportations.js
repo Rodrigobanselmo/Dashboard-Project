@@ -75,6 +75,52 @@ export function ImportationRisks(risksData,reduceReadData,companyId,checkSuccess
 
 }
 
+export function ImportationRiskPer(reduceReadData,companyId,checkSuccess,checkError) { //get data and create if doesnt exists
+  var companyRef = db.collection("company").doc(companyId)
+  var reduceRef = companyRef.collection('reduceRead')
+
+  let docId = null;
+  var batch = db.batch();
+
+
+  //verifica se possui reduceRead doc com espaco vazio se nao ele cria
+  reduceRef.where("id", "==", 'risksPer').get()
+  .then(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+      if(doc.data().data.length) {
+        docId=doc.id
+      }
+    })
+    if (docId !== null) {
+      batchCreate()
+    } else {
+      docId = v4()
+      reduceRef.doc(docId).set({
+        id:'risksPer',
+        data:[]
+      }).then(()=>{
+        batchCreate()
+      })
+    }
+    }).catch((error) => {
+      checkError(errorCatch(error))
+  });
+
+  function batchCreate() {
+
+    batch.set(reduceRef.doc(docId),reduceReadData) //[...reduceReadData]
+
+    batch.commit().then(() => {
+        checkSuccess()
+    }).catch((error) => {
+      checkError(errorCatch(error))
+    });
+  }
+}
+
+
+
+
 export function SeeIfCNPJExists(CNPJ,companyId,checkSuccess,checkError) {
 
   var companiesRef = db.collection("company").doc(companyId).collection('companies')

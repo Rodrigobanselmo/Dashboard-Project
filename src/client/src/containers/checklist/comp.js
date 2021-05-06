@@ -86,6 +86,7 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
     // notification.error({message: ''})
     const uid = Math.floor((1 + Math.random()) * 0x1000000000000000).toString(32).substring(1);
     setPosition([{id:uid,title}]);
+    setData([])
 
     function onSuccess(checklist) {
       setData([{title,id:uid}])
@@ -422,6 +423,8 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
       setSave(true)
 
       if (riskData[draggableArray[0]] && question.type == 'standard' && question.action[answerId].id != 'q_3') {
+        var copyDataChecklist2 = {...copyDataChecklist}
+        copyDataChecklist2 = clone(copyDataChecklist2)
         const riskDataIndex = riskData[draggableArray[0]].findIndex(i=>i.id == draggableArray[1])
         const riskDataObject = riskData[draggableArray[0]][riskDataIndex]
 
@@ -429,17 +432,17 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
           console.log('riskDataObject',riskData[draggableArray[0]][riskDataIndex])
           const oppositeAnswerId = question.action[answerId].id === 'q_1' ?'q_2':'q_1'
           const droppableId = [column]
-          const riskDataIndexes = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data.findIndex(i=>i.risk==riskId)
+          const riskDataIndexes = copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data.findIndex(i=>i.risk==riskId)
           if (riskDataIndexes != -1) {
-            const exists = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[riskDataIndexes][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']
-            const existsData = exists?copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[riskDataIndexes][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']:[]
-            copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[riskDataIndexes][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug'] = [...existsData.filter(i=>i!=riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']),riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']]
+            const exists = copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[riskDataIndexes][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']
+            const existsData = exists?copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[riskDataIndexes][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']:[]
+            copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[riskDataIndexes][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug'] = [...existsData.filter(i=>i!=riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']),riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']]
           } else {
-            copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data = [...copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data,{risk:riskId}]
-            const lastIndex = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data.length -1
-            const exists = copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[lastIndex][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']
-            const existsData = exists?copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[lastIndex][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']:[]
-            copyDataChecklist.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[lastIndex][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug'] = [...existsData.filter(i=>i!=riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']),riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']]
+            copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data = [...copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data,{risk:riskId}]
+            const lastIndex = copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data.length -1
+            const exists = copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[lastIndex][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']
+            const existsData = exists?copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[lastIndex][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug']:[]
+            copyDataChecklist2.data[categoryIndex].questions[questionIndexDatabase].action[oppositeAnswerId].data[lastIndex][droppableId[0]=='med'?'rec':droppableId[0]=='rec'?'med':droppableId[0]=='medSug'?'recSug':'medSug'] = [...existsData.filter(i=>i!=riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']),riskDataObject[draggableArray[0]=='med'?'rec':draggableArray[0]=='rec'?'med':draggableArray[0]=='medSug'?'recSug':'medSug']]
           }
 
           notification.modal({
@@ -447,7 +450,7 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
             text:`Você deseja adicionar a ${draggableArray[0]=='med'?'recomendação':'medida de controle'} equivalente à ${draggableArray[0]!=='med'?'recomendação':'medida de controle'} selecionada para a resposta "${question.action[answerId].id === 'q_1' ?'Não':'Sim'}"?`,
             rightBnt:'Adicionar',
             open:true,
-            onClick:()=>setDataChecklist({...copyDataChecklist})
+            onClick:()=>setDataChecklist({...copyDataChecklist2})
           })
         }
       }
@@ -527,7 +530,7 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
       }
 
       const newJumpData = {questionId:copyDataChecklist.data[categoryIndex].questions[questionIndex].id,selected:destArray[1],...copyDataChecklist.data[categoryIndex].questions[questionIndex].action[destArray[1]].jump}
-      if (Array.isArray(copyDataChecklist.data[categoryIndex].jump)) copyDataChecklist.data[categoryIndex].jump = [...copyDataChecklist.data[categoryIndex].jump.filter(i=>i.questionId != copyDataChecklist.data[categoryIndex].questions[questionIndex].id), newJumpData]
+      if (Array.isArray(copyDataChecklist.data[categoryIndex].jump)) copyDataChecklist.data[categoryIndex].jump = [...copyDataChecklist.data[categoryIndex].jump.filter(i=>i.questionId != copyDataChecklist.data[categoryIndex].questions[questionIndex].id  || i.selected != destArray[1]), newJumpData]
       else copyDataChecklist.data[categoryIndex].jump = [newJumpData]
       setDataChecklist({...copyDataChecklist})
       setSave(true)
@@ -544,6 +547,7 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
       const questionIndex = copyDataChecklist.data[categoryIndex].questions.findIndex(i=>i.id==questionId)
       const questionAction= copyDataChecklist.data[categoryIndex].questions[questionIndex].action[sourceArray[1]]
 
+
       if (draggableArray[0] == 'jumpGroup') {
         const destinationChecklist = [...questionAction.jump.g.filter(i=>i!=draggableArray[1])]
         copyDataChecklist.data[categoryIndex].questions[questionIndex].action[sourceArray[1]].jump.g = [...destinationChecklist]
@@ -554,11 +558,12 @@ export function MainComponent({currentUser,notification,setLoad,setLoaderDash}) 
 
       const newJumpData = {questionId:copyDataChecklist.data[categoryIndex].questions[questionIndex].id,selected:sourceArray[1],...copyDataChecklist.data[categoryIndex].questions[questionIndex].action[sourceArray[1]].jump}
       const jump = copyDataChecklist.data[categoryIndex].questions[questionIndex].action[sourceArray[1]].jump
-      if (jump?.g && jump?.p && (jump.g.length > 0 || jump?.p > 0) ) {
-        if (Array.isArray(copyDataChecklist.data[categoryIndex].jump)) copyDataChecklist.data[categoryIndex].jump = [...copyDataChecklist.data[categoryIndex].jump.filter(i=>i.questionId != copyDataChecklist.data[categoryIndex].questions[questionIndex].id), newJumpData]
+      if ((jump?.g && jump.g.length > 0) || (jump?.q && jump.q.length > 0)) {
+        if (Array.isArray(copyDataChecklist.data[categoryIndex].jump)) copyDataChecklist.data[categoryIndex].jump = [...copyDataChecklist.data[categoryIndex].jump.filter(i=>i.questionId != copyDataChecklist.data[categoryIndex].questions[questionIndex].id || i.selected != sourceArray[1]) , newJumpData]
         else copyDataChecklist.data[categoryIndex].jump = [newJumpData]
       } else {
-        if (Array.isArray(copyDataChecklist.data[categoryIndex].jump)) copyDataChecklist.data[categoryIndex].jump = [...copyDataChecklist.data[categoryIndex].jump.filter(i=>i.questionId != copyDataChecklist.data[categoryIndex].questions[questionIndex].id)]
+        console.log(2)
+        if (Array.isArray(copyDataChecklist.data[categoryIndex].jump)) copyDataChecklist.data[categoryIndex].jump = [...copyDataChecklist.data[categoryIndex].jump.filter(i=>i.questionId != copyDataChecklist.data[categoryIndex].questions[questionIndex].id || i.selected != sourceArray[1])]
         else copyDataChecklist.data[categoryIndex].jump = []
       }
 

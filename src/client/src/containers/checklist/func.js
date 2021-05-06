@@ -1,4 +1,4 @@
-import {CreateNewChecklist,GetAllChecklist,GetChecklist,SaveChecklist,EditChecklist} from '../../services/firestoreChecklist'
+import {CreateNewChecklist,DeleteChecklist,GetAllChecklist,GetChecklist,SaveChecklist,EditChecklist} from '../../services/firestoreChecklist'
 import {GetAllRisks} from '../../services/firestoreRisks'
 import {v4} from "uuid";
 import faker from 'faker';
@@ -113,9 +113,8 @@ export function onDeleteChecklist({id,setAllChecklists,onSuccess,currentUser,set
     }, 600);
   }
 
-  //GetAllCompanies(currentUser.company.id,checkSuccess,checkError)
+  DeleteChecklist(id,currentUser.company.id,checkSuccess,checkError)
   setLoad(true)
-  checkSuccess()
 }
 
 export function onEditChecklist({id,title,onSuccess,currentUser,setLoad,notification}) {

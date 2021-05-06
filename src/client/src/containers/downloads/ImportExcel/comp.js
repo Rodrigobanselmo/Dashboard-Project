@@ -39,6 +39,16 @@ export function TableTabs({tabId,readExcel,_key,currentUser,notification,setLoad
                   readExcel(file,'qui');
                 }}
               />
+              <p style={{marginBottom:5}}>Periculosos</p>
+              <input
+                key={_key || ''}
+                type="file"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  readExcel(file,'per');
+                }}
+              />
             </div>
           </div>
         </TabPanel>

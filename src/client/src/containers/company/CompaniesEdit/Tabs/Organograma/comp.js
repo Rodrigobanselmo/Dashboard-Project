@@ -13,7 +13,6 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
 
   React.useEffect(() => {
     setOpen('none')
-    console.log(nodeKey);
   }, [nodeKey])
 
   function onSetOpen(event,text) {
@@ -68,7 +67,6 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
 
   function onOptions() {
     const [...indexes] = position.nodeKey.split('-');
-    console.log('dataStateTest',dataState)
     if (position.nodeKey === 'initial') { //empresa
       return ["Setor"]
     } else if (indexes.length == 1) { //estou no setor
@@ -114,7 +112,6 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
     } else if (position.nodeKey.split('-').length != 4 && !filter) {
       return false
     }
-    console.log('deepestJson(DATA)',deepestJson(DATA));
     return false
   }
 

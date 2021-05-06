@@ -38,7 +38,7 @@ export function GetChecklist(companyId,itemId,checkSuccess,checkError) {
   });
 }
 
-export function CreateNewChecklist(id,title,checkSuccess,checkError) { //get data and create if doesnt exists
+export function CreateNewChecklist(id,title,companyId,checkSuccess,checkError) { //get data and create if doesnt exists
   var companyRef = db.collection("company").doc(companyId)
   var dataRef = companyRef.collection('checklists')
   var reduceRef = companyRef.collection('reduceRead')
@@ -69,8 +69,47 @@ export function CreateNewChecklist(id,title,checkSuccess,checkError) { //get dat
 
   function batchCreate() {
 
-    batch.set(dataRef.doc(id),{title,id,data:[]})
+    if (docId) batch.set(dataRef.doc(id),{title,id,data:[]})
     batch.update(reduceRef.doc(docId),{data:fb.firestore.FieldValue.arrayUnion({id,title})})
+
+    batch.commit().then(() => {
+      checkSuccess()
+    }).catch((error) => {
+      checkError(errorCatch(error))
+    });
+  }
+}
+
+export function DeleteChecklist(id,companyId,checkSuccess,checkError) { //get data and create if doesnt exists
+  var companyRef = db.collection("company").doc(companyId)
+  var dataRef = companyRef.collection('checklists')
+  var reduceRef = companyRef.collection('reduceRead')
+
+  var docId = null;
+  var index = 0;
+  var array = [];
+  var batch = db.batch();
+
+  reduceRef.where("id", "==", 'checklists').get()
+  .then(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+        if(doc.data().data.findIndex(i=>i.id == id) != -1) {
+          array=[...doc.data().data.filter(i=>i.id != id)]
+          docId=doc.id
+        }
+    })
+      if (docId !== null) {
+        updateEdit()
+      } else {
+        checkError('Não foi possivel encontrar este dado no servidor.')
+      }
+    }).catch((error) => {
+      checkError(errorCatch(error))
+    });
+
+  function updateEdit() {
+    batch.delete(dataRef.doc(id))
+    if (docId) batch.update(reduceRef.doc(docId),{data:[...array]})
 
     batch.commit().then(() => {
       checkSuccess()
@@ -122,7 +161,7 @@ export function EditChecklist(id,title,companyId,checkSuccess,checkError) { //ge
 
   function updateEdit() {
     batch.update(dataRef.doc(id),{title})
-    batch.update(reduceRef.doc(docId),{data:[...array]})
+    if (docId) batch.update(reduceRef.doc(docId),{data:[...array]})
 
     batch.commit().then(() => {
       checkSuccess()

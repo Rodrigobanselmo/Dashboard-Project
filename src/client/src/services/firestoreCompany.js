@@ -13,7 +13,7 @@ export function CreateNewCompany(data,readData,companyId,checkSuccess,checkError
 
   var batch = db.batch();
 
-
+  //SeeIfCNPJExists(data.cnpj,companyId,checkSuccess,checkError)
 
   //verifica se possui reduceRead doc com espaco vazio se nao ele cria
   reduceRef.where("id", "==", 'companies').get()
@@ -84,6 +84,7 @@ export function SeeIfCNPJExists(CNPJ,companyId,checkSuccess,checkError) {
       checkError(errorCatch(error))
   });
 }
+
 export function GetAllCompanies(companyId,checkSuccess,checkError) {
 
   var dataRef = db.collection("company").doc(companyId).collection('reduceRead')
@@ -116,4 +117,17 @@ export function GetCompany(companyId,cnpj,checkSuccess,checkError) {
   .catch((error) => {
       checkError(errorCatch(error))
   });
+}
+
+export function SetOrganograma(companyId,cnpj,dataInitial,checkSuccess,checkError) { //get data and create if doesnt exists
+
+  var companyRef = db.collection("company").doc(companyId).collection('companies').doc(keepOnlyNumbers(cnpj))
+  companyRef.update({
+    org:{...dataInitial}
+  }).then(()=> {
+      checkSuccess()
+  }).catch((error) => {
+    checkError(errorCatch(error))
+  });
+
 }
