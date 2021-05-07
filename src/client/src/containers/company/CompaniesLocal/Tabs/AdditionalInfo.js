@@ -116,7 +116,7 @@ export function AdditionalInfo({data,setData}) {
             data={estados}
             variant="outlined"
             />
-        {/* <DividerForm >Contato Presente na Receita Federal</DividerForm>
+        <DividerForm >Contato Presente na Receita Federal</DividerForm>
         <InputUnform
           width={'100%'}
           defaultValue={data?.contact?.email}
@@ -147,8 +147,8 @@ export function AdditionalInfo({data,setData}) {
           label={'Celular'}
           variant="outlined"
           inputComponent={NumberFormatCell}
-        /> */}
-        <DividerForm >Contato do Supervisor</DividerForm>
+        />
+        <DividerForm >Contato Adicional</DividerForm>
         <InputUnform
             width={'100%'}
             name={'supervisor.name'}

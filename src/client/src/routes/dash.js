@@ -1,5 +1,5 @@
-import { Team, Perfil,Companies,Excel,CompaniesEdit,ImportExcel,Home } from '../containers';
-import {TEAM,USER,DASHBOARD,COMPANY,DATA,TESTE,COMPANY_EDIT,IMPORT} from './routesNames'
+import { Team, Perfil,Companies,Excel,CompaniesEdit,ImportExcel,Home,CompaniesLocal } from '../containers';
+import {TEAM,USER,DASHBOARD,COMPANY,DATA,TESTE,COMPANY_EDIT,COMPANY_LOCATION,IMPORT} from './routesNames'
 import {risks} from './paths/risks'
 import {checklist} from './paths/checklist'
 
@@ -34,6 +34,16 @@ const routes = [
   {
     path: COMPANY_EDIT,
     component: CompaniesEdit,
+    exact:true,
+    // isPrivate:true,
+    // privateRoute:DASHBOARD,
+    // infoUser:['access'],
+    // condition:[['admin','master']],
+    // Equal:[true],
+  },
+  {
+    path: COMPANY_LOCATION,
+    component: CompaniesLocal,
     exact:true,
     // isPrivate:true,
     // privateRoute:DASHBOARD,

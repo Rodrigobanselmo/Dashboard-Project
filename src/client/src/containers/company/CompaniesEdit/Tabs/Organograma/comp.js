@@ -19,11 +19,12 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
     event.preventDefault();
     if (text==='Editar' && position.nodeKey !== 'initial') {
       setOpen(text)
+      console.log('getEditInfo(type)',getEditInfo('type'))
       if (open !== 'Editar') setData({title:getEditInfo('title'),type:getEditInfo('type')})
     }
-    if (text==='Adicionar' && position.nodeKey.split('-').length != 4) {
+    if (text==='Adicionar' && position.nodeKey.split('-').length != 6) {
       setOpen(text)
-      if (open !== 'Adicionar')setData({title:'',type:''})
+      if (open !== 'Adicionar') setData({title:'',type:''})
     }
     if (text==='Deletar' && position.nodeKey !== 'initial' && !isContract()) {
       setOpen(text)
@@ -42,7 +43,7 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
     setOpen('none')
     removeMenu({bool:true})
     if (open==='Editar' && position.nodeKey !== 'initial') {onEditChild({nodeKey:position.nodeKey,text:data.title,type:data.type})}
-    if (open==='Adicionar' && position.nodeKey.split('-').length != 4) onAddChild({nodeKey:position.nodeKey,title:data.title,type:data.type})
+    if (open==='Adicionar' && position.nodeKey.split('-').length != 6) onAddChild({nodeKey:position.nodeKey,title:data.title,type:data.type})
     if (open==='Deletar' && position.nodeKey !== 'initial') { onDeleteChild({nodeKey:position.nodeKey}) }
     //onAddChild(e,position.nodeKey)
   }
@@ -59,8 +60,14 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
       if (variable==='title') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]]?.text
       if (variable==='type') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]]?.type
     } else if (indexes.length == 4 ) {
-      if (variable==='title') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[2]]?.text
-      if (variable==='type') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[2]]?.type
+      if (variable==='title') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]]?.text
+      if (variable==='type') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]]?.type
+    } else if (indexes.length == 5 ) {
+      if (variable==='title') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]]?.text
+      if (variable==='type') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]]?.type
+    } else if (indexes.length == 6 ) {
+      if (variable==='title') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children[indexes[5]]?.text
+      if (variable==='type') return dataState?.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children[indexes[5]]?.type
     }
     return false
   }
@@ -68,16 +75,30 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
   function onOptions() {
     const [...indexes] = position.nodeKey.split('-');
     if (position.nodeKey === 'initial') { //empresa
-      return ["Setor"]
-    } else if (indexes.length == 1) { //estou no setor
-      return ["Setor Desenvolvido", "Cargo"]
-    } else if (indexes.length == 2) { //estou no setor Desenvolvido ou cargo
-      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.type === 'Setor Desenvolvido') return ["Cargo"]
-      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.type === 'Cargo') return ["Cargo Desenvolvido"]
+      return ["Diretória","Gerencia","Setor","Cargo"]
+    } else if (indexes.length == 1) {
+      if (dataState?.children[indexes[0]]?.type === 'Diretória') return ["Gerencia","Setor","Cargo"]
+      if (dataState?.children[indexes[0]]?.type === 'Gerencia') return ["Setor","Cargo"]
+      if (dataState?.children[indexes[0]]?.type === 'Setor') return ["Subsetor","Cargo"]
+      if (dataState?.children[indexes[0]]?.type === 'Cargo') return ["Função"]
+      return ["Gerencia","Setor","Cargo"]
+    } else if (indexes.length == 2) {
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.type === 'Gerencia') return ["Setor","Cargo"]
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.type === 'Setor') return ["Subsetor","Cargo"]
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.type === 'Subsetor') return ["Cargo"]
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.type === 'Cargo') return ["Função"]
       return []
-    } else if (indexes.length == 3) { //estou no cargo ou cargo desenvolvido
-      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.type === 'Cargo')  return ['Cargo Desenvolvido']
-      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.type === 'Cargo Desenvolvido')  return []
+    } else if (indexes.length == 3) {
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.type === 'Setor')  return ["Subsetor","Cargo"]
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.type === 'Subsetor')  return ["Cargo"]
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.type === 'Cargo')  return ["Função"]
+      return []
+    } else if (indexes.length == 4) {
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.children[indexes[3]]?.type === 'Subsetor')  return ['Cargo']
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.children[indexes[3]]?.type === 'Cargo')  return ['Função']
+      return []
+    } else if (indexes.length == 5) {
+      if (dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.children[indexes[3]]?.children[indexes[4]]?.type === 'Cargo')  return ['Função']
       return []
     }
     return []
@@ -93,6 +114,12 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
       return true
     } else if (indexes.length == 3 && dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.childrenHide) {
       return true
+    } else if (indexes.length == 4 && dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.children[indexes[3]]?.childrenHide) {
+      return true
+    } else if (indexes.length == 5 && dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.children[indexes[3]].children[indexes[4]]?.childrenHide) {
+      return true
+    } else if (indexes.length == 6 && dataState?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.children[indexes[3]].children[indexes[4]].children[indexes[5]]?.childrenHide) {
+      return true
     }
     return false
   }
@@ -107,9 +134,13 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
       return true
     } else if (indexes.length == 3 && deepestJson(DATA) <= 3) {
       return true
-    } else if (indexes.length == 4) {
+    } else if (indexes.length == 4 && deepestJson(DATA) <= 4) {
       return true
-    } else if (position.nodeKey.split('-').length != 4 && !filter) {
+    } else if (indexes.length == 5 ) {
+      return true
+    } else if (indexes.length == 6) {
+      return true
+    } else if (position.nodeKey.split('-').length != 6 && !filter) {
       return false
     }
     return false
@@ -119,7 +150,7 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
 
     const style = validationDirectionOnLeft() ? {left:2,transform:`rotate(180deg)`}:{right:2}
     return(
-      <ButtonRightClick text={text} indexes={position.nodeKey.split('-')} dataState={dataState} nodeKey={position.nodeKey}  position={position.nodeKey.split('-').length} onClick={(event)=>onSetOpen(event,text)}>
+      <ButtonRightClick text={text} indexes={position.nodeKey.split('-')} dataState={dataState} nodeKey={position.nodeKey}  position={position.nodeKey.split('-').length} onOptions={onOptions()} onClick={(event)=>onSetOpen(event,text)}>
         <div>
           <span>{text}</span>
           {open===text &&
@@ -164,6 +195,7 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
               onSelect={onSelect}
               placeholder={"Selecione o tipo de área"}
               defaultValue={data.type}
+              value={open == 'Editar' ? data.type : false}
             />
           </>
           }

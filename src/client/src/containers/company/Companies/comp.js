@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useEffect,useState} from 'react';
 import {Icons} from '../../../components/Icons/iconsDashboard';
 import {
   ContainerDiv,
@@ -22,14 +22,15 @@ export default function Container({children}) {
 }
 
 
-Container.TableTabs =  function TableContainer({setSelected,selected,dataRows,setDataRows,tabsLabel,setOpen,currentUser,notification,setLoad,setLoaderDash}) {
+Container.TableTabs =  function TableContainer({dataRows,setDataRows,tabsLabel,setOpen,currentUser,notification,setLoad,setLoaderDash}) {
 
-  const [loadContent, setLoadContent] = React.useState(true)
-  const [search, setSearch] = React.useState('')
-  const [tabValue, setTabValue] = React.useState(0);
+  const [loadContent, setLoadContent] = useState(true)
+  const [search, setSearch] = useState('')
+  const [tabValue, setTabValue] = useState(0);
   const history = useHistory();
+  const [selected, setSelected] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     onGetAllCompanies(currentUser.company.id,setDataRows,setLoadContent,notification,setLoaderDash)
   }, [])
 

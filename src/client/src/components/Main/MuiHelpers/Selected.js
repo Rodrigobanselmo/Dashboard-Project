@@ -101,7 +101,7 @@ const ListItem = styled.li`
 `;
 
 
-export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={},label='Tipo',onSelect,placeholder='Selecione',reloadDefault=true,defaultValue,defaultValueIndex,...props}) {
+export function Menu({options=[],type='',value ,headerStyle={},listStyle={},itemStyle={},label='Tipo',onSelect,placeholder='Selecione',reloadDefault=true,defaultValue,defaultValueIndex,...props}) {
   const [isOpen, setIsOpen] = useState(false);
   const [run, setRun] = useState(0);
   const [selectedOption, setSelectedOption] = useState(options.length == 1 ? options[0] : defaultValueIndex ? options[defaultValueIndex] : defaultValue);
@@ -110,14 +110,14 @@ export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={
 
   React.useEffect(() => {
     console.log(run)
-    if (selectedOption != 'Multiplos' && run != 'Multiplos') onSelect(selectedOption,true,true)
-    else onSelect(selectedOption,false,true,()=>{
+    if (selectedOption != 'Multiplos' && run != 'Multiplos' && !value) onSelect(selectedOption,true,true)
+    else if (!value) onSelect(selectedOption,false,true,()=>{
       setRun(0)
       setSelectedOption('Multiplos')})
   }, [selectedOption,run])
 
   React.useEffect(() => {
-    if (reloadDefault) {
+    if (reloadDefault && !value) {
       setSelectedOption(defaultValue)
     }
   }, [defaultValue])
@@ -132,15 +132,17 @@ export function Menu({options=[],type='',headerStyle={},listStyle={},itemStyle={
     setIsOpen(false);
   };
 
+  console.log('value',value)
+
   return (
     <ClickAwayListener onClickAway={()=>setIsOpen(false)}>
       <DropDownContainer type={type} {...props}>
         {label && <LabelText >{label}</LabelText>}
         <DropDownHeader type={type} style={headerStyle} open={isOpen} selected={options.findIndex(i=>i=selectedOption) != -1} onClick={toggling}>
-          {selectedOption || placeholder}
-        {options.length >= 2 && <Icons style={{fontSize:30,position: 'absolute',top:6,right:5,}}  type={`ArrowDrop`}/>}
+          {value || selectedOption || placeholder}
+        {options.length >= 2 && !value && <Icons style={{fontSize:30,position: 'absolute',top:6,right:5,}}  type={`ArrowDrop`}/>}
         </DropDownHeader>
-        {options.length >= 2 && isOpen && (
+        {options.length >= 2 && isOpen && !value && (
           <DropDownListContainer>
             <DropDownList type={type} style={listStyle}>
               {options.map((option,index) => (

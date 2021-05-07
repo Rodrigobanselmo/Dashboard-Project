@@ -50,7 +50,6 @@ export default function Modal({open,setOpen,notification,currentUser,setLoad,set
     const [unform, setUnform] = useState({}) //dados dos email inseridos nos inputs
     const [infoModal, setInfoModal] = useState({title:'',text:''}) //para mandar pro modalFullScreen e dizer se ao fechar da um alerta
     const [position, setPosition] = useState(1) //posicao do carrousel
-    console.log('data',data)
 
     function onClose(allGood) {
         setOpen(false)

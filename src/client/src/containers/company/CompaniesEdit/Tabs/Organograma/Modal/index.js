@@ -10,7 +10,7 @@ import {useNotification} from '../../../../../../context/NotificationContext'
 import {useLoaderScreen} from '../../../../../../context/LoaderContext'
 import {useAuth} from '../../../../../../context/AuthContext'
 
-export default function Modal({open,setOpen,type, data,initialData,setInitialData}) {
+export default function Modal({open,setOpen}) {
 
     const [data1, setData1] = useState('')
     const {currentUser} = useAuth()

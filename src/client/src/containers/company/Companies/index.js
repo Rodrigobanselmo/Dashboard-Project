@@ -13,7 +13,6 @@ function Companies() {
   const [open, setOpen] = useState(false)
   const [queryOld, setQueryOld] = useState(false)
   const [dataRows, setDataRows] = useState([])
-  const [selected, setSelected] = useState([]);
 
   const { setLoaderDash } = useLoaderDashboard();
   const {setLoad} = useLoaderScreen();
@@ -39,8 +38,6 @@ function Companies() {
                 currentUser={currentUser}
                 setOpen={setOpen}
                 tabsLabel={tabsLabel}
-                selected={selected}
-                setSelected={setSelected}
                 setLoad={setLoad}
                 setLoaderDash={setLoaderDash}
               />

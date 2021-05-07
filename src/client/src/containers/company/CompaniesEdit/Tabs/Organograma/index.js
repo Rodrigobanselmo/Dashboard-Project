@@ -41,14 +41,23 @@ const Container = styled.div`
 	background-color: ${({theme})=>theme.palette.background.paper};
 `;
 
-export function Organograma({data,cnpj,currentUser,notification,setData}) {
+
+export function Organograma({data,cnpj,workplaceId,currentUser,notification,setData}) {
+
+  const dataToStart = {
+    text: data.nome,
+    type: "Empresa",
+    children: [],
+    childrenHide: false,
+    nodeProps: {}
+  }
 
   const [position, setPosition] = useState({top:0,left:0,nodeKey:'',fromTop:0})
   const [positionScroll, setPositionScroll] = useState(0)
   const [initialized, setInitialized] = useState(false)
-  const [dataInitial,setDataInitial] = useState(clone(dataFake))
-  const [dataBeforeFilter,setDataBeforeFilter] = useState(clone(dataFake))
-  const [dataState, setDataState] = useState(clone(dataFake))
+  const [dataInitial,setDataInitial] = useState(data?.org?clone(data.org):clone(dataToStart))
+  const [dataBeforeFilter,setDataBeforeFilter] = useState(data?.org?clone(data.org):clone(dataToStart))
+  const [dataState, setDataState] = useState(data?.org?clone(data.org):clone(dataToStart))
   const [show, setShow] = useState(false)
   const [save, setSave] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -210,14 +219,7 @@ export function Organograma({data,cnpj,currentUser,notification,setData}) {
   }, [filter,dataInitial,dataBeforeFilter])
 
   function onSave() {
-
-    onSaveOrganograma({setLoading,setSave,data,setData,currentUser,notification,dataInitial})
-    // setLoading(true)
-    // setTimeout(() => {
-    //   setLoading(false)
-    // }, 1500);
-    // setSave(false)
-    // setData()
+    onSaveOrganograma({setLoading,setSave,data,workplaceId,setData,currentUser,notification,dataInitial})
   }
 
   function onHandleExpand() {
@@ -268,7 +270,7 @@ export function Organograma({data,cnpj,currentUser,notification,setData}) {
         {show &&
           <CardEdit deepestJson={deepestJson} nodeKey={position.nodeKey} positionScroll={positionScroll} onContractChild={onContractChild} filter={filter} dataState={filter ? dataInitial : dataState} data={dataState} theme={theme} onDeleteChild={onDeleteChild} onEditChild={onEditChild} onAddChild={onAddChild} removeMenu={removeMenu} position={position}/>
         }
-        <Modal type={'rec'} open={open} setOpen={setOpen}/>
+        <Modal open={open} setOpen={setOpen}/>
       </Container>
   );
 }

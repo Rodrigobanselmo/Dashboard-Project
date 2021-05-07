@@ -51,7 +51,7 @@ export const ButtonRightClick = styled.button`
   span {
         opacity:1
   }
-  ${props => props.position == 4 && props.text=='Adicionar' && css`
+  ${props => props.onOptions.length == 0  && props.text=='Adicionar' && css`
       span {
         opacity:0.5
       }

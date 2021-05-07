@@ -307,7 +307,7 @@ const Row = memo(({ index, style, data: { columns, items, classes, setSelected, 
       }
       {columns.map((column, colIndex) => {
         if (column) return (
-          <RowCell onCorrectData={onCorrectData} colIndex={colIndex} onClick={(e)=>handleCellClick(e,item?.CNPJ ?? item?.cnpj ?? item?.id ?? item?.uid,item)} key={item?.id ? item.id + colIndex: item.CNPJ?item.CNPJ + colIndex:item.uid + colIndex} column={column} classes={classes} item={item} rowSize={rowSize}/>
+          <RowCell onCorrectData={onCorrectData} colIndex={colIndex} onClick={(e)=>handleCellClick(e,item?.CNPJ ?? item?.cnpj ?? item?.id ?? item?.uid,item,colIndex)} key={item?.id ? item.id + colIndex: item.CNPJ?item.CNPJ + colIndex:item.uid + colIndex} column={column} classes={classes} item={item} rowSize={rowSize}/>
         );
         else null
       })}
@@ -409,12 +409,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const App = ({rowsCells,headCells,setSelected,selected,handleCellClick,initialOrder,rowSize=55,onCorrectData}) => {
+const App = ({rowsCells,minHeight=0,headCells,setSelected,selected,handleCellClick,initialOrder,rowSize=55,onCorrectData}) => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-        <div style={{height:rowsCells.length > 7?440: rowsCells.length*rowSize+rowSize+5,borderRadius:10}} className={classes.paper}>
+        <div style={{height:rowsCells.length > 7?440: rowsCells.length*rowSize+rowSize+5,borderRadius:10,minHeight:minHeight}} className={classes.paper}>
           <ReactWindowTable onCorrectData={onCorrectData} data={rowsCells} rowSize={rowSize} columns={headCells} setSelected={setSelected} selected={selected} handleCellClick={handleCellClick} initialOrder={initialOrder} />
         </div>
         <p style={{textAlign:"right",marginBottom:-10,marginTop:0}}>Total: {rowsCells.length}</p>

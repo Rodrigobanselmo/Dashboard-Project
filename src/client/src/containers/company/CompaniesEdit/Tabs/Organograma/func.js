@@ -35,7 +35,14 @@ export const dataFake = {
                             children: [
                                 {
                                     text: "Nome do Cargo 5",
-                                    children: [],
+                                    children: [
+                                      {
+                                        text: "Nome do Cargo 5",
+                                        children: [],
+                                        type: "Cargo Desenvolvido",
+                                        nodeProps: {}
+                                      },
+                                    ],
                                     type: "Cargo Desenvolvido"
                                 },
                                 {
@@ -260,6 +267,7 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
     let dataCopy = {...dataState};
     const [...indexes] = nodeKey.split('-');
 
+    console.log(2)
 
     if (nodeKey === 'initial') {
       if (dataInitial) {
@@ -362,6 +370,61 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           children: []
         })
       }
+    } else if (indexes.length == 4) {
+      if (dataInitial) {
+        const index1 = dataCopy.children.findIndex(i=>i.name == indexes[0])
+        const index2 = dataCopy.children[index1].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}`)
+        const index3 = dataCopy.children[index1].children[index2].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}-${indexes[2]}`)
+        const index4 = dataCopy.children[index1].children[index2].children[index3].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}`)
+        dataCopy.children[index1].children[index2].children[index3].children[index4].children.push({
+          name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${dataInitial.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.length-1}`,
+          type: type,
+          text: title,
+          children: []
+        })
+      } else if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]]?.childrenHide) {
+        dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].childrenHide.push({
+          name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].childrenHide.length}`,
+          text: title,
+          type: type,
+          children: []
+        })
+      } else {
+        dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.push({
+          name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.length}`,
+          text: title,
+          type: type,
+          children: []
+        })
+      }
+    } else if (indexes.length == 5) {
+      if (dataInitial) {
+        const index1 = dataCopy.children.findIndex(i=>i.name == indexes[0])
+        const index2 = dataCopy.children[index1].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}`)
+        const index3 = dataCopy.children[index1].children[index2].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}-${indexes[2]}`)
+        const index4 = dataCopy.children[index1].children[index2].children[index3].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}`)
+        const index5 = dataCopy.children[index1].children[index2].children[index3].children[index4].children.findIndex(i=>i.name == `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${indexes[4]}`)
+        dataCopy.children[index1].children[index2].children[index3].children[index4].children[index5].children.push({
+          name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${indexes[4]}-${dataInitial.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.length-1}`,
+          type: type,
+          text: title,
+          children: []
+        })
+      } else if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]]?.childrenHide) {
+        dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].childrenHide.push({
+          name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${indexes[4]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].childrenHide.length}`,
+          text: title,
+          type: type,
+          children: []
+        })
+      } else {
+        dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.push({
+          name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${indexes[4]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.length}`,
+          text: title,
+          type: type,
+          children: []
+        })
+      }
     }
     setDataState({...dataCopy})
   }
@@ -390,6 +453,10 @@ export function onDelete({nodeKey,setDataState,dataState,setPrevFilter}) {
 
     }  */
     dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.slice(0,indexes[3]),...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.slice(Number(indexes[3])+1,dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.length)]
+  } else if (indexes.length == 5) {
+    dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.slice(0,indexes[4]),...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.slice(Number(indexes[4])+1,dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.length)]
+  } else if (indexes.length == 6) {
+    dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.slice(0,indexes[5]),...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.slice(Number(indexes[5])+1,dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.length)]
   }
   setDataState({...dataCopy})
 }
@@ -413,6 +480,12 @@ export function onEdit({nodeKey,setDataState,dataState,text='',type='',setPrevFi
   } else if (indexes.length == 4) {
     dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].text = text
     dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].type = type
+  } else if (indexes.length == 5) {
+    dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].text = text
+    dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].type = type
+  } else if (indexes.length == 6) {
+    dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children[indexes[5]].text = text
+    dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children[indexes[5]].type = type
   }
   setDataState({...dataCopy})
 }
@@ -472,11 +545,35 @@ export function onContract({nodeKey,setDataState,dataState,setSizeHeight}) {
       dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
       //dataCopy.num = //dataCopy.num - dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num
     }
+  } else if (indexes.length == 4) {
+    if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]]?.childrenHide) {
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].childrenHide]
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].childrenHide = false
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].nodeProps = {}
+      //dataCopy.num = //dataCopy.num + dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num
+    } else if (dataCopy?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.children[indexes[3]]?.children && dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.length){
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].childrenHide = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children]
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children = []
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
+      //dataCopy.num = //dataCopy.num - dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num
+    }
+  } else if (indexes.length == 5) {
+    if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]]?.childrenHide) {
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].childrenHide]
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].childrenHide = false
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].nodeProps = {}
+      //dataCopy.num = //dataCopy.num + dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num
+    } else if (dataCopy?.children[indexes[0]]?.children[indexes[1]]?.children[indexes[2]]?.children[indexes[3]]?.children[indexes[4]]?.children && dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.length){
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].childrenHide = [...dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children]
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children = []
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
+      //dataCopy.num = //dataCopy.num - dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].num
+    }
   }
   setDataState({...dataCopy})
 }
 
-export function onSave({setLoading,setSave,setData,data,currentUser,notification,dataInitial}) {
+export function onSave({setLoading,setSave,setData,data,workplaceId,currentUser,notification,dataInitial}) {
   function checkSuccess(response) {
     setLoading(false)
     setData(data=>({...data,org:{...dataInitial}}))
@@ -486,11 +583,28 @@ export function onSave({setLoading,setSave,setData,data,currentUser,notification
     setSave(true)
     setLoading(false)
     setTimeout(() => {
-      notification.error({message:error,modal:true})
+      notification.error({message:error})
     }, 600);
   }
   setSave(false)
   setLoading(true)
-  SetOrganograma(currentUser.company.id,data.cnpj,dataInitial,checkSuccess,checkError)
+  SetOrganograma(currentUser.company.id,data.cnpj,dataInitial,workplaceId,checkSuccess,checkError)
   //console.log(currentUser.company.id,data.cnpj,dataInitial)
 }
+
+// export function onGetOrganograma({starterData,data,currentUser,notification,dataInitial}) {
+//   function checkSuccess(response) {
+//     //setLoading(false)
+//     starterData(response)
+//   }
+
+//   function checkError(error) {
+//     //setLoading(false)
+//     setTimeout(() => {
+//       notification.error({message:error})
+//     }, 600);
+//   }
+//   //setLoading(true)
+//   GetOrganograma(currentUser.company.id,data.cnpj,checkSuccess,checkError)
+//   //console.log(currentUser.company.id,data.cnpj,dataInitial)
+// }

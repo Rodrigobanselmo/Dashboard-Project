@@ -16,21 +16,20 @@ function Companies() {
   const { setLoaderDash } = useLoaderDashboard();
   const {currentUser} = useAuth()
   const notification = useNotification()
+  const [open, setOpen] = useState(false)
 
-  let { cnpj,tabId,workplaceId } = useParams();
+  let { cnpj,tabId } = useParams();
+  const tabsLabel = ['Estabelecimentos','Informações Principais']
 
-  const tabsLabel = ['Principal', 'Organograma','Empregados', 'Informações Adicionais']
-
-    console.log('tabId',tabId);
     return (
         <>
             <Header icons={'Business'} path={'Gerenciar suas Empresas / Editar'} title={'Editar Empresa'} video={true}/>
             <Container style={{width:'100%',backgroundColor:'#1a1a1e',borderRadius:'15px'}}>
               <Container.TableTabs
                 tabsLabel={tabsLabel}
+                setOpen={setOpen}
                 notification={notification}
                 currentUser={currentUser}
-                workplaceId={workplaceId}
                 cnpj={cnpj}
                 tabId={tabId}
                 setLoaderDash={setLoaderDash}

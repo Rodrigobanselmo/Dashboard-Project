@@ -4,11 +4,11 @@ import {keepOnlyNumbers,formatCPFeCNPJeCEPeCNAE} from '../helpers/StringHandle'
 import {v4} from "uuid";
 
 
-export function CreateNewCompany(data,readData,companyId,checkSuccess,checkError) { //get data and create if doesnt exists
+export function CreateNewCompany(data,companyWorkplaceData,readData,companyId,checkSuccess,checkError) { //get data and create if doesnt exists
   var companyRef = db.collection("company").doc(companyId)
-  var companiesRef = companyRef.collection('companies')
+  var companiesRef = companyRef.collection('companies').doc(keepOnlyNumbers(data.cnpj))
+  var workRef = companiesRef.collection('workplace').doc(companyWorkplaceData.id)
   var reduceRef = companyRef.collection('reduceRead')
-
   let docId = null;
 
   var batch = db.batch();
@@ -37,8 +37,8 @@ export function CreateNewCompany(data,readData,companyId,checkSuccess,checkError
   });
 
   function batchCreate() {
-
-    batch.set(companiesRef.doc(keepOnlyNumbers(data.cnpj)),{...data})
+    batch.set(companiesRef,{...data})
+    batch.set(workRef,{...companyWorkplaceData})
     batch.update(reduceRef.doc(docId),{data:fb.firestore.FieldValue.arrayUnion({...readData})})
 
     batch.commit().then(() => {
@@ -105,7 +105,7 @@ export function GetAllCompanies(companyId,checkSuccess,checkError) {
 export function GetCompany(companyId,cnpj,checkSuccess,checkError) {
 
   var dataRef = db.collection("company").doc(companyId).collection('companies').doc(keepOnlyNumbers(cnpj))
-
+  console.log(cnpj)
   dataRef.get()
   .then(function(docSnapshots) {
     if (docSnapshots.exists) {
@@ -119,9 +119,25 @@ export function GetCompany(companyId,cnpj,checkSuccess,checkError) {
   });
 }
 
-export function SetOrganograma(companyId,cnpj,dataInitial,checkSuccess,checkError) { //get data and create if doesnt exists
+export function GetCompanyWorkplace(companyId,cnpj,workplaceId,checkSuccess,checkError) {
 
-  var companyRef = db.collection("company").doc(companyId).collection('companies').doc(keepOnlyNumbers(cnpj))
+  var dataRef = db.collection("company").doc(companyId).collection('companies').doc(keepOnlyNumbers(cnpj)).collection('workplace').doc(workplaceId)
+  dataRef.get()
+  .then(function(docSnapshots) {
+    if (docSnapshots.exists) {
+      checkSuccess(docSnapshots.data())
+    } else {
+      checkError(`A empresa com o CNPJ ${formatCPFeCNPJeCEPeCNAE(cnpj)} não é cadastrado em sua empresa ou possui formato inválido`)
+    }
+  })
+  .catch((error) => {
+      checkError(errorCatch(error))
+  });
+}
+
+export function SetOrganograma(companyId,cnpj,dataInitial,workplaceId,checkSuccess,checkError) { //get data and create if doesnt exists
+
+  var companyRef = db.collection("company").doc(companyId).collection('companies').doc(keepOnlyNumbers(cnpj)).collection('workplace').doc(workplaceId)
   companyRef.update({
     org:{...dataInitial}
   }).then(()=> {

@@ -3,46 +3,14 @@ import {SeeIfCNPJExists,CreateNewCompany} from '../../../../services/firestoreCo
 import {wordUpper,formatTel,formatCPFeCNPJeCEPeCNAE} from '../../../../helpers/StringHandle'
 
 export function onCreateNewCompany({data,setDataRows,receitaFederal,currentUser,notification,setLoad,onClose}) {
-  const uid = Math.floor((1 + Math.random()) * 0x1000000000000000).toString(32).substring(1);
 
   var companyData = {
     cnpj:formatCPFeCNPJeCEPeCNAE(data.cnpj),
     nome: wordUpper((data.nome.trim()).split(" ")),
     fantasia: wordUpper((data.fantasia.trim()).split(" ")),
-    type: data?.type?data.type.toUpperCase():data.tipo.toUpperCase(),
+    type: data.tipo,
     atv1: data.atividade_principal,
     atv2: data.atividades_secundarias.filter(i=>i.text !== ''),
-    contact:{
-      tel: formatTel(data.contact.telefone),
-      email: data.contact.email,
-      cel: formatTel(data.contact.celular),
-    },
-    workplace:[
-      {
-        id:uid,
-        name: data?.type?data.type.toUpperCase():data.tipo.toUpperCase(),
-        status:'Ativo',
-        city: data.address.municipio,
-        cell:'',
-      },
-    ],
-    responsavel:wordUpper((data.responsavel.trim()).split(" ")),
-    //fiscal:wordUpper((data.fiscal.trim()).split(" ")),
-    //fiscalCell:formatTel(data.fiscalCell),
-    identificacao:wordUpper((data.identificacao.trim()).split(" ")),
-    status:'Ativo',
-    creation:(new Date() - 1),
-    end:0,
-  }
-
-
-  var companyWorkplaceData = {
-    id:uid,
-    cnpj:formatCPFeCNPJeCEPeCNAE(data.cnpj),
-    nome: wordUpper((data.nome.trim()).split(" ")),
-    identificacao:wordUpper((data.identificacao.trim()).split(" ")),
-    name: data?.type?data.type.toUpperCase():data.tipo.toUpperCase(),
-    status:'Ativo',
     address: {
       cep: formatCPFeCNPJeCEPeCNAE(data.address.cep),
       city: data.address.municipio,
@@ -52,11 +20,19 @@ export function onCreateNewCompany({data,setDataRows,receitaFederal,currentUser,
       comp: data.address.complemento,
       uf:data.address.uf,
     },
-    supervisor:{
-      email:data.supervisorEmail.toLowerCase(),
-      name:'',
-      cell:'',
-    }
+    contact:{
+      tel: formatTel(data.contact.telefone),
+      email: data.contact.email,
+      cel: formatTel(data.contact.celular),
+    },
+    responsavel:wordUpper((data.responsavel.trim()).split(" ")),
+    //fiscal:wordUpper((data.fiscal.trim()).split(" ")),
+    //fiscalCell:formatTel(data.fiscalCell),
+    identificacao:wordUpper((data.identificacao.trim()).split(" ")),
+    status:'Ativo',
+    creation:(new Date() - 1),
+    end:0,
+    supervisorEmail:data.supervisorEmail.toLowerCase()
   }
 
   let name = companyData.identificacao
@@ -87,12 +63,12 @@ export function onCreateNewCompany({data,setDataRows,receitaFederal,currentUser,
   function checkError(error) {
     setLoad(false)
     setTimeout(() => {
-      notification.error({message:error?error:'Erro os adquirir CNPJ',modal:true})
+      notification.error({message:error,modal:true})
     }, 600);
   }
 
 
-  CreateNewCompany(companyData,companyWorkplaceData,readData,currentUser.company.id,checkSuccess,checkError)
+  CreateNewCompany(companyData,readData,currentUser.company.id,checkSuccess,checkError)
 
 }
 
@@ -107,7 +83,7 @@ export function onCheckCNPJExists(value,companyId,setData,notification){
     }
 
     function checkError(error) {
-      notification.error({message:error?error:'Erro os adquirir CNPJ',modal:true})
+      notification.error({message:error,modal:true})
       setData(data=>({...data,CNPJ:value, status:'Warn',message:error}))
     }
 
@@ -126,7 +102,6 @@ export function onGetCNPJ(value,setData,notification,setReceitaFederal,setPositi
         open:true,
       })
       setLoad(false)
-      setPosition(position=>position+1)
     } else {
       console.log(response);
       setReceitaFederal(data=>({...data,...response}))
@@ -136,10 +111,9 @@ export function onGetCNPJ(value,setData,notification,setReceitaFederal,setPositi
   }
 
   function checkError(error) {
-    notification.error({message:error?error:'Erro os adquirir CNPJ',modal:true})
+    notification.error({message:error,modal:true})
     setData(data=>({...data,CNPJ:value, status:'Warn',message:error}))
     setLoad(false)
-    setPosition(position=>position+1)
   }
 
     GetCNPJ(value,checkSuccess,checkError)

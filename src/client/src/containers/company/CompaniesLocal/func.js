@@ -1,11 +1,11 @@
-import {GetCompanyWorkplace} from '../../../services/firestoreCompany'
+import {GetCompany} from '../../../services/firestoreCompany'
 
-export function onGetCompanyWorkplace({companyId,workplaceId,cnpj,setData,setLoadContent,notification,setLoaderDash}) {
+export function onGetCompany({companyId,setDataRows,cnpj,setData,setLoadContent,notification,setLoaderDash}) {
     function checkSuccess(response) {
         setLoadContent(false)
         setData({...response})
+        if (response?.workplace) setDataRows([...response.workplace])
         setLoaderDash(false)
-        console.log('data',{...response});
       }
 
       function checkError(error) {
@@ -15,5 +15,5 @@ export function onGetCompanyWorkplace({companyId,workplaceId,cnpj,setData,setLoa
         }, 600);
       }
 
-      GetCompanyWorkplace(companyId,cnpj,workplaceId,checkSuccess,checkError)
+      GetCompany(companyId,cnpj,checkSuccess,checkError)
 }

@@ -3,7 +3,7 @@ import {Icons} from '../../../components/Icons/iconsDashboard';
 import {
   ContainerDiv,
 } from './styles';
-import {onGetCompany} from './func'
+import {onGetCompanyWorkplace} from './func'
 import NewTabs, {TabPanel} from '../../../components/Main/MuiHelpers/NewTabs'
 import {LoadingContent} from '../../../components/Main/Loader/LoadingContent'
 import {Principal} from './Tabs/Principal'
@@ -18,12 +18,13 @@ export default function Container({children}) {
     );
 }
 
-Container.TableTabs =  function TableTabs({tabsLabel,data,cnpj,tabId,setData,currentUser,notification,setLoaderDash}) {
+Container.TableTabs =  function TableTabs({tabsLabel,workplaceId,cnpj,tabId,currentUser,notification,setLoaderDash}) {
     const [loadContent, setLoadContent] = useState(true)
     const [tabValue, setTabValue] = useState(tabId ? parseInt(tabId) : 0)
+    const [data, setData] = useState(false)
 
     useEffect(() => {
-      onGetCompany({setData,companyId:currentUser.company.id,cnpj,setLoadContent,notification,setLoaderDash})
+      onGetCompanyWorkplace({setData,workplaceId,companyId:currentUser.company.id,cnpj,setLoadContent,notification,setLoaderDash})
     }, [])
 
     return (
@@ -33,10 +34,10 @@ Container.TableTabs =  function TableTabs({tabsLabel,data,cnpj,tabId,setData,cur
           :
           <>
             <TabPanel key={0} value={tabValue} index={0} >
-              <Principal setData={setData} data={data}/>
+              {/* <Principal setData={setData} data={data}/> */}
             </TabPanel>
             <TabPanel key={1} value={tabValue} index={1} >
-              <Organograma setData={setData} data={data} cnpj={cnpj} currentUser={currentUser} notification={notification}/>
+              {data && <Organograma setData={setData} data={data} workplaceId={workplaceId} cnpj={cnpj} currentUser={currentUser} notification={notification}/>}
             </TabPanel>
             <TabPanel key={2} value={tabValue} index={2} >
             </TabPanel>
