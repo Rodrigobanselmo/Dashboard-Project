@@ -266,8 +266,7 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
 
     let dataCopy = {...dataState};
     const [...indexes] = nodeKey.split('-');
-
-    console.log(2)
+    const uid = Math.floor((1 + Math.random()) * 0x1000000000000000).toString(32).substring(1);
 
     if (nodeKey === 'initial') {
       if (dataInitial) {
@@ -275,7 +274,8 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           name: `${dataInitial.children.length}`,
           type: type,
           text: title,
-          children: []
+          children: [],
+          id: uid
         })
      // console.log(dataInitial.children.length);
     } else if (dataCopy?.childrenHide) {
@@ -283,14 +283,16 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           name: `${dataCopy.childrenHide.length}`,
           text: title,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       } else {
         dataCopy.children.push({
           name: `${dataCopy.children.length}`,
           text: title,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       }
     } else if (indexes.length == 1) {
@@ -300,7 +302,8 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           name: `${indexes[0]}-${dataInitial.children[indexes[0]].children.length-1}`,
           type: type,
           text: title,
-          children: []
+          children: [],
+          id: uid
         })
         //console.log(`${dataInitial.children[indexes[0]].children.length}`);
       } else if (dataCopy.children[indexes[0]]?.childrenHide) {
@@ -308,13 +311,15 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           name: `${indexes[0]}-${dataCopy.children[indexes[0]].childrenHide.length}`,
           type: type,
           text: title,
-          children: []
+          children: [],
+          id: uid
         })
       } else {
         dataCopy.children[indexes[0]].children.push({
           type: type,
           text: title,
-          children: []
+          children: [],
+          id: uid
         })
         console.log('dataCopy2',dataCopy);
       }
@@ -326,7 +331,8 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           name: `${indexes[0]}-${indexes[1]}-${dataInitial.children[indexes[0]].children[indexes[1]].children.length-1}`,
           type: type,
           text: title,
-          children: []
+          children: [],
+          id: uid
         })
       } else if (dataCopy.children[indexes[0]].children[indexes[1]]?.childrenHide) {
         dataCopy.children[indexes[0]].children[indexes[1]].childrenHide.push({
@@ -334,14 +340,16 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           text: title,
           num:0,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       } else {
         dataCopy.children[indexes[0]].children[indexes[1]].children.push({
           name: `${indexes[0]}-${indexes[1]}-${dataCopy.children[indexes[0]].children[indexes[1]].children.length}`,
           text: title,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       }
     } else if (indexes.length == 3) {
@@ -353,21 +361,24 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${dataInitial.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.length-1}`,
           type: type,
           text: title,
-          children: []
+          children: [],
+          id: uid
         })
       } else if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]]?.childrenHide) {
         dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].childrenHide.push({
           name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].childrenHide.length}`,
           text: title,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       } else {
         dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.push({
           name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children.length}`,
           text: title,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       }
     } else if (indexes.length == 4) {
@@ -380,21 +391,24 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${dataInitial.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.length-1}`,
           type: type,
           text: title,
-          children: []
+          children: [],
+          id: uid
         })
       } else if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]]?.childrenHide) {
         dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].childrenHide.push({
           name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].childrenHide.length}`,
           text: title,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       } else {
         dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.push({
           name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children.length}`,
           text: title,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       }
     } else if (indexes.length == 5) {
@@ -408,21 +422,24 @@ export function onAdd({nodeKey,setDataState,dataState,title,type,dataInitial}) {
           name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${indexes[4]}-${dataInitial.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.length-1}`,
           type: type,
           text: title,
-          children: []
+          children: [],
+          id: uid
         })
       } else if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]]?.childrenHide) {
         dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].childrenHide.push({
           name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${indexes[4]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].childrenHide.length}`,
           text: title,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       } else {
         dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.push({
           name: `${indexes[0]}-${indexes[1]}-${indexes[2]}-${indexes[3]}-${indexes[4]}-${dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children.length}`,
           text: title,
           type: type,
-          children: []
+          children: [],
+          id: uid
         })
       }
     }
@@ -573,10 +590,84 @@ export function onContract({nodeKey,setDataState,dataState,setSizeHeight}) {
   setDataState({...dataCopy})
 }
 
-export function onSave({setLoading,setSave,setData,data,workplaceId,currentUser,notification,dataInitial}) {
-  function checkSuccess(response) {
+//MODAL function
+
+export function onChooseEndNode({nodeKey,dataState,notification,setDataState,setDataSelected}) {
+
+  let dataCopy = {...dataState};
+  const [...indexes] = nodeKey.split('-');
+
+  function alert(message) {
+    notification.error({message,modal:true})
+  }
+  if (nodeKey === 'initial') {
+    return alert('Selecione um cargo ou função.')
+  } else if (indexes.length == 1) {
+    if (dataCopy.children[indexes[0]].type == 'Cargo' || dataCopy.children[indexes[0]].type == "Função") {
+      dataCopy.children[indexes[0]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
+      setDataSelected(dataCopy.children[indexes[0]].id)
+    } else return alert('Selecione um cargo ou função.')
+
+    } else if (indexes.length == 2) {
+    if (dataCopy.children[indexes[0]].children[indexes[1]].type == 'Cargo' || dataCopy.children[indexes[0]].children[indexes[1]].type == "Função") {
+      dataCopy.children[indexes[0]].children[indexes[1]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
+      const DATA = {
+        cargoId:dataCopy.children[indexes[0]].children[indexes[1]].id,
+        cargoText:dataCopy.children[indexes[0]].children[indexes[1]].text,
+      }
+      setDataSelected({...DATA})
+    } else return alert('Selecione um cargo ou função.')
+
+  } else if (indexes.length == 3) {
+    if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].type == 'Cargo' || dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].type == "Função") {
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
+      const DATA = {
+        cargoId:dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].id,
+        cargoText:dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].text,
+      }
+      setDataSelected({...DATA})
+    } else return alert('Selecione um cargo ou função.')
+
+  } else if (indexes.length == 4) {
+    if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].type == 'Cargo' || dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].type == "Função") {
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
+      const DATA = {
+        cargoId:dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].id,
+        cargoText:dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].text,
+      }
+      setDataSelected({...DATA})
+    } else return alert('Selecione um cargo ou função.')
+
+  } else if (indexes.length == 5) {
+    if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].type == 'Cargo' || dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].type == "Função") {
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
+      const DATA = {
+        cargoId:dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].id,
+        cargoText:dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].text,
+      }
+      setDataSelected({...DATA})
+    } else return alert('Selecione um cargo ou função.')
+
+  } else if (indexes.length == 6) {
+    if (dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children[indexes[5]].type == 'Cargo' || dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children[indexes[5]].type == "Função") {
+      dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children[indexes[5]].nodeProps = {style:{fill:'#d9560b',stroke: '#d9560b',strokeWidth: 0.7,fontSize: 16}}
+      const DATA = {
+        cargoId:dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children[indexes[5]].id,
+        cargoText:dataCopy.children[indexes[0]].children[indexes[1]].children[indexes[2]].children[indexes[3]].children[indexes[4]].children[indexes[5]].text,
+      }
+      setDataSelected({...DATA})
+    } else return alert('Selecione um cargo ou função.')
+
+  }
+  setDataState({...dataCopy})
+}
+
+
+export function onSave({setLoading,setSave,setData,data,workplaceId,currentUser,notification,dataInitial,onModalClick}) {
+  function checkSuccess() {
     setLoading(false)
     setData(data=>({...data,org:{...dataInitial}}))
+    if (onModalClick) onModalClick(setSave)
   }
 
   function checkError(error) {

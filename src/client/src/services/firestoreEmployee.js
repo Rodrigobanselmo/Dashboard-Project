@@ -4,19 +4,15 @@ import {keepOnlyNumbers,formatCPFeCNPJeCEPeCNAE} from '../helpers/StringHandle'
 import {v4} from "uuid";
 
 
-export function CreateNewCompany(data,companyWorkplaceData,readData,companyId,checkSuccess,checkError) { //get data and create if doesnt exists
-  var companyRef = db.collection("company").doc(companyId)
-  var companiesRef = companyRef.collection('companies').doc(keepOnlyNumbers(data.cnpj))
-  var workRef = companiesRef.collection('workplace').doc(companyWorkplaceData.id)
-  var reduceRef = companyRef.collection('reduceRead')
+export function CreateNewEmployee(ReduceData,data,companyId,cnpj,checkSuccess,checkError) { //get data and create if doesnt exists
+
+  var employeeRef = db.collection("company").doc(companyId).collection('companies').doc(keepOnlyNumbers(cnpj)).collection('employee')
   let docId = null;
 
   var batch = db.batch();
 
-  //SeeIfCNPJExists(data.cnpj,companyId,checkSuccess,checkError)
-
   //verifica se possui reduceRead doc com espaco vazio se nao ele cria
-  reduceRef.where("id", "==", 'companies').get()
+  employeeRef.where("id", "==", 'reduceRead').get()
   .then(function(querySnapshot) {
     querySnapshot.forEach(function(doc) {
       if(doc.data().data.length < 500) docId=doc.id
@@ -25,8 +21,8 @@ export function CreateNewCompany(data,companyWorkplaceData,readData,companyId,ch
       batchCreate()
     } else {
       docId = v4()
-      reduceRef.doc(docId).set({
-        id:'companies',
+      employeeRef.doc(docId).set({
+        id:'reduceRead',
         data:[]
       }).then(()=>{
         batchCreate()
@@ -37,12 +33,11 @@ export function CreateNewCompany(data,companyWorkplaceData,readData,companyId,ch
   });
 
   function batchCreate() {
-    batch.set(companiesRef,{...data})
-    batch.set(workRef,{...companyWorkplaceData})
-    batch.update(reduceRef.doc(docId),{data:fb.firestore.FieldValue.arrayUnion({...readData})})
+    batch.set(employeeRef.doc(data.id),{...data})
+    batch.update(employeeRef.doc(docId),{data:fb.firestore.FieldValue.arrayUnion({...ReduceData})})
 
     batch.commit().then(() => {
-      checkSuccess({...readData})
+      checkSuccess()
     }).catch((error) => {
       checkError(errorCatch(error))
     });

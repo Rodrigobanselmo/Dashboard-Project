@@ -7,6 +7,7 @@ import {onGetCompanyWorkplace} from './func'
 import NewTabs, {TabPanel} from '../../../components/Main/MuiHelpers/NewTabs'
 import {LoadingContent} from '../../../components/Main/Loader/LoadingContent'
 import {Principal} from './Tabs/Principal'
+import {Employee} from './Tabs/Employee'
 import {Organograma} from './Tabs/Organograma/index'
 import {AdditionalInfo} from './Tabs/AdditionalInfo'
 
@@ -22,9 +23,11 @@ Container.TableTabs =  function TableTabs({tabsLabel,workplaceId,cnpj,tabId,curr
     const [loadContent, setLoadContent] = useState(true)
     const [tabValue, setTabValue] = useState(tabId ? parseInt(tabId) : 0)
     const [data, setData] = useState(false)
+    const [employee, setEmployee] = useState([])
 
     useEffect(() => {
-      onGetCompanyWorkplace({setData,workplaceId,companyId:currentUser.company.id,cnpj,setLoadContent,notification,setLoaderDash})
+      //also get employee
+      onGetCompanyWorkplace({setData,setEmployee,workplaceId,companyId:currentUser.company.id,cnpj,setLoadContent,notification,setLoaderDash})
     }, [])
 
     return (
@@ -40,6 +43,7 @@ Container.TableTabs =  function TableTabs({tabsLabel,workplaceId,cnpj,tabId,curr
               {data && <Organograma setData={setData} data={data} workplaceId={workplaceId} cnpj={cnpj} currentUser={currentUser} notification={notification}/>}
             </TabPanel>
             <TabPanel key={2} value={tabValue} index={2} >
+              <Employee setEmployee={setEmployee} data={data} setData={setData} employee={employee}/>
             </TabPanel>
             <TabPanel key={3} value={tabValue} index={3} >
               <AdditionalInfo setData={setData}  data={data}/>

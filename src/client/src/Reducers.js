@@ -5,6 +5,7 @@ import themeReducer from './reducers/themeReducer';
 import riskReducer from './reducers/riskReducer';
 import riskDataReducer from './reducers/riskDataReducer';
 import saveReducer from './reducers/saveReducer';
+import dataReducer from './reducers/dataReducer';
 
 export default combineReducers({
     user:userReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
     risk:riskReducer,
     riskData:riskDataReducer,
     save:saveReducer,
+    data:dataReducer,
 });

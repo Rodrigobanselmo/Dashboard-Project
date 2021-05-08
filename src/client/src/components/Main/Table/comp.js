@@ -30,6 +30,20 @@ import RichTooltip from '../../Dashboard/Components/MultUsage/RichTooltip'
 import {ThemeContext} from "styled-components";
 import styled from "styled-components";
 
+const NodataContainer = styled.div`
+  display: flex;
+
+  & p {
+    border-radius:10px;
+    text-align: center;
+    padding:30px;
+    width:100%;
+    border: 2px dashed ${({theme})=> theme.palette.background.line};
+    color: ${({theme})=> theme.palette.text.third};
+  }
+`;
+
+
 const TooltipItem = styled.div`
   padding:5px;
   margin-bottom:7px;
@@ -186,6 +200,15 @@ export function AddTextButton({onClick,initialWidth='52px',width=165,text='Nova 
       <span  className={'noBreakText'}>{shortText}</span>
       <p  className={'noBreakText'}>{text}</p>
     </ButtonContainer>
+  )
+}
+
+export function NoData({text='Nenhum dado cadastrado',...restProps}) {
+
+  return (
+    <NodataContainer   {...restProps}>
+      <p  className={'noBreakText'}>{text}</p>
+    </NodataContainer>
   )
 }
 

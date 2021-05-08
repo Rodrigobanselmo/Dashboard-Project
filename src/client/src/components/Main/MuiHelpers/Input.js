@@ -14,6 +14,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { fade } from '@material-ui/core/styles';
 import { useField } from '@unform/core'
 import { uniqueId } from 'lodash/util'
+import {KeyboardDatePicker,MuiPickersUtilsProvider} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 const ContainerIcon = styled.div`
     &:active {
@@ -261,4 +263,32 @@ export function InputUnform({onChange,name,validation=false,option=false,marginT
         <FormHelperText style={{margin:4,padding:0,marginLeft:3}} ref={errorRef} error />
       </FormControl>
   );
+}
+
+export function InputDate({...props}) {
+
+
+  return (
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <KeyboardDatePicker
+        autoOk
+        disableToolbar
+        variant="inline"
+        format="dd/MM/yyyy"
+        margin="dense"
+        id="date-picker-inline"
+        inputVariant="outlined"
+        label="Data de Início"
+        invalidDateMessage='Formato de data inválido'
+        // value={selectedDate}
+        // onChange={handleDateChange}
+        InputAdornmentProps={{ position: "end" }}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
+        style={{width:'100%'}}
+        {...props}
+      />
+    </MuiPickersUtilsProvider>
+  )
 }

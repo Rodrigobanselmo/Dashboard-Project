@@ -45,11 +45,10 @@ export const StatusComponent = styled.div`
     border-radius: 10px;
     width:10px;
     height:10px;
-    ${props => (props.status === 'none' || props.status === 'Não') && css`
+    ${props => (props.status === 'none' || props.status === 'Não' || props.status === 'Desligado') && css`
       background-color: ${({theme})=> (theme.palette.status.fail) };
-      /* background-color: ${({theme})=> (theme.palette.status.success) }; */
     `}
-    ${props => (props.status === 'Aguardando Autenticação'/*  || props.status === 'Não' */) && css`
+    ${props => (props.status === 'Aguardando Autenticação'|| props.status === 'Afastado') && css`
       background-color: ${({theme})=> (theme.palette.status.orange ) };
     `}
 `;

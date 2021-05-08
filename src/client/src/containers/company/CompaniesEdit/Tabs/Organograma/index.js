@@ -24,7 +24,7 @@ import styled, {ThemeContext} from "styled-components";
 import './style.css';
 import {v4} from "uuid";
 import { useResizeDetector } from 'react-resize-detector';
-import {dataFake,onAdd,onDelete,onEdit,onContract,onSave as onSaveOrganograma} from './func';
+import {dataFake,onAdd,onDelete,onEdit,onContract,onSave as onSaveOrganograma,onChooseEndNode} from './func';
 import {CardEdit} from './comp';
 import {FilterComponent,AddUserButton,AddTextButton} from '../../../../../components/Main/Table/comp'
 import { ViewArray } from '@material-ui/icons';
@@ -38,11 +38,11 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   padding-left:30px;
-	background-color: ${({theme})=>theme.palette.background.paper};
+	background-color: ${({theme,modalType})=>modalType?theme.palette.background.back:theme.palette.background.paper};
 `;
 
 
-export function Organograma({data,cnpj,workplaceId,currentUser,notification,setData}) {
+export function Organograma({data,randomId,setDataSelected,onModalClick,cnpj,modalPosition=0,workplaceId,currentUser,notification,setData,widthContent,modalType}) {
 
   const dataToStart = {
     text: data.nome,
@@ -59,7 +59,7 @@ export function Organograma({data,cnpj,workplaceId,currentUser,notification,setD
   const [dataBeforeFilter,setDataBeforeFilter] = useState(data?.org?clone(data.org):clone(dataToStart))
   const [dataState, setDataState] = useState(data?.org?clone(data.org):clone(dataToStart))
   const [show, setShow] = useState(false)
-  const [save, setSave] = useState(false)
+  const [save, setSave] = useState(modalType=='employee'?true:false)
   const [loading, setLoading] = useState(false)
   const [sizeHeight, setSizeHeight] = useState(500)
   const [filter, setFilter] = useState('')
@@ -69,7 +69,7 @@ export function Organograma({data,cnpj,workplaceId,currentUser,notification,setD
   const { width, height, ref } = useResizeDetector();
   const theme = useContext(ThemeContext)
 
-  const ContainerMain = document.getElementById('someRandomID');
+  const ContainerMain = document.getElementById(randomId?randomId:'someRandomID');
 
   useEffect(() => {
     if (initialized) {
@@ -91,7 +91,7 @@ export function Organograma({data,cnpj,workplaceId,currentUser,notification,setD
 
   function onRightClick(event, nodeKey) {
     event && event.preventDefault();
-    setPosition({top:event.pageY,left:event.pageX,nodeKey:nodeKey,fromTop:positionScroll})
+    setPosition({top:event.pageY,left:event.pageX+window.screen.width*modalPosition,nodeKey:nodeKey,fromTop:positionScroll})
     setShow(true)
   }
 
@@ -219,7 +219,7 @@ export function Organograma({data,cnpj,workplaceId,currentUser,notification,setD
   }, [filter,dataInitial,dataBeforeFilter])
 
   function onSave() {
-    onSaveOrganograma({setLoading,setSave,data,workplaceId,setData,currentUser,notification,dataInitial})
+    onSaveOrganograma({setLoading,setSave,data,workplaceId,setData,currentUser,notification,dataInitial,onModalClick})
   }
 
   function onHandleExpand() {
@@ -229,23 +229,59 @@ export function Organograma({data,cnpj,workplaceId,currentUser,notification,setD
     setDataBeforeFilter({...root})
   }
 
+   //MODAL FUNCTION
+   function onChooseNode(event, nodeKey) {
+    event && event.preventDefault();
+    var root = {};
+    root = {...dataInitial};
+    root = clone(root);
+
+    if (nodeKey === 'initial') {
+      onChooseEndNode({nodeKey,dataState:dataInitial,notification,setDataState:setDataBeforeFilter,setDataSelected})
+    } else {
+      const [...indexes] = nodeKey.split('-');
+      console.log('indexes',indexes,'nodeKey',nodeKey);
+      onChooseEndNode({nodeKey,dataState:root,notification,setDataState:setDataBeforeFilter,setDataSelected});
+    }
+  }
+
+  function onChooseNode(event, nodeKey) {
+    event && event.preventDefault();
+    var root = {};
+    root = {...dataInitial};
+    root = clone(root);
+
+    if (nodeKey === 'initial') {
+      onChooseEndNode({nodeKey,dataState:dataInitial,notification,setDataState:setDataBeforeFilter,setDataSelected})
+    } else {
+      const [...indexes] = nodeKey.split('-');
+      console.log('indexes',indexes,'nodeKey',nodeKey);
+      onChooseEndNode({nodeKey,dataState:root,notification,setDataState:setDataBeforeFilter,setDataSelected});
+    }
+  }
+  //
+
   return (
-      <Container ref={ref}>
+      <Container modalType={modalType} ref={ref}>
         <div style={{display:'flex',flexDirection:'row', alignItems:'center',marginTop:15}}>
           <FilterComponent
             style={{margin:0,marginRight:10,padding:0}}
             setSearch={setFilter}
             search={filter}
             onCleanSearch={()=>setFilter('')}
-            />
+          />
           <div style={{position: 'relative'}}>
             <ContinueButton disable={`${loading || !save}`} style={{width:100,padding:2.5,opacity:loading?0.6:1}} onClick={onSave} primary={!save?'outlined':'true'} size={'medium'}>
-              Salvar
+              {modalType=='employee'?"Criar":'Salvar'}
             </ContinueButton>
             {loading && <CircularProgress size={24} style={{color: theme.palette.primary.main,position: 'absolute',top: '50%',left: '50%',marginTop: -12,marginLeft: -12,}} />}
           </div>
-          <AddUserButton style={{marginRight:20}} onClick={onHandleExpand} text={'Expandir Todos'} icon={'AllOut'} width={180} />
-          <AddTextButton transparent style={{marginLeft:'auto'}} onClick={()=>setOpen(true)} text={'-  Grupo Homogenio de Exposixão'} shortText={'GHE'} width={290} />
+          {!modalType &&
+            <>
+              <AddUserButton style={{marginRight:20}} onClick={onHandleExpand} text={'Expandir Todos'} icon={'AllOut'} width={180} />
+              <AddTextButton transparent style={{marginLeft:'auto'}} onClick={()=>setOpen(true)} text={'-  Grupo Homogenio de Exposixão'} shortText={'GHE'} width={290} />
+            </>
+          }
         </div>
         {width >10 &&
         <Tree
@@ -253,13 +289,13 @@ export function Organograma({data,cnpj,workplaceId,currentUser,notification,setD
           className: theme.palette.type == 'dark' ? 'custom' : 'customLight' ,
         }}
         gProps={{
-          onClick: onContractChild,
+          onClick: modalType=='employee'?onChooseNode:onContractChild,
           onContextMenu: onRightClick,
         }}
         data={dataState}
         labelProp='text'
         height={filter ? 450 : sizeHeight}
-        width={deepestJson(dataState) == 1 ? (width+20)/2 :width+20}
+        width={widthContent?widthContent:deepestJson(dataState) == 1 ? (width+20)/2 :width+20}
         animated
         textProps={{
             transform:'translate(5)'

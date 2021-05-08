@@ -164,7 +164,7 @@ export function CardEdit({deepestJson, onAddChild,onDeleteChild,onEditChild,node
   return (
     <ClickAwayListener disableReactTree={true}  onClickAway={()=>removeMenu({bool:true})}>
       <div style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-        <ContainerButtons style={{top:position.top+30,transform:`translate( 0px, ${(-positionScroll+position.fromTop)}px)`, left:position.left-80}}>
+        <ContainerButtons style={{zIndex:1091019861896198168917917918618916189179871891619618,top:position.top+30,transform:`translate( 0px, ${(-positionScroll+position.fromTop)}px)`, left:position.left-80}}>
           <Button text={'Editar'}/>
           {isContract() ?
             <Button text={'Expandir'}/>

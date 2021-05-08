@@ -13,6 +13,7 @@ import TableComponent from './table';
 import { useHistory } from "react-router-dom"
 import {AdditionalInfo} from './Tabs/AdditionalInfo'
 import {FilterComponent,AddUserButton} from '../../../components/Main/Table/comp'
+import { useDispatch } from 'react-redux'
 
 export default function Container({children}) {
     return (
@@ -29,6 +30,7 @@ Container.TableTabs =  function TableTabs({tabsLabel,setOpen,cnpj,tabId,currentU
     const [search, setSearch] = useState('')
     const [dataRows, setDataRows] = useState([])
     const history = useHistory()
+    //const dispatch = useDispatch()
 
     useEffect(() => {
       onGetCompany({setData,setDataRows,companyId:currentUser.company.id,cnpj,setLoadContent,notification,setLoaderDash})
@@ -36,6 +38,7 @@ Container.TableTabs =  function TableTabs({tabsLabel,setOpen,cnpj,tabId,currentU
 
     function handleCellClick(e,rowId,row,index) {
       history.push(`${COMPANY}/estabelecimento/${rowId}/${keepOnlyNumbers(cnpj)}/0`);
+      //dispatch({ type: 'ADD_COMPANY', payload: data })
     }
 
     console.log(tabValue)

@@ -79,7 +79,7 @@ const useTableStyles = makeStyles(theme => ({
     borderLeft: `2px ${theme.palette.table.line} solid`,
     borderRight: `2px ${theme.palette.table.line} solid`,
     cursor: 'pointer',
-    '&:hover' : {backgroundColor:darken(theme.palette.table.hover,0.13)},
+    '&:hover' : {backgroundColor:darken(theme.palette.table.hover,0.10)},
     // borderRight: `2px ${theme.palette.table.line} solid`,
     // borderLeft: `2px ${theme.palette.table.line} solid`,
     //overflow: 'visible hidden',
